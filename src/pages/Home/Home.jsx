@@ -5,8 +5,9 @@ import { Button } from "react-bootstrap";
 import PropertyCard from "../../components/PropertyCard/PropertyCard";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import { Link } from "react-router-dom";
 
-const responsive = {
+const responsiveProperties = {
   superLargeDesktop: {
     breakpoint: { max: 4000, min: 3000 },
     items: 5,
@@ -24,6 +25,43 @@ const responsive = {
     items: 1,
   },
 };
+const responsiveAgent = {
+  superLargeDesktop: {
+    breakpoint: { max: 4000, min: 3000 },
+    items: 4,
+  },
+  desktop: {
+    breakpoint: { max: 3000, min: 1024 },
+    items: 4,
+  },
+  tablet: {
+    breakpoint: { max: 1024, min: 464 },
+    items: 4,
+  },
+  mobile: {
+    breakpoint: { max: 464, min: 0 },
+    items: 1,
+  },
+};
+
+const agents = [
+  {
+    name: "Jimmy Changa",
+    id: 1,
+  },
+  {
+    name: "Nick R. Bocker",
+    id: 2,
+  },
+  {
+    name: "Buster Hyaman",
+    id: 3,
+  },
+  {
+    name: "Buster ock",
+    id: 4,
+  },
+];
 
 function Home() {
   return (
@@ -57,7 +95,7 @@ function Home() {
           rewindWithAnimation
           partialVisbile="false"
           slidesToSlide={1}
-          responsive={responsive}
+          responsive={responsiveProperties}
         >
           {Array.apply(null, Array(10)).map((item, index) => {
             return <PropertyCard key={item} />;
@@ -79,7 +117,7 @@ function Home() {
               src="	https://preview.colorlib.com/theme/konato/assets/img/icon/services1.svg
               
 "
-            ></img>
+            />
             <h3>Sell home or office</h3>
             <p>
               Get Started by choosing from one of our pre-built templates to
@@ -123,7 +161,7 @@ function Home() {
           rewindWithAnimation
           partialVisbile="false"
           slidesToSlide={1}
-          responsive={responsive}
+          responsive={responsiveProperties}
         >
           {Array.apply(null, Array(10)).map((item, index) => {
             return <PropertyCard key={item} />;
@@ -160,14 +198,14 @@ function Home() {
               src="https://preview.colorlib.com/theme/konato/assets/img/icon/property1.svg"
               alt=""
             />
-            <span>Home & Apartment</span>
+            <Link to={"/"}>Home & Apartment</Link>
           </div>
           <div className={styles.propertyTypeContainer}>
             <img
               src="https://preview.colorlib.com/theme/konato/assets/img/icon/property2.svg"
               alt=""
             />
-            <span>Vila</span>
+            <Link to={"/"}>Vila</Link>
           </div>
           <div className={styles.propertyTypeContainer}>
             <img
@@ -175,16 +213,85 @@ function Home() {
 "
               alt=""
             />
-            <span>Studio</span>
+            <Link to={"/"}>Studio</Link>
           </div>
           <div className={styles.propertyTypeContainer}>
             <img
               src="https://preview.colorlib.com/theme/konato/assets/img/icon/property4.svg"
               alt=""
             />
-            <span>Office</span>
+            <Link to={"/"}>Office</Link>
           </div>
         </div>
+      </section>
+
+      <section className={classNames("text-center mt-5", styles.agentSection)}>
+        <h1>Out Agents</h1>
+        <span>
+          Get started by choosing from one of our pre-built page tempates to
+          showcase your properties.
+        </span>
+
+        <Carousel
+          responsive={responsiveAgent}
+          autoPlay
+          infinite
+          partialVisbile={false}
+          itemClass={styles.agentCardContainer}
+          containerClass={classNames(styles.agentCarousel, "container-fluid")}
+        >
+          {agents.map((agent) => (
+            <div
+              className={classNames(
+                "d-flex align-items-center justify-content-center flex-column",
+                styles.agentCard
+              )}
+            >
+              <img
+                className={styles.agentImg}
+                src={`https://preview.colorlib.com/theme/konato/assets/img/gallery/team${agent.id}.jpg`}
+                alt="agent"
+              />
+              <div>
+                <h3 className={styles.agentName}>{agent.name}</h3>
+                <span>Real Estate Agent</span>
+              </div>
+            </div>
+          ))}
+        </Carousel>
+      </section>
+
+      <section
+        className={classNames(
+          "d-flex align-items-center",
+          styles.newsLetterSection
+        )}
+      >
+        <div
+          className={classNames(
+            "d-flex align-items-end flex-column",
+            styles.newLetterFormContainer
+          )}
+        >
+          <div className="">
+            <h1 className="text-white">Subscribe Newsletter</h1>
+            <span className="text-white">
+              Get started by choosing from our pre-built templates to showcase
+              your properties.
+            </span>
+
+            <form className="mt-5 d-flex align-items-start flex-column gap-2">
+              <input
+                className={styles.newsLetterInput}
+                placeholder="Enter Your Email"
+              />
+              <button type="submit" className={styles.subscribeBtn}>
+                Subscribe
+              </button>
+            </form>
+          </div>
+        </div>
+        <div className={styles.newsLetterImage} />
       </section>
     </main>
   );
