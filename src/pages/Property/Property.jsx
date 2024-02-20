@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./Property.module.css";
 import classNames from "classnames";
 import PropertyCard from "../../components/PropertyCard/PropertyCard";
 import { Newsletter } from "../../components/Newsletter/Newsletter";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllProperty } from "../../redux/slices/propertySlice";
 
 function Property() {
+  const propertiesStore = useSelector((store) => store.properties);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllProperty());
+  }, [dispatch]);
+
+  console.log(propertiesStore);
   return (
     <main className="">
       <div
@@ -13,7 +23,7 @@ function Property() {
           styles.availablePropertyBanner
         )}
       >
-        <div className={classNames("container", styles.bannerTextContainer)}>
+        <div className={classNames("container ", styles.bannerTextContainer)}>
           <h1>Available Property</h1>
           <div className={classNames("text-wrap", styles.bannerText)}>
             Get Started by choosing from one of our pre-built page templates to
@@ -21,7 +31,7 @@ function Property() {
           </div>
         </div>
       </div>
-      <section className="container text-center mt-5">
+      <section className="container text-center my-5">
         <h1>Properties for Sale</h1>
         <div className={classNames("mt-5", styles.propertyGrid)}>
           {Array.apply(null, Array(9)).map((item) => (
