@@ -1,0 +1,16 @@
+.navLink {
+  color: white;
+  list-style-type: none;
+  text-decoration: none;
+}
+
+.navbar {
+  background: #004274;
+  padding: 15px;
+  font-weight: 500;
+}
+
+.signinBtn {
+  background: #00aeff;
+  border: 1px solid #00aeff;
+}
