@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 
 function Footer() {
   return (
-    <footer className={classNames("container-fluid", styles.footer)}>
+    <footer className={classNames("container-fluid ", styles.footer)}>
       <div className="d-flex align-items-start justify-content-center gap-5">
         <div
           className={classNames(

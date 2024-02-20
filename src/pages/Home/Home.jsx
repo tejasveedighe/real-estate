@@ -1,12 +1,13 @@
-import React from "react";
-import styles from "./Home.module.css";
 import classNames from "classnames";
+import React from "react";
 import { Button } from "react-bootstrap";
-import PropertyCard from "../../components/PropertyCard/PropertyCard";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { Link } from "react-router-dom";
-import { AgentProfileCard } from "../../components/AgentProfileCard/AgentProfileCard";
+import { AgentsCarousel } from "../../components/AgentsGridCarousel/AgentsCarousel";
+import { Newsletter } from "../../components/Newsletter/Newsletter";
+import PropertyCard from "../../components/PropertyCard/PropertyCard";
+import styles from "./Home.module.css";
 
 const responsiveProperties = {
   superLargeDesktop: {
@@ -26,43 +27,6 @@ const responsiveProperties = {
     items: 1,
   },
 };
-const responsiveAgent = {
-  superLargeDesktop: {
-    breakpoint: { max: 4000, min: 3000 },
-    items: 4,
-  },
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 4,
-  },
-  tablet: {
-    breakpoint: { max: 1024, min: 464 },
-    items: 4,
-  },
-  mobile: {
-    breakpoint: { max: 464, min: 0 },
-    items: 1,
-  },
-};
-
-const agents = [
-  {
-    name: "Jimmy Changa",
-    id: 1,
-  },
-  {
-    name: "Nick R. Bocker",
-    id: 2,
-  },
-  {
-    name: "Buster Hyaman",
-    id: 3,
-  },
-  {
-    name: "Buster ock",
-    id: 4,
-  },
-];
 
 function Home() {
   return (
@@ -84,7 +48,6 @@ function Home() {
           <Button className={styles.viewBtn}>View Property</Button>
         </div>
       </section>
-
       <section className="d-flex align-items-center justify-content-center flex-column mt-5">
         <h1>Display Latest & Featured Properties</h1>
 
@@ -103,7 +66,6 @@ function Home() {
           })}
         </Carousel>
       </section>
-
       <section
         className={classNames(
           "d-flex align-items-center justify-content-center flex-column gap-5",
@@ -150,7 +112,6 @@ function Home() {
           </div>
         </div>
       </section>
-
       <section className="d-flex align-items-center justify-content-center flex-column mt-5">
         <h1>Properties for Sale</h1>
 
@@ -169,7 +130,6 @@ function Home() {
           })}
         </Carousel>
       </section>
-
       <section
         className={classNames(
           "d-flex align-items-center justify-content-center",
@@ -225,60 +185,8 @@ function Home() {
           </div>
         </div>
       </section>
-
-      <section className={classNames("text-center mt-5", styles.agentSection)}>
-        <h1>Out Agents</h1>
-        <span>
-          Get started by choosing from one of our pre-built page tempates to
-          showcase your properties.
-        </span>
-
-        <Carousel
-          responsive={responsiveAgent}
-          autoPlay
-          infinite
-          partialVisbile={false}
-          itemClass={styles.agentCardContainer}
-          containerClass={classNames(styles.agentCarousel, "container-fluid")}
-        >
-          {agents.map((agent) => (
-            <AgentProfileCard agent={agent} />
-          ))}
-        </Carousel>
-      </section>
-
-      <section
-        className={classNames(
-          "d-flex align-items-center",
-          styles.newsLetterSection
-        )}
-      >
-        <div
-          className={classNames(
-            "d-flex align-items-end flex-column",
-            styles.newLetterFormContainer
-          )}
-        >
-          <div className="">
-            <h1 className="text-white">Subscribe Newsletter</h1>
-            <span className="text-white">
-              Get started by choosing from our pre-built templates to showcase
-              your properties.
-            </span>
-
-            <form className="mt-5 d-flex align-items-start flex-column gap-2">
-              <input
-                className={styles.newsLetterInput}
-                placeholder="Enter Your Email"
-              />
-              <button type="submit" className={styles.subscribeBtn}>
-                Subscribe
-              </button>
-            </form>
-          </div>
-        </div>
-        <div className={styles.newsLetterImage} />
-      </section>
+      <AgentsCarousel />
+      <Newsletter />
     </main>
   );
 }
