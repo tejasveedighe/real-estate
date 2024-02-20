@@ -87,17 +87,7 @@
     width: 85%;
   }
   .agentCardContainer {
-    .agentCard {
-      gap: 19px;
-
-      .agentImg:hover {
-      }
-
-      .agentName:hover {
-        color: #00a0eb;
-        cursor: pointer;
-      }
-    }
+    
   }
 }
 

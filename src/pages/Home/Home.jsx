@@ -6,6 +6,7 @@ import PropertyCard from "../../components/PropertyCard/PropertyCard";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { Link } from "react-router-dom";
+import { AgentProfileCard } from "../../components/AgentProfileCard/AgentProfileCard";
 
 const responsiveProperties = {
   superLargeDesktop: {
@@ -241,22 +242,7 @@ function Home() {
           containerClass={classNames(styles.agentCarousel, "container-fluid")}
         >
           {agents.map((agent) => (
-            <div
-              className={classNames(
-                "d-flex align-items-center justify-content-center flex-column",
-                styles.agentCard
-              )}
-            >
-              <img
-                className={styles.agentImg}
-                src={`https://preview.colorlib.com/theme/konato/assets/img/gallery/team${agent.id}.jpg`}
-                alt="agent"
-              />
-              <div>
-                <h3 className={styles.agentName}>{agent.name}</h3>
-                <span>Real Estate Agent</span>
-              </div>
-            </div>
+            <AgentProfileCard agent={agent} />
           ))}
         </Carousel>
       </section>
