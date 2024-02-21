@@ -13,6 +13,11 @@ export const loginUser = createAsyncThunk("user/login", async (payload) => {
   return res.data;
 });
 
+export const signupUser = createAsyncThunk("user/signup", async (payload) => {
+  const res = await Axios.post("/AddUser", payload);
+  return res.data;
+});
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -22,10 +27,11 @@ const userSlice = createSlice({
     },
     removeUser: (state) => {
       state.user = null;
-      localStorage.removeItem("userToken");
     },
-  },
+   
+    },
   extraReducers: (builder) => {
+    // login
     builder.addCase(loginUser.pending, (state) => {
       state.loading = true;
       state.status = "pending";
@@ -36,6 +42,22 @@ const userSlice = createSlice({
       state.errors = action.error;
     });
     builder.addCase(loginUser.fulfilled, (state, action) => {
+      state.loading = false;
+      state.status = "fulfilld";
+      state.user = action.payload;
+    });
+
+    // sign up
+    builder.addCase(signupUser.pending, (state) => {
+      state.loading = true;
+      state.status = "pending";
+    });
+    builder.addCase(signupUser.rejected, (state, action) => {
+      state.loading = true;
+      state.status = "rejected";
+      state.errors = action.error;
+    });
+    builder.addCase(signupUser.fulfilled, (state, action) => {
       state.loading = false;
       state.status = "fulfilld";
       state.user = action.payload;
