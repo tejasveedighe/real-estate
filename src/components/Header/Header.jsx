@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styles from "./Header.module.css";
 import { Button, Dropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -11,7 +11,9 @@ function Header() {
     Cookies.remove("userId");
     Cookies.remove("userName");
     Cookies.remove("userEmail");
+    window.location.reload();
   }, []);
+
   return (
     <nav
       className={classNames(
