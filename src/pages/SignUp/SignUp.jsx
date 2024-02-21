@@ -26,11 +26,6 @@ function SignUp() {
         return;
       }
 
-      console.log(name);
-      console.log(email);
-      console.log(password);
-      console.log(repassword);
-
       dispatch(
         signupUser({
           name,
