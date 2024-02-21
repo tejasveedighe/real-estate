@@ -14,7 +14,6 @@ function Property() {
     dispatch(getAllProperty());
   }, [dispatch]);
 
-  console.log(propertiesStore);
   return (
     <main className="">
       <div
@@ -34,9 +33,18 @@ function Property() {
       <section className="container text-center my-5">
         <h1>Properties for Sale</h1>
         <div className={classNames("mt-5", styles.propertyGrid)}>
-          {Array.apply(null, Array(9)).map((item) => (
-            <PropertyCard key={item} />
-          ))}
+          {!propertiesStore.loading &&
+          propertiesStore.status === "fulfilled" ? (
+            propertiesStore.properties.map((property, index) => (
+              <PropertyCard
+                key={property?.propertyId}
+                property={property}
+                index={index}
+              />
+            ))
+          ) : (
+            <>No Data to show</>
+          )}
         </div>
       </section>
       <Newsletter />

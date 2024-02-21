@@ -1,32 +1,12 @@
 import classNames from "classnames";
 import React from "react";
 import { Button } from "react-bootstrap";
-import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { Link } from "react-router-dom";
 import { AgentsCarousel } from "../../components/AgentsGridCarousel/AgentsCarousel";
 import { Newsletter } from "../../components/Newsletter/Newsletter";
-import PropertyCard from "../../components/PropertyCard/PropertyCard";
+import { Properties } from "../../components/Properties/Properties";
 import styles from "./Home.module.css";
-
-const responsiveProperties = {
-  superLargeDesktop: {
-    breakpoint: { max: 4000, min: 3000 },
-    items: 5,
-  },
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 3,
-  },
-  tablet: {
-    breakpoint: { max: 1024, min: 464 },
-    items: 2,
-  },
-  mobile: {
-    breakpoint: { max: 464, min: 0 },
-    items: 1,
-  },
-};
 
 function Home() {
   return (
@@ -48,24 +28,8 @@ function Home() {
           <Button className={styles.viewBtn}>View Property</Button>
         </div>
       </section>
-      <section className="d-flex align-items-center justify-content-center flex-column mt-5">
-        <h1>Display Latest & Featured Properties</h1>
+      <Properties title={"Display Latest & Featured Properties"} />
 
-        <Carousel
-          containerClass={"container my-5"}
-          itemClass="d-flex align-items-center justify-content-center"
-          infinite
-          rewind
-          rewindWithAnimation
-          partialVisbile="false"
-          slidesToSlide={1}
-          responsive={responsiveProperties}
-        >
-          {Array.apply(null, Array(10)).map((item, index) => {
-            return <PropertyCard key={item} />;
-          })}
-        </Carousel>
-      </section>
       <section
         className={classNames(
           "d-flex align-items-center justify-content-center flex-column gap-5",
@@ -112,24 +76,8 @@ function Home() {
           </div>
         </div>
       </section>
-      <section className="d-flex align-items-center justify-content-center flex-column mt-5">
-        <h1>Properties for Sale</h1>
 
-        <Carousel
-          containerClass={"container my-5"}
-          itemClass="d-flex align-items-center justify-content-center"
-          infinite
-          rewind
-          rewindWithAnimation
-          partialVisbile="false"
-          slidesToSlide={1}
-          responsive={responsiveProperties}
-        >
-          {Array.apply(null, Array(10)).map((item, index) => {
-            return <PropertyCard key={item} />;
-          })}
-        </Carousel>
-      </section>
+      <Properties title={"Properties for Sale"} />
       <section
         className={classNames(
           "d-flex align-items-center justify-content-center",

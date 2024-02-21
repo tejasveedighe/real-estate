@@ -1,5 +1,9 @@
 import axios from "axios";
+import { URL } from "./constants";
 
 export const Axios = axios.create({
-  baseURL: "https://localhost:7071",
+  baseURL: URL,
+  headers: {
+    Accept: "*/*"
+  }
 });
