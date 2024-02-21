@@ -1,11 +1,42 @@
-import React from "react";
+import React, { useCallback } from "react";
 import styles from "./AddProperty.module.css";
 import { useDispatch } from "react-redux";
-import { Form } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import classNames from "classnames";
+import { addProperty } from "../../redux/slices/propertySlice";
 
 function AddProperty() {
   const dispatch = useDispatch();
+
+  const onSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(e.target);
+
+      const propertyData = {
+        propertyTitle: formData.get("propertyTitle"),
+        propertyType: formData.get("propertyType"),
+        price: parseFloat(formData.get("price")),
+        description: formData.get("description"),
+        location: formData.get("location"),
+        status: formData.get("status"),
+        noBedroom: parseInt(formData.get("noBedroom")),
+        noBathroom: parseInt(formData.get("noBathroom")),
+        squareFeet: parseInt(formData.get("squareFeet")),
+        approved: formData.get("approved") === "true",
+      };
+
+      dispatch(addProperty(propertyData))
+        .then((res) => {
+          if (res.type === "properties/addProperty/fulfilled") {
+            alert("Property added successfully");
+          }
+        })
+        .catch((err) => alert(err.message));
+    },
+    [dispatch]
+  );
 
   return (
     <main
@@ -14,7 +45,10 @@ function AddProperty() {
         "d-flex align-items-center flex-column justify-content-center"
       )}
     >
-      <Form className=" bg-white p-5 d-flex align-items-center justify-content-center flex-column">
+      <Form
+        onSubmit={onSubmit}
+        className=" bg-white p-5 d-flex align-items-center justify-content-center flex-column"
+      >
         <h1 className="mb-4">Add Property</h1>
         <div>
           <div className="d-flex align-items-center justify-content-center gap-5">
@@ -31,17 +65,31 @@ function AddProperty() {
               <Form.Label>Price</Form.Label>
               <Form.Control
                 type="number"
-                name="propertyPrice"
+                name="price"
                 required
-                placeholder="Enter Your title here"
+                placeholder="Enter Your Price here"
               />
             </Form.Group>
           </div>
           <Form.Group className="mt-3">
+            <Form.Label>Property Type</Form.Label>
+            <Form.Select
+              name="propertyType"
+              required
+              placeholder="Enter Property Type"
+            >
+              <option defaultChecked value="type 1">
+                1
+              </option>
+              <option value="type 2">2</option>
+              <option value="type 3">3</option>
+            </Form.Select>
+          </Form.Group>
+          <Form.Group className="mt-3">
             <Form.Label>Property Description</Form.Label>
             <Form.Control
               as="textarea"
-              name="propertyDescription"
+              name="description"
               required
               placeholder="Enter Property Description"
             />
@@ -52,7 +100,7 @@ function AddProperty() {
             <Form.Label>Location</Form.Label>
             <Form.Control
               type="text"
-              name="propertyLocation"
+              name="location"
               required
               placeholder="Enter Property Location"
             />
@@ -110,6 +158,10 @@ function AddProperty() {
             </Form.Select>
           </Form.Group>
         </div>
+
+        <Button type="submit" variant="success" className="align-self-end mt-3">
+          Add Property
+        </Button>
       </Form>
     </main>
   );

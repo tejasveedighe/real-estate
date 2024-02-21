@@ -33,9 +33,9 @@ function Property() {
       <section className="container text-center my-5">
         <h1>Properties for Sale</h1>
         <div className={classNames("mt-5", styles.propertyGrid)}>
-          {!propertiesStore.loading &&
-          propertiesStore.status === "fulfilled" ? (
-            propertiesStore.properties.map((property, index) => (
+          {!propertiesStore?.loading &&
+          propertiesStore?.status === "fulfilled" ? (
+            propertiesStore?.properties?.map((property, index) => (
               <PropertyCard
                 key={property?.propertyId}
                 property={property}
