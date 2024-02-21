@@ -22,7 +22,6 @@ function PropertyCard({ property, index }) {
       </ListGroup>
       <Card.Body>
         <Link to={`/property/${property?.propertyId}`}>View Details</Link>
-        <Link to="/">Contact Agent</Link>
       </Card.Body>
     </Card>
   );

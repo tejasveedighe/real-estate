@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
-import styles from "./Property.module.css";
-import { Link, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { getPropertyById } from "../../redux/slices/propertySlice";
 import classNames from "classnames";
-import { Button } from "react-bootstrap";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { getPropertyById } from "../../redux/slices/propertySlice";
+import styles from "./Property.module.css";
 
 function Property() {
   const dispatch = useDispatch();
@@ -13,8 +12,6 @@ function Property() {
   const { loading, errors, status, property } = useSelector(
     (store) => store.properties
   );
-
-  console.log(loading, errors, status, property);
 
   useEffect(() => {
     dispatch(getPropertyById(propertyId)).catch((err) => alert(err.message));
