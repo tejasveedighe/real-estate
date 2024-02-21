@@ -1,5 +1,6 @@
 import React from "react";
 import { Card, ListGroup } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 function PropertyCard({ property, index }) {
   return (
@@ -20,8 +21,8 @@ function PropertyCard({ property, index }) {
         <ListGroup.Item>Square Feet: {property?.squareFeet}</ListGroup.Item>
       </ListGroup>
       <Card.Body>
-        <Card.Link href="#">View Details</Card.Link>
-        <Card.Link href="#">Contact Agent</Card.Link>
+        <Link to={`/property/${property?.propertyId}`}>View Details</Link>
+        <Link to="/">Contact Agent</Link>
       </Card.Body>
     </Card>
   );

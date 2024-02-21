@@ -4,20 +4,22 @@ import AuthLayout from "./components/AuthLayout/AuthLayout";
 import AddProperty from "./pages/AddProperty/AddProperty";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
-import Property from "./pages/Property/Property";
+import AllProperty from "./pages/AllProperty/AllProperty";
 import SignUp from "./pages/SignUp/SignUp";
+import Property from "./pages/Property/Property";
 
 function App() {
   return (
     <>
       <Routes>
-        <Route exact path="/login" element={<Login />} />
-        <Route exact path="/signup" element={<SignUp />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
 
         <Route element={<AuthLayout />}>
-          <Route exact path="/" element={<Home />} />
-          <Route exact path="/property" element={<Property />} />
-          <Route exact path="/addProperty" element={<AddProperty />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/addProperty" element={<AddProperty />} />
+          <Route path="/property" element={<AllProperty />} />
+          <Route path="/property/:propertyId" element={<Property />} />
         </Route>
       </Routes>
     </>

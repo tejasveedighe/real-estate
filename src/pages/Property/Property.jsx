@@ -1,53 +1,83 @@
 import React, { useEffect } from "react";
 import styles from "./Property.module.css";
-import classNames from "classnames";
-import PropertyCard from "../../components/PropertyCard/PropertyCard";
-import { Newsletter } from "../../components/Newsletter/Newsletter";
+import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllProperty } from "../../redux/slices/propertySlice";
+import { getPropertyById } from "../../redux/slices/propertySlice";
+import classNames from "classnames";
+import { Button } from "react-bootstrap";
 
 function Property() {
-  const propertiesStore = useSelector((store) => store.properties);
   const dispatch = useDispatch();
+  const { propertyId } = useParams();
+
+  const { loading, errors, status, property } = useSelector(
+    (store) => store.properties
+  );
+
+  console.log(loading, errors, status, property);
 
   useEffect(() => {
-    dispatch(getAllProperty());
-  }, [dispatch]);
+    dispatch(getPropertyById(propertyId)).catch((err) => alert(err.message));
+  }, [dispatch, propertyId]);
+
+  if (loading) {
+    return (
+      <main className="d-flex align-items-center justify-content-center text-center mt-5">
+        <h1>Loading....</h1>
+      </main>
+    );
+  }
+
+  if (status === "rejected") {
+    <main className="d-flex align-items-center justify-content-center text-center mt-5">
+      <h1>Some error occured please try later</h1>
+    </main>;
+  }
 
   return (
-    <main className="">
-      <div
+    <main className="d-flex align-items-center justify-content-center">
+      <section
         className={classNames(
-          "d-flex align-items-center",
-          styles.availablePropertyBanner
+          styles.parent,
+          "d-flex align-items-center justify-content-center mt-5 p-5 flex-column"
         )}
       >
-        <div className={classNames("container ", styles.bannerTextContainer)}>
-          <h1>Available Property</h1>
-          <div className={classNames("text-wrap", styles.bannerText)}>
-            Get Started by choosing from one of our pre-built page templates to
-            showcase your properties.
+        <img
+          src={`${process.env.PUBLIC_URL}/house0.jpg`}
+          className={styles.propertyImg}
+          alt="Property"
+        />
+        <hr className={styles.solid} />
+        <div className=" w-100 mt-4">
+          <h3>
+            {property.propertyTitle} ({property.propertyType})
+          </h3>
+          <p className={styles.propertyDescription}>{property.description}</p>
+        </div>
+        <hr className={styles.solid} />
+        <div className="w-100">
+          <h5 className={styles.subHeading}>Condition:</h5>
+          <div className={styles.propertyConditionGrid}>
+            <div>
+              Area: {property.squareFeet} m<sup>2</sup>
+            </div>
+            <div>Bedroom: {property.noBedroom}</div>
+            <div>Bathroom: {property.noBathroom}</div>
+            <div>Location: {property.location}</div>
+            <div>Price: ${property.price}</div>
           </div>
         </div>
-      </div>
-      <section className="container text-center my-5">
-        <h1>Properties for Sale</h1>
-        <div className={classNames("mt-5", styles.propertyGrid)}>
-          {!propertiesStore?.loading &&
-          propertiesStore?.status === "fulfilled" ? (
-            propertiesStore?.properties?.map((property, index) => (
-              <PropertyCard
-                key={property?.propertyId}
-                property={property}
-                index={index}
-              />
-            ))
-          ) : (
-            <>No Data to show</>
-          )}
+        <hr className={styles.solid} />
+        <div className="w-100">
+          Contact Agent:
+          <a
+            className="text-decoration-none"
+            href={`tel:${property.contactNumber}`}
+          >
+            {property.contactNumber}
+          </a>
         </div>
       </section>
-      <Newsletter />
     </main>
   );
 }

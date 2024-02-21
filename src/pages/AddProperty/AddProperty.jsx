@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useRef } from "react";
 import styles from "./AddProperty.module.css";
 import { useDispatch } from "react-redux";
 import { Button, Form } from "react-bootstrap";
@@ -7,6 +7,7 @@ import { addProperty } from "../../redux/slices/propertySlice";
 
 function AddProperty() {
   const dispatch = useDispatch();
+  const formRef = useRef();
 
   const onSubmit = useCallback(
     (e) => {
@@ -31,6 +32,7 @@ function AddProperty() {
         .then((res) => {
           if (res.type === "properties/addProperty/fulfilled") {
             alert("Property added successfully");
+            formRef.current.reset();
           }
         })
         .catch((err) => alert(err.message));
@@ -46,6 +48,7 @@ function AddProperty() {
       )}
     >
       <Form
+        ref={formRef}
         onSubmit={onSubmit}
         className=" bg-white p-5 d-flex align-items-center justify-content-center flex-column"
       >

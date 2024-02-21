@@ -3,6 +3,7 @@ import { Axios } from "../../utils/helpers";
 
 const initalState = {
   properties: [],
+  property: {},
   loading: false,
   status: "idle",
   errors: {},
@@ -20,6 +21,14 @@ export const addProperty = createAsyncThunk(
   "properties/addProperty",
   async (payload) => {
     const res = await Axios.post("/property", payload);
+    return res.data;
+  }
+);
+
+export const getPropertyById = createAsyncThunk(
+  "properties/getPropertyById",
+  async (propertyId) => {
+    const res = await Axios.get(`/Property/${propertyId}`);
     return res.data;
   }
 );
@@ -63,6 +72,22 @@ const propertySlice = createSlice({
       state.loading = false;
       state.status = "fulfilled";
       state.properties = action.payload;
+    });
+
+    // get property by id
+    builder.addCase(getPropertyById.pending, (state) => {
+      state.loading = true;
+      state.status = "pending";
+    });
+    builder.addCase(getPropertyById.rejected, (state, action) => {
+      state.loading = false;
+      state.status = "rejected";
+      state.errors = action.error;
+    });
+    builder.addCase(getPropertyById.fulfilled, (state, action) => {
+      state.loading = false;
+      state.status = "fulfilled";
+      state.property = action.payload;
     });
   },
 });
