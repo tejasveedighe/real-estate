@@ -1,19 +1,40 @@
 import React, { useCallback } from "react";
 import { Form } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./Login.module.css";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../redux/slices/userSlice";
 
 function Login() {
-  const onSubmit = useCallback((e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const username = formData.get("username");
-    const password = formData.get("password");
-    const userId = formData.get("userId");
-    console.log("userId:", userId);
-    console.log("Username:", username);
-    console.log("Password:", password);
-  }, []);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const onSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const email = formData.get("email");
+      const password = formData.get("password");
+      const userId = formData.get("userId");
+
+      dispatch(
+        loginUser({
+          email,
+          password,
+          userId,
+        })
+      ).then((res) => {
+        if (res.type === "user/login/fulfilled") {
+          localStorage.setItem("userToken", res.payload.token);
+          localStorage.setItem("userEmail", res.payload.userDetails.email);
+          localStorage.setItem("userName", res.payload.userDetails.name);
+          localStorage.setItem("userId", res.payload.userDetails.userId);
+          navigate("/");
+        }
+      });
+    },
+    [dispatch, navigate]
+  );
 
   return (
     <main className={styles.loginPage}>
@@ -37,12 +58,12 @@ function Login() {
               />
             </Form.Group>
             <Form.Group className="w-100">
-              <Form.Label>Username or Email Address</Form.Label>
+              <Form.Label>Email Address</Form.Label>
               <Form.Control
                 required
-                type="text"
-                name="username"
-                placeholder="Username / Email Address"
+                type="mail"
+                name="email"
+                placeholder="Email Address"
               />
             </Form.Group>
             <Form.Group className="w-100">
