@@ -47,7 +47,7 @@ function Header() {
             +10 (78) 356 3276
           </a>
         </div>
-        <Link className={styles.navLink} to="/signin">
+        <Link className={styles.navLink} to="/login">
           <Button className={styles.signinBtn} variant="primary">
             Sign In
           </Button>

@@ -28,6 +28,7 @@ function Home() {
           <Button className={styles.viewBtn}>View Property</Button>
         </div>
       </section>
+
       <Properties title={"Display Latest & Featured Properties"} />
 
       <section
@@ -78,6 +79,7 @@ function Home() {
       </section>
 
       <Properties title={"Properties for Sale"} />
+
       <section
         className={classNames(
           "d-flex align-items-center justify-content-center",
@@ -133,7 +135,9 @@ function Home() {
           </div>
         </div>
       </section>
+
       <AgentsCarousel />
+
       <Newsletter />
     </main>
   );

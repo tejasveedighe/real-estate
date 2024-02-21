@@ -1,0 +1,32 @@
+.loginPage {
+  background-image: url("https://preview.colorlib.com/theme/konato/assets/img/hero/h1_hero1.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .formContainer {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+    padding: 45px;
+
+    form {
+      width: 700px;
+    }
+    .loginBtn {
+      background: #00aeff;
+      padding: 10px 43px;
+      color: white;
+      height: 60px;
+      border: none;
+    }
+  }
+}
