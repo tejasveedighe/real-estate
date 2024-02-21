@@ -36,6 +36,10 @@ function Header() {
           Properties
         </Link>
 
+        <Link className={styles.navLink} to="/addProperty">
+          Add Property
+        </Link>
+
         <Link className={styles.navLink} to="/about">
           About
         </Link>
@@ -59,16 +63,6 @@ function Header() {
           <Dropdown>
             <Dropdown.Toggle>{Cookies.get("userName")}</Dropdown.Toggle>
             <Dropdown.Menu>
-              <Dropdown.Item>
-                <Button variant="success" className="w-100">
-                  <Link
-                    to="/profile"
-                    className="text-decoration-none text-black text-center text-white"
-                  >
-                    Profile
-                  </Link>
-                </Button>
-              </Dropdown.Item>
               <Dropdown.Item>
                 <Button
                   variant="danger"

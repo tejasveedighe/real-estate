@@ -16,6 +16,14 @@ export const getAllProperty = createAsyncThunk(
   }
 );
 
+export const addProperty = createAsyncThunk(
+  "properties/addProperty",
+  async (payload) => {
+    const res = await Axios.post("/property", payload);
+    return res.data;
+  }
+);
+
 const propertySlice = createSlice({
   name: "properties",
   initialState: initalState,
@@ -25,6 +33,7 @@ const propertySlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    // get all property
     builder.addCase(getAllProperty.pending, (state) => {
       state.loading = true;
       state.status = "pending";
@@ -35,6 +44,22 @@ const propertySlice = createSlice({
       state.errors = action.error;
     });
     builder.addCase(getAllProperty.fulfilled, (state, action) => {
+      state.loading = false;
+      state.status = "fulfilled";
+      state.properties = action.payload;
+    });
+
+    // add property
+    builder.addCase(addProperty.pending, (state) => {
+      state.loading = true;
+      state.status = "pending";
+    });
+    builder.addCase(addProperty.rejected, (state, action) => {
+      state.loading = false;
+      state.status = "rejected";
+      state.errors = action.error;
+    });
+    builder.addCase(addProperty.fulfilled, (state, action) => {
       state.loading = false;
       state.status = "fulfilled";
       state.properties = action.payload;
