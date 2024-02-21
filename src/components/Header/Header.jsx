@@ -1,10 +1,17 @@
-import React from "react";
+import React, { useCallback } from "react";
 import styles from "./Header.module.css";
-import { Button } from "react-bootstrap";
+import { Button, Dropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
+import Cookies from "js-cookie";
 
 function Header() {
+  const handleSignOut = useCallback(() => {
+    Cookies.remove("userToken");
+    Cookies.remove("userId");
+    Cookies.remove("userName");
+    Cookies.remove("userEmail");
+  }, []);
   return (
     <nav
       className={classNames(
@@ -43,15 +50,27 @@ function Header() {
         <div className={styles.navLink}>
           Call Us :
           <a className={styles.navLink} href="tel:+10 (78) 356 3276">
-            {" "}
             +10 (78) 356 3276
           </a>
         </div>
-        <Link className={styles.navLink} to="/login">
-          <Button className={styles.signinBtn} variant="primary">
-            Sign In
-          </Button>
-        </Link>
+        {Cookies.get("userToken") ? (
+          <Dropdown>
+            <Dropdown.Toggle>{Cookies.get("userName")}</Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item>
+                <Button variant="danger" onClick={handleSignOut}>
+                  Sign Out
+                </Button>
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        ) : (
+          <Link className={styles.navLink} to="/login">
+            <Button className={styles.signinBtn} variant="primary">
+              Sign In
+            </Button>
+          </Link>
+        )}
       </div>
     </nav>
   );

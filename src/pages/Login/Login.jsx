@@ -1,9 +1,10 @@
 import React, { useCallback } from "react";
 import { Form } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
-import styles from "./Login.module.css";
 import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../../redux/slices/userSlice";
+import styles from "./Login.module.css";
+import Cookies from "js-cookie";
 
 function Login() {
   const dispatch = useDispatch();
@@ -25,10 +26,11 @@ function Login() {
         })
       ).then((res) => {
         if (res.type === "user/login/fulfilled") {
-          localStorage.setItem("userToken", res.payload.token);
-          localStorage.setItem("userEmail", res.payload.userDetails.email);
-          localStorage.setItem("userName", res.payload.userDetails.name);
-          localStorage.setItem("userId", res.payload.userDetails.userId);
+          Cookies.set("userToken", res.payload.token);
+          Cookies.set("userEmail", res.payload.userDetails.email);
+          Cookies.set("userName", res.payload.userDetails.name);
+          Cookies.set("userId", res.payload.userDetails.userId);
+          
           navigate("/");
         }
       });

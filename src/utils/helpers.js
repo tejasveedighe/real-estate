@@ -1,5 +1,6 @@
 import axios from "axios";
 import { URL } from "./constants";
+import Cookies from "js-cookie";
 
 export const Axios = axios.create({
   baseURL: URL,
@@ -7,7 +8,7 @@ export const Axios = axios.create({
 
 Axios.interceptors.request.use(
   (config) => {
-    const userToken = localStorage.getItem("userToken");
+    const userToken = Cookies.get("userToken");
     if (userToken) {
       config.headers.Authorization = `Bearer ${userToken}`;
     }
