@@ -7,6 +7,7 @@ const initalState = {
   loading: false,
   status: "idle",
   errors: {},
+  lastAction: "",
 };
 
 export const getAllProperty = createAsyncThunk(
@@ -33,6 +34,14 @@ export const getPropertyById = createAsyncThunk(
   }
 );
 
+export const searchProperty = createAsyncThunk(
+  "properties/searchProperty",
+  async (payload) => {
+    const res = await Axios.post("/searchProperty", payload);
+    return res.data;
+  }
+);
+
 const propertySlice = createSlice({
   name: "properties",
   initialState: initalState,
@@ -55,6 +64,7 @@ const propertySlice = createSlice({
     builder.addCase(getAllProperty.fulfilled, (state, action) => {
       state.loading = false;
       state.status = "fulfilled";
+      state.lastAction = "getAllProperty";
       state.properties = action.payload;
     });
 
@@ -71,6 +81,7 @@ const propertySlice = createSlice({
     builder.addCase(addProperty.fulfilled, (state, action) => {
       state.loading = false;
       state.status = "fulfilled";
+      state.lastAction = "addProperty";
       state.properties = action.payload;
     });
 
@@ -87,7 +98,25 @@ const propertySlice = createSlice({
     builder.addCase(getPropertyById.fulfilled, (state, action) => {
       state.loading = false;
       state.status = "fulfilled";
+      state.lastAction = "getPropertyById";
       state.property = action.payload;
+    });
+
+    // search property
+    builder.addCase(searchProperty.pending, (state) => {
+      state.loading = true;
+      state.status = "pending";
+    });
+    builder.addCase(searchProperty.rejected, (state, action) => {
+      state.loading = false;
+      state.status = "rejected";
+      state.errors = action.error;
+    });
+    builder.addCase(searchProperty.fulfilled, (state, action) => {
+      state.loading = false;
+      state.status = "fulfilled";
+      state.lastAction = "searchProperty";
+      state.properties = action.payload;
     });
   },
 });
