@@ -58,38 +58,40 @@ function Header() {
         </Link>
       </div>
       <div className="d-flex align-items-center justify-content-center gap-4">
-        <div className={styles.navLink}>
-          <Dropdown>
-            <Dropdown.Toggle className="bg-none">
-              <PiBellSimpleBold /> <Badge>{null}</Badge>
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.Item>
-                <Link
-                  to="/requests"
-                  className="text-black text-decoration-none"
-                >
-                  You have {} requests pending click here to check
-                </Link>
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
         {isLoggedIn() ? (
-          <Dropdown>
-            <Dropdown.Toggle>{Cookies.get("userName")}</Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.Item>
-                <Button
-                  variant="danger"
-                  className="w-100"
-                  onClick={handleSignOut}
-                >
-                  Sign Out
-                </Button>
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
+          <>
+            <div className={styles.navLink}>
+              <Dropdown>
+                <Dropdown.Toggle className="bg-none">
+                  <PiBellSimpleBold /> <Badge>{null}</Badge>
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item>
+                    <Link
+                      to="/requests"
+                      className="text-black text-decoration-none"
+                    >
+                      You have {} requests pending click here to check
+                    </Link>
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
+            <Dropdown>
+              <Dropdown.Toggle>{Cookies.get("userName")}</Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item>
+                  <Button
+                    variant="danger"
+                    className="w-100"
+                    onClick={handleSignOut}
+                  >
+                    Sign Out
+                  </Button>
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </>
         ) : (
           <Link className={styles.navLink} to="/login">
             <Button className={styles.signinBtn} variant="primary">
