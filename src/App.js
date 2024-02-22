@@ -8,6 +8,7 @@ import Login from "./pages/Login/Login";
 import Property from "./pages/Property/Property";
 import SignUp from "./pages/SignUp/SignUp";
 import ProtectedRoutes from "./components/ProtectedRoutes/ProtectedRoutes";
+import Requests from "./pages/Requests/Requests";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
 
           <Route element={<ProtectedRoutes />}>
             <Route path="/addProperty" element={<AddProperty />} />
+            <Route path="/requests" element={<Requests />} />
           </Route>
         </Route>
       </Routes>

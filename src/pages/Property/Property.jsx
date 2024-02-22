@@ -1,9 +1,11 @@
 import classNames from "classnames";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getPropertyById } from "../../redux/slices/propertySlice";
 import styles from "./Property.module.css";
+import { isLoggedIn } from "../../utils/auth";
+import { Button } from "react-bootstrap";
 
 function Property() {
   const dispatch = useDispatch();
@@ -16,6 +18,8 @@ function Property() {
   useEffect(() => {
     dispatch(getPropertyById(propertyId)).catch((err) => alert(err.message));
   }, [dispatch, propertyId]);
+
+  const handleRequestClick = useCallback(() => {}, []);
 
   if (loading) {
     return (
@@ -55,25 +59,43 @@ function Property() {
         <div className="w-100">
           <h5 className={styles.subHeading}>Condition:</h5>
           <div className={styles.propertyConditionGrid}>
-            <div>
-              Area: {property.squareFeet} m<sup>2</sup>
+            <div className="text-capitalize">
+              <b>Area: </b>
+              {property.squareFeet} m<sup>2</sup>
             </div>
-            <div>Bedroom: {property.noBedroom}</div>
-            <div>Bathroom: {property.noBathroom}</div>
-            <div>Location: {property.location}</div>
-            <div>Price: ${property.price}</div>
+            <div className="text-capitalize">
+              <b>Bedroom: </b>
+              {property.noBedroom}
+            </div>
+            <div className="text-capitalize">
+              <b>Bathroom: </b>
+              {property.noBathroom}
+            </div>
+            <div className="text-capitalize">
+              <b>Location: </b>
+              {property.location}
+            </div>
+            <div className="text-capitalize">
+              <b>Price: </b>${property.price}
+            </div>
           </div>
         </div>
         <hr className={styles.solid} />
-        <div className="w-100">
-          Contact Agent:
-          <a
-            className="text-decoration-none"
-            href={`tel:${property.contactNumber}`}
-          >
-            {property.contactNumber}
-          </a>
-        </div>
+        {property.approved ? (
+          <div className="w-100">
+            Contact Agent:
+            <a
+              className="text-decoration-none"
+              href={`tel:${property.contactNumber}`}
+            >
+              {property.contactNumber}
+            </a>
+          </div>
+        ) : isLoggedIn() ? (
+          <Button onClick={handleRequestClick} variant="info">
+            Request Approval
+          </Button>
+        ) : null}
       </section>
     </main>
   );

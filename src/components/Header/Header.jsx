@@ -1,10 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react";
-import styles from "./Header.module.css";
-import { Button, Dropdown } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import classNames from "classnames";
 import Cookies from "js-cookie";
+import React, { useCallback } from "react";
+import { Badge, Button, Dropdown } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import { isLoggedIn, useUserRole } from "../../utils/auth";
+import styles from "./Header.module.css";
+import { PiBellSimpleBold } from "react-icons/pi";
 
 function Header() {
   const handleSignOut = useCallback(() => {
@@ -58,10 +59,21 @@ function Header() {
       </div>
       <div className="d-flex align-items-center justify-content-center gap-4">
         <div className={styles.navLink}>
-          Call Us :
-          <a className={styles.navLink} href="tel:+10 (78) 356 3276">
-            +10 (78) 356 3276
-          </a>
+          <Dropdown>
+            <Dropdown.Toggle className="bg-none">
+              <PiBellSimpleBold /> <Badge>{null}</Badge>
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item>
+                <Link
+                  to="/requests"
+                  className="text-black text-decoration-none"
+                >
+                  You have {} requests pending click here to check
+                </Link>
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </div>
         {isLoggedIn() ? (
           <Dropdown>
