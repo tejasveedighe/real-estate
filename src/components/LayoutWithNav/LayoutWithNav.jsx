@@ -1,9 +1,8 @@
 import React from "react";
-import Header from "../Header/Header";
 import { Outlet } from "react-router-dom";
 import Footer from "../Footer/Footer";
-
-function AuthLayout() {
+import Header from "../Header/Header";
+function LayoutWithNav() {
   return (
     <>
       <Header />
@@ -13,4 +12,4 @@ function AuthLayout() {
   );
 }
 
-export default AuthLayout;
+export default LayoutWithNav;

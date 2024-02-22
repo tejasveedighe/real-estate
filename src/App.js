@@ -1,12 +1,13 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import AuthLayout from "./components/AuthLayout/AuthLayout";
+import LayoutWithNav from "./components/LayoutWithNav/LayoutWithNav";
 import AddProperty from "./pages/AddProperty/AddProperty";
+import AllProperty from "./pages/AllProperty/AllProperty";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
-import AllProperty from "./pages/AllProperty/AllProperty";
-import SignUp from "./pages/SignUp/SignUp";
 import Property from "./pages/Property/Property";
+import SignUp from "./pages/SignUp/SignUp";
+import ProtectedRoutes from "./components/ProtectedRoutes/ProtectedRoutes";
 
 function App() {
   return (
@@ -15,11 +16,14 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
 
-        <Route element={<AuthLayout />}>
+        <Route element={<LayoutWithNav />}>
           <Route path="/" element={<Home />} />
-          <Route path="/addProperty" element={<AddProperty />} />
           <Route path="/property" element={<AllProperty />} />
           <Route path="/property/:propertyId" element={<Property />} />
+
+          <Route element={<ProtectedRoutes />}>
+            <Route path="/addProperty" element={<AddProperty />} />
+          </Route>
         </Route>
       </Routes>
     </>
