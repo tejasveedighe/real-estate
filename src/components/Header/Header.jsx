@@ -60,23 +60,25 @@ function Header() {
       <div className="d-flex align-items-center justify-content-center gap-4">
         {isLoggedIn() ? (
           <>
-            <div className={styles.navLink}>
-              <Dropdown>
-                <Dropdown.Toggle className="bg-none">
-                  <PiBellSimpleBold /> <Badge>{null}</Badge>
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item>
-                    <Link
-                      to="/requests"
-                      className="text-black text-decoration-none"
-                    >
-                      You have {} requests pending click here to check
-                    </Link>
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </div>
+            {role === "Admin" ? (
+              <div className={styles.navLink}>
+                <Dropdown>
+                  <Dropdown.Toggle className="bg-none">
+                    <PiBellSimpleBold /> <Badge>{null}</Badge>
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item>
+                      <Link
+                        to="/requests"
+                        className="text-black text-decoration-none"
+                      >
+                        You have {} requests pending click here to check
+                      </Link>
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
+            ) : null}
             <Dropdown>
               <Dropdown.Toggle>{Cookies.get("userName")}</Dropdown.Toggle>
               <Dropdown.Menu>
