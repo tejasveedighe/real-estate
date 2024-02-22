@@ -4,6 +4,7 @@ import { Button, Dropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
 import Cookies from "js-cookie";
+import { isLoggedIn, useUserRole } from "../../utils/auth";
 
 function Header() {
   const handleSignOut = useCallback(() => {
@@ -14,6 +15,7 @@ function Header() {
     window.location.reload();
   }, []);
 
+  const role = useUserRole();
   return (
     <nav
       className={classNames(
@@ -36,9 +38,11 @@ function Header() {
           Properties
         </Link>
 
-        <Link className={styles.navLink} to="/addProperty">
-          Add Property
-        </Link>
+        {role === "Admin" ? (
+          <Link className={styles.navLink} to="/addProperty">
+            Add Property
+          </Link>
+        ) : null}
 
         <Link className={styles.navLink} to="/about">
           About
@@ -59,7 +63,7 @@ function Header() {
             +10 (78) 356 3276
           </a>
         </div>
-        {Cookies.get("userToken") ? (
+        {isLoggedIn() ? (
           <Dropdown>
             <Dropdown.Toggle>{Cookies.get("userName")}</Dropdown.Toggle>
             <Dropdown.Menu>
