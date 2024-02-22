@@ -42,6 +42,14 @@ export const searchProperty = createAsyncThunk(
   }
 );
 
+export const deleteProperty = createAsyncThunk(
+  "properties/deleteProperty",
+  async (propertyId) => {
+    const res = await Axios.delete(`/property/${propertyId}`);
+    return res.data;
+  }
+);
+
 const propertySlice = createSlice({
   name: "properties",
   initialState: initalState,
@@ -117,6 +125,24 @@ const propertySlice = createSlice({
       state.status = "fulfilled";
       state.lastAction = "searchProperty";
       state.properties = action.payload;
+    });
+
+    // delete property by id
+    builder.addCase(deleteProperty.pending, (state) => {
+      state.loading = true;
+      state.status = "pending";
+    });
+    builder.addCase(deleteProperty.rejected, (state, action) => {
+      state.loading = false;
+      state.status = "rejected";
+      state.errors = action.error;
+      alert("Failed to delete Property please try later");
+    });
+    builder.addCase(deleteProperty.fulfilled, (state, action) => {
+      state.loading = false;
+      state.status = "fulfilled";
+      state.lastAction = "deleteProperty";
+      console.log(action);
     });
   },
 });
