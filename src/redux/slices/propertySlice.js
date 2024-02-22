@@ -50,6 +50,14 @@ export const deleteProperty = createAsyncThunk(
   }
 );
 
+export const approveProperty = createAsyncThunk(
+  "properties/approveProperty",
+  async (propertyId) => {
+    const res = await Axios.put(`/property/approve/${propertyId}`);
+    return res.data;
+  }
+);
+
 const propertySlice = createSlice({
   name: "properties",
   initialState: initalState,
@@ -142,7 +150,23 @@ const propertySlice = createSlice({
       state.loading = false;
       state.status = "fulfilled";
       state.lastAction = "deleteProperty";
-      console.log(action);
+    });
+
+    // approve property by id
+    builder.addCase(approveProperty.pending, (state) => {
+      state.loading = true;
+      state.status = "pending";
+    });
+    builder.addCase(approveProperty.rejected, (state, action) => {
+      state.loading = false;
+      state.status = "rejected";
+      state.errors = action.error;
+      alert("Failed to approve Property please try later");
+    });
+    builder.addCase(approveProperty.fulfilled, (state, action) => {
+      state.loading = false;
+      state.status = "fulfilled";
+      state.lastAction = "approveProperty";
     });
   },
 });
