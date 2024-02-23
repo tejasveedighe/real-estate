@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../../redux/slices/userSlice";
 import styles from "./Login.module.css";
@@ -9,6 +9,8 @@ import Cookies from "js-cookie";
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { loading } = useSelector((store) => store.user);
 
   const onSubmit = useCallback(
     (e) => {
@@ -24,15 +26,16 @@ function Login() {
           password,
         })
       ).then((res) => {
-        if (res.type === "user/login/fulfilled" && res.payload.token) {
-          Cookies.set("userToken", res.payload.token);
-          Cookies.set("userEmail", res.payload.userDetails.email);
-          Cookies.set("userName", res.payload.userDetails.name);
-          Cookies.set("userId", res.payload.userDetails.userId);
-
-          navigate("/");
-        } else {
-          alert(res.payload.message);
+        if (res.type === "user/login/fulfilled") {
+          if (res.payload.token) {
+            Cookies.set("userToken", res.payload.token);
+            Cookies.set("userEmail", res.payload.userDetails.email);
+            Cookies.set("userName", res.payload.userDetails.name);
+            Cookies.set("userId", res.payload.userDetails.userId);
+            navigate("/");
+          } else {
+            alert(res?.payload?.message);
+          }
         }
       });
     },
@@ -83,9 +86,13 @@ function Login() {
             <span>
               Don't have an account? <Link to="/signup">Sign Up</Link> here
             </span>
-            <Button type="submit" className={styles.loginBtn}>
-              Login
-            </Button>
+            {!loading ? (
+              <Button type="submit" className={styles.loginBtn}>
+                Login
+              </Button>
+            ) : (
+              <Button className={styles.loginBtn}>Loading .... </Button>
+            )}
           </div>
         </Form>
       </section>
