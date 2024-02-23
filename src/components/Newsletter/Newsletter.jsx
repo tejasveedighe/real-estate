@@ -6,7 +6,7 @@ export function Newsletter() {
   return (
     <section
       className={classNames(
-        "d-flex align-items-center",
+        "d-flex align-items-center justify-content-between",
         styles.newsLetterSection
       )}
     >
