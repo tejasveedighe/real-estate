@@ -1,11 +1,15 @@
 import classNames from "classnames";
 import React, { useCallback, useEffect } from "react";
+import { Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { getPropertyById } from "../../redux/slices/propertySlice";
-import styles from "./Property.module.css";
+import {
+  getPropertyById,
+  requestForContact,
+} from "../../redux/slices/propertySlice";
 import { isLoggedIn } from "../../utils/auth";
-import { Button } from "react-bootstrap";
+import styles from "./Property.module.css";
+import Cookies from "js-cookie";
 
 function Property() {
   const dispatch = useDispatch();
@@ -19,7 +23,24 @@ function Property() {
     dispatch(getPropertyById(propertyId)).catch((err) => alert(err.message));
   }, [dispatch, propertyId]);
 
-  const handleRequestClick = useCallback(() => {}, []);
+  const handleRequestClick = useCallback(() => {
+    dispatch(
+      requestForContact({
+        userId: Cookies.get("userId"),
+        propertyId,
+      })
+    )
+      .then((res) => {
+        if (res.type === "properties/requestForContact/fulfilled") {
+          alert(
+            "Your Request has been sent to the admin, you will see the contact when Admin Approves"
+          );
+        }
+      })
+      .catch((err) => {
+        alert(`Unable to request: ${err.message}`);
+      });
+  }, [dispatch, propertyId]);
 
   if (loading) {
     return (

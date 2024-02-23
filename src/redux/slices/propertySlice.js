@@ -58,6 +58,14 @@ export const approveProperty = createAsyncThunk(
   }
 );
 
+export const requestForContact = createAsyncThunk(
+  "properties/requestForContact",
+  async (payload) => {
+    const res = await Axios.post("/contactApproval", payload);
+    return res.data;
+  }
+);
+
 const propertySlice = createSlice({
   name: "properties",
   initialState: initalState,
@@ -167,6 +175,23 @@ const propertySlice = createSlice({
       state.loading = false;
       state.status = "fulfilled";
       state.lastAction = "approveProperty";
+    });
+
+    // approve contact
+    builder.addCase(requestForContact.pending, (state) => {
+      state.loading = true;
+      state.status = "pending";
+    });
+    builder.addCase(requestForContact.rejected, (state, action) => {
+      state.loading = false;
+      state.status = "rejected";
+      state.errors = action.error;
+      alert("Failed to requrest for contact please try later");
+    });
+    builder.addCase(requestForContact.fulfilled, (state, action) => {
+      state.loading = false;
+      state.status = "fulfilled";
+      state.lastAction = "requestForContact";
     });
   },
 });
