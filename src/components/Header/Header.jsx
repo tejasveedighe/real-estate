@@ -48,14 +48,6 @@ function Header() {
         <Link className={styles.navLink} to="/about">
           About
         </Link>
-
-        <Link className={styles.navLink} to="/blog">
-          Blog
-        </Link>
-
-        <Link className={styles.navLink} to="/contact">
-          Contact
-        </Link>
       </div>
       <div className="d-flex align-items-center justify-content-center gap-4">
         {isLoggedIn() ? (
