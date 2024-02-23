@@ -16,13 +16,11 @@ function Login() {
       const formData = new FormData(e.target);
       const email = formData.get("email");
       const password = formData.get("password");
-      const userId = formData.get("userId");
 
       dispatch(
         loginUser({
           email,
           password,
-          userId,
         })
       ).then((res) => {
         if (res.type === "user/login/fulfilled") {
@@ -30,7 +28,7 @@ function Login() {
           Cookies.set("userEmail", res.payload.userDetails.email);
           Cookies.set("userName", res.payload.userDetails.name);
           Cookies.set("userId", res.payload.userDetails.userId);
-          
+
           navigate("/");
         }
       });
@@ -50,15 +48,6 @@ function Login() {
             <span>Enter Login Details to get access</span>
           </div>
           <div className="w-100 d-flex flex-column gap-4">
-            <Form.Group className="w-100">
-              <Form.Label>User Id</Form.Label>
-              <Form.Control
-                required
-                type="number"
-                name="userId"
-                placeholder="User Id"
-              />
-            </Form.Group>
             <Form.Group className="w-100">
               <Form.Label>Email Address</Form.Label>
               <Form.Control
