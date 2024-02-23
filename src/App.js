@@ -11,6 +11,7 @@ import Property from "./pages/Property/Property";
 import Requests from "./pages/Requests/Requests";
 import SignUp from "./pages/SignUp/SignUp";
 import ManageUser from "./pages/ManageUser/ManageUsers";
+import User from "./pages/User/User";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/addProperty" element={<AddProperty />} />
           <Route path="/requests" element={<Requests />} />
           <Route path="/manageUsers" element={<ManageUser />} />
+          <Route path="/user/:userId" element={<User />} />
         </Route>
       </Route>
     </Routes>

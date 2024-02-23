@@ -32,6 +32,14 @@ export const deleteUserById = createAsyncThunk(
   }
 );
 
+export const getUserById = createAsyncThunk(
+  "properties/getUserById",
+  async (userId) => {
+    const res = await Axios.get(`/user/${userId}`);
+    return res.data;
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -105,6 +113,22 @@ const userSlice = createSlice({
     builder.addCase(deleteUserById.fulfilled, (state, action) => {
       state.loading = false;
       state.status = "fulfilled";
+    });
+
+    // get user by id
+    builder.addCase(getUserById.pending, (state) => {
+      state.loading = true;
+      state.status = "pending";
+    });
+    builder.addCase(getUserById.rejected, (state, action) => {
+      state.loading = true;
+      state.status = "rejected";
+      state.errors = action.error;
+    });
+    builder.addCase(getUserById.fulfilled, (state, action) => {
+      state.loading = false;
+      state.status = "fulfilled";
+      state.user = action.payload;
     });
   },
 });

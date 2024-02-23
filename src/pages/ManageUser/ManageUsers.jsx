@@ -1,16 +1,14 @@
 import Cookies from "js-cookie";
-import styles from "./ManageUser.module.css";
 import React, { useCallback, useEffect, useState } from "react";
+import { Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import AddNewUserModal from "../../components/AddNewUserModal/AddNewUserModal";
 import UserProfileCard from "../../components/UserProfileCard/UserProfileCard";
 import { deleteUserById, getAllUsers } from "../../redux/slices/userSlice";
-import { Button } from "react-bootstrap";
-import AddNewUserModal from "../../components/AddNewUserModal/AddNewUserModal";
+import styles from "./ManageUser.module.css";
 
 function ManageUser() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const { users, loading, status } = useSelector((store) => store.user);
   const currentUserId = parseInt(Cookies.get("userId"));
