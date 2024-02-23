@@ -40,9 +40,14 @@ function Header() {
         </Link>
 
         {role === "Admin" ? (
-          <Link className={styles.navLink} to="/addProperty">
-            Add Property
-          </Link>
+          <>
+            <Link className={styles.navLink} to="/addProperty">
+              Add Property
+            </Link>
+            <Link className={styles.navLink} to="/manageUsers">
+              Manage Users
+            </Link>
+          </>
         ) : null}
 
         <Link className={styles.navLink} to="/about">

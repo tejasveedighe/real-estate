@@ -3,6 +3,7 @@ import { Axios } from "../../utils/helpers";
 
 const initialState = {
   user: null,
+  users: [],
   loading: false,
   status: "idle",
   errors: {},
@@ -18,6 +19,11 @@ export const signupUser = createAsyncThunk("user/signup", async (payload) => {
   return res.data;
 });
 
+export const getAllUsers = createAsyncThunk("user/getAllUsers", async () => {
+  const res = await Axios.get("/user");
+  return res.data;
+});
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -28,8 +34,7 @@ const userSlice = createSlice({
     removeUser: (state) => {
       state.user = null;
     },
-   
-    },
+  },
   extraReducers: (builder) => {
     // login
     builder.addCase(loginUser.pending, (state) => {
@@ -43,7 +48,7 @@ const userSlice = createSlice({
     });
     builder.addCase(loginUser.fulfilled, (state, action) => {
       state.loading = false;
-      state.status = "fulfilld";
+      state.status = "fulfilled";
       state.user = action.payload;
     });
 
@@ -59,8 +64,24 @@ const userSlice = createSlice({
     });
     builder.addCase(signupUser.fulfilled, (state, action) => {
       state.loading = false;
-      state.status = "fulfilld";
+      state.status = "fulfilled";
       state.user = action.payload;
+    });
+
+    // get all users
+    builder.addCase(getAllUsers.pending, (state) => {
+      state.loading = true;
+      state.status = "pending";
+    });
+    builder.addCase(getAllUsers.rejected, (state, action) => {
+      state.loading = true;
+      state.status = "rejected";
+      state.errors = action.error;
+    });
+    builder.addCase(getAllUsers.fulfilled, (state, action) => {
+      state.loading = false;
+      state.status = "fulfilled";
+      state.users = action.payload;
     });
   },
 });

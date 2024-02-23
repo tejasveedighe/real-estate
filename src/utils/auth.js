@@ -3,7 +3,7 @@ import { decodeToken } from "react-jwt";
 
 export function useUserRole() {
   try {
-    if (!isLoggedIn()) return false;
+    if (!isLoggedIn()) return null;
     const token = Cookies.get("userToken");
     const decoded = decodeToken(token);
     return decoded?.role;
