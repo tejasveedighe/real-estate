@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import UserProfileCard from "../../components/UserProfileCard/UserProfileCard";
-import { getAllUsers } from "../../redux/slices/userSlice";
+import { deleteUserById, getAllUsers } from "../../redux/slices/userSlice";
 import { Button } from "react-bootstrap";
 import AddNewUserModal from "../../components/AddNewUserModal/AddNewUserModal";
 
@@ -21,17 +21,27 @@ function ManageUser() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (status === "fulfilled") {
+    if (!loading) {
       setFilteredUsers(() => {
-        return users.filter((user) => user.userId !== currentUserId);
+        return users?.filter((user) => user.userId !== currentUserId);
       });
     }
-  }, [status, users, currentUserId]);
+  }, [users, currentUserId, loading]);
 
   const [openAddNewUserModal, setOpenAddNewUserModal] = useState(false);
   const handleAddNewUser = useCallback(() => {
     setOpenAddNewUserModal((prev) => !prev);
   }, []);
+
+  const handleDeleteUser = useCallback(
+    (userId) => {
+      dispatch(deleteUserById(userId)).then((res) => {
+        alert("User was deleted");
+        dispatch(getAllUsers());
+      });
+    },
+    [dispatch]
+  );
 
   if (loading) {
     return (
@@ -57,7 +67,11 @@ function ManageUser() {
       </div>
       <div className={styles.usersGrid}>
         {filteredUser.map((user) => (
-          <UserProfileCard key={user.userId} user={user} />
+          <UserProfileCard
+            key={user.userId}
+            user={user}
+            deleteUser={handleDeleteUser}
+          />
         ))}
       </div>
       <AddNewUserModal onHide={handleAddNewUser} show={openAddNewUserModal} />

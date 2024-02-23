@@ -2,7 +2,7 @@ import { Button } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
 
-function UserProfileCard({ user }) {
+function UserProfileCard({ user, deleteUser }) {
   return (
     <Card style={{ width: "18rem" }}>
       <Card.Body>
@@ -10,7 +10,9 @@ function UserProfileCard({ user }) {
         <Card.Subtitle className="mb-2 text-muted">{user.email}</Card.Subtitle>
         <div className="d-flex align-items-center justify-content-around">
           <Link to={`/user/${user.userId}`}>View Profile</Link>
-          <Button variant="danger">Delete User</Button>
+          <Button onClick={deleteUser.bind(this, user.userId)} variant="danger">
+            Delete User
+          </Button>
         </div>
       </Card.Body>
     </Card>
