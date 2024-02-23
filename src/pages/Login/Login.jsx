@@ -1,5 +1,5 @@
-import React, { useCallback } from "react";
-import { Form } from "react-bootstrap";
+import React, { useCallback, useState } from "react";
+import { Button, Form } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../../redux/slices/userSlice";
@@ -13,6 +13,7 @@ function Login() {
   const onSubmit = useCallback(
     (e) => {
       e.preventDefault();
+
       const formData = new FormData(e.target);
       const email = formData.get("email");
       const password = formData.get("password");
@@ -23,13 +24,15 @@ function Login() {
           password,
         })
       ).then((res) => {
-        if (res.type === "user/login/fulfilled") {
+        if (res.type === "user/login/fulfilled" && res.payload.token) {
           Cookies.set("userToken", res.payload.token);
           Cookies.set("userEmail", res.payload.userDetails.email);
           Cookies.set("userName", res.payload.userDetails.name);
           Cookies.set("userId", res.payload.userDetails.userId);
 
           navigate("/");
+        } else {
+          alert(res.payload.message);
         }
       });
     },
@@ -39,7 +42,7 @@ function Login() {
   return (
     <main className={styles.loginPage}>
       <section className={styles.formContainer}>
-        <form
+        <Form
           onSubmit={onSubmit}
           className="d-flex flex-column align-items-start gap-5"
         >
@@ -52,7 +55,7 @@ function Login() {
               <Form.Label>Email Address</Form.Label>
               <Form.Control
                 required
-                type="mail"
+                type="email"
                 name="email"
                 placeholder="Email Address"
               />
@@ -80,11 +83,11 @@ function Login() {
             <span>
               Don't have an account? <Link to="/signup">Sign Up</Link> here
             </span>
-            <button type="submit" className={styles.loginBtn}>
+            <Button type="submit" className={styles.loginBtn}>
               Login
-            </button>
+            </Button>
           </div>
-        </form>
+        </Form>
       </section>
     </main>
   );
