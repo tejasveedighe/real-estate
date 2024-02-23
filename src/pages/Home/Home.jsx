@@ -78,8 +78,6 @@ function Home() {
         </div>
       </section>
 
-      <Properties title={"Properties for Sale"} />
-
       <section
         className={classNames(
           "d-flex align-items-center justify-content-center",
