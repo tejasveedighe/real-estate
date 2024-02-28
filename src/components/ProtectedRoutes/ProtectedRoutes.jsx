@@ -1,12 +1,10 @@
-import Cookies from "js-cookie";
 import React from "react";
-import { decodeToken } from "react-jwt";
 import { Navigate, Outlet } from "react-router-dom";
-import { useUserRole } from "../../utils/auth";
+import { getUserData } from "../../utils/auth";
 
 function ProtectedRoutes() {
   try {
-    const role = useUserRole();
+    const { userRole: role } = getUserData();
     if (!role) {
       alert("Login to continue");
       return <Navigate to="/" />;

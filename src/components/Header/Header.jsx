@@ -2,10 +2,10 @@ import classNames from "classnames";
 import Cookies from "js-cookie";
 import React, { useCallback } from "react";
 import { Badge, Button, Dropdown } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { isLoggedIn, useUserRole } from "../../utils/auth";
-import styles from "./Header.module.css";
 import { PiBellSimpleBold } from "react-icons/pi";
+import { Link } from "react-router-dom";
+import { getUserData, isLoggedIn } from "../../utils/auth";
+import styles from "./Header.module.css";
 
 function Header() {
   const handleSignOut = useCallback(() => {
@@ -16,7 +16,7 @@ function Header() {
     window.location.reload();
   }, []);
 
-  const role = useUserRole();
+  const { userRole: role } = getUserData();
   return (
     <nav
       className={classNames(

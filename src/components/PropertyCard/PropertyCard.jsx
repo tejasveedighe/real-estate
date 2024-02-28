@@ -1,14 +1,14 @@
 import React, { useCallback } from "react";
 import { Button, Card, ListGroup } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import styles from "./PropertyCard.module.css";
-import { useUserRole } from "../../utils/auth";
 import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import { deleteProperty } from "../../redux/slices/propertySlice";
+import { getUserData } from "../../utils/auth";
+import styles from "./PropertyCard.module.css";
 
 function PropertyCard({ property, index }) {
   const dispatch = useDispatch();
-  const role = useUserRole();
+  const { userRole: role } = getUserData();
 
   const handleDeleteProperty = useCallback(() => {
     dispatch(deleteProperty(property.propertyId))
