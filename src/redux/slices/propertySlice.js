@@ -66,6 +66,16 @@ export const requestForContact = createAsyncThunk(
   }
 );
 
+export const getPropertyDataByUser = createAsyncThunk(
+  "properties/getPropertyByUser",
+  async (payload) => {
+    const res = await Axios.get(
+      `/Property/${payload.userId}/${payload.propertyId}`
+    );
+    return res.data;
+  }
+);
+
 const propertySlice = createSlice({
   name: "properties",
   initialState: initalState,
@@ -192,6 +202,24 @@ const propertySlice = createSlice({
       state.loading = false;
       state.status = "fulfilled";
       state.lastAction = "requestForContact";
+    });
+
+    // get property by user
+    builder.addCase(getPropertyDataByUser.pending, (state) => {
+      state.loading = true;
+      state.status = "pending";
+    });
+    builder.addCase(getPropertyDataByUser.rejected, (state, action) => {
+      state.loading = false;
+      state.status = "rejected";
+      state.errors = action.error;
+      alert("Failed to fetch the property data for user");
+    });
+    builder.addCase(getPropertyDataByUser.fulfilled, (state, action) => {
+      state.loading = false;
+      state.status = "fulfilled";
+      state.lastAction = "getPropertyDataByUser";
+      state.property = action.payload;
     });
   },
 });

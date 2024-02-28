@@ -5,9 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
   getPropertyById,
+  getPropertyDataByUser,
   requestForContact,
 } from "../../redux/slices/propertySlice";
-import { isLoggedIn } from "../../utils/auth";
+import { getUserData, isLoggedIn } from "../../utils/auth";
 import styles from "./Property.module.css";
 import Cookies from "js-cookie";
 
@@ -15,13 +16,22 @@ function Property() {
   const dispatch = useDispatch();
   const { propertyId } = useParams();
 
-  const { loading, errors, status, property } = useSelector(
+  const { loading, status, property } = useSelector(
     (store) => store.properties
   );
 
-  useEffect(() => {
-    dispatch(getPropertyById(propertyId)).catch((err) => alert(err.message));
+  const getPropertyData = useCallback(() => {
+    if (isLoggedIn()) {
+      dispatch(
+        getPropertyDataByUser({ userId: getUserData().userId, propertyId })
+      ).catch((err) => alert(err.message));
+    } else
+      dispatch(getPropertyById(propertyId)).catch((err) => alert(err.message));
   }, [dispatch, propertyId]);
+
+  useEffect(() => {
+    getPropertyData();
+  }, [getPropertyData]);
 
   const handleRequestClick = useCallback(() => {
     dispatch(
@@ -102,7 +112,7 @@ function Property() {
           </div>
         </div>
         <hr className={styles.solid} />
-        {property.approved ? (
+        {property.approvalStatus === 2 ? (
           <div className="w-100">
             Contact Agent:
             <a
@@ -112,7 +122,11 @@ function Property() {
               {property.contactNumber}
             </a>
           </div>
-        ) : isLoggedIn() ? (
+        ) : property.approvalStatus === 1 ? (
+          <Button variant="info">Pending Approval</Button>
+        ) : property.approvalStatus === 3 ? (
+          <Button variant="danger">Rejected</Button>
+        ) : isLoggedIn() && property.approvalStatus === 0 ? (
           <Button onClick={handleRequestClick} variant="info">
             Request Approval
           </Button>
