@@ -4,6 +4,7 @@ import { Axios } from "../../utils/helpers";
 const initalState = {
   properties: [],
   property: {},
+  requests: [],
   loading: false,
   status: "idle",
   errors: {},
@@ -75,6 +76,11 @@ export const getPropertyDataByUser = createAsyncThunk(
     return res.data;
   }
 );
+
+export const getAllContactRequests = createAsyncThunk("properties/getAllContactRequests", async () => {
+  const res = await Axios.get("/getlistofapprovalrequest/")
+  return res.data;
+})
 
 const propertySlice = createSlice({
   name: "properties",
@@ -224,6 +230,25 @@ const propertySlice = createSlice({
       state.status = "fulfilled";
       state.lastAction = "getPropertyDataByUser";
       state.property = action.payload;
+    });
+
+
+    // get contact requests by type
+    builder.addCase(getAllContactRequests.pending, (state) => {
+      state.loading = true;
+      state.status = "pending";
+    });
+    builder.addCase(getAllContactRequests.rejected, (state, action) => {
+      state.loading = false;
+      state.status = "rejected";
+      state.errors = action.error;
+      alert("Failed to fetch the contact requests");
+    });
+    builder.addCase(getAllContactRequests.fulfilled, (state, action) => {
+      state.loading = false;
+      state.status = "fulfilled";
+      state.lastAction = "getAllContactRequests";
+      state.requests = action.payload;
     });
   },
 });
