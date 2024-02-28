@@ -10,7 +10,6 @@ import {
 } from "../../redux/slices/propertySlice";
 import { getUserData, isLoggedIn } from "../../utils/auth";
 import styles from "./Property.module.css";
-import Cookies from "js-cookie";
 
 function Property() {
   const dispatch = useDispatch();
@@ -36,7 +35,7 @@ function Property() {
   const handleRequestClick = useCallback(() => {
     dispatch(
       requestForContact({
-        userId: Cookies.get("userId"),
+        userId: getUserData().userId,
         propertyId,
       })
     )
@@ -112,25 +111,28 @@ function Property() {
           </div>
         </div>
         <hr className={styles.solid} />
-        {property.approvalStatus === 2 ? (
-          <div className="w-100">
-            Contact Agent:
-            <a
-              className="text-decoration-none"
-              href={`tel:${property.contactNumber}`}
-            >
-              {property.contactNumber}
-            </a>
-          </div>
-        ) : property.approvalStatus === 1 ? (
-          <Button variant="info">Pending Approval</Button>
-        ) : property.approvalStatus === 3 ? (
-          <Button variant="danger">Rejected</Button>
-        ) : isLoggedIn() && property.approvalStatus === 0 ? (
-          <Button onClick={handleRequestClick} variant="info">
-            Request Approval
-          </Button>
-        ) : null}
+        <div>
+          {getUserData().userRole ===
+          "Admin" ? null : property.approvalStatus === 2 ? (
+            <div className="w-100">
+              Contact Agent:
+              <a
+                className="text-decoration-none"
+                href={`tel:${property.contactNumber}`}
+              >
+                {property.contactNumber}
+              </a>
+            </div>
+          ) : property.approvalStatus === 1 ? (
+            <Button variant="info">Pending Approval</Button>
+          ) : property.approvalStatus === 3 ? (
+            <Button variant="danger">Rejected</Button>
+          ) : isLoggedIn() && property.approvalStatus === 0 ? (
+            <Button onClick={handleRequestClick} variant="info">
+              Request Approval
+            </Button>
+          ) : null}
+        </div>
       </section>
     </main>
   );

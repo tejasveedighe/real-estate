@@ -7,7 +7,7 @@ export function isLoggedIn() {
 
 export function getUserData() {
   try {
-    if (!isLoggedIn()) return null;
+    if (!isLoggedIn()) return {};
     const token = Cookies.get("userToken");
     const userRole = decodeToken(token).role;
     const userId = Cookies.get("userId");
@@ -20,6 +20,6 @@ export function getUserData() {
       userRole,
     };
   } catch (error) {
-    return {};
+    return {}
   }
 }
