@@ -202,6 +202,10 @@ const propertySlice = createSlice({
       state.loading = false;
       state.status = "fulfilled";
       state.lastAction = "requestForContact";
+      state.property = {
+        ...state.property,
+        approvalStatus: action.payload.approvalStatus
+      }
     });
 
     // get property by user
