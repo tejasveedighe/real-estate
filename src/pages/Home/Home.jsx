@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import React from "react";
-import { Button } from "react-bootstrap";
+import { Button, ButtonGroup } from "react-bootstrap";
 import "react-multi-carousel/lib/styles.css";
 import { Link } from "react-router-dom";
 import { AgentsCarousel } from "../../components/AgentsGridCarousel/AgentsCarousel";
@@ -13,20 +13,22 @@ function Home() {
     <main className="">
       <section
         className={classNames(
-          "d-flex align-items-center justify-content-center",
+          "d-flex align-items-center flex-column justify-content-center",
           styles.imageSection
         )}
       >
-        <div className="container text-white">
-          <span className="fs-4">3 Bed - 2 Bath - 2000 Sq Ft</span>
-          <p className={styles.propertyHeading}>Light House NY</p>
-          <p className={"fs-5"}>
-            Get Started by choosing from one of our pre-built page <br />
-            templates to showcase your properties.
-          </p>
-          <p className="fs-2">$ 4,569 </p>
-          <Button className={styles.viewBtn}>View Property</Button>
+        <div className={classNames("text-white", styles.searchProperty)}>
+          Discover a place
+          <br /> you'll love to Live.
         </div>
+        <ButtonGroup>
+          <Button>Buy</Button>
+          <Button>Rent</Button>
+          <Button>Sell</Button>
+        </ButtonGroup>
+        <search>
+
+        </search>
       </section>
 
       <Properties title={"Display Latest & Featured Properties"} />

@@ -2,14 +2,16 @@
   background-image: url("https://preview.colorlib.com/theme/konato/assets/img/hero/h1_hero1.jpg");
   height: 690px;
 
-  & .propertyHeading {
-    font-size: 55px;
+  .searchProperty {
+    font-weight: bolder;
+    font-size: 50px;
+    line-height: 50px;
   }
 
-  & .viewBtn {
-    background-color: var(--lightBlue);
-    border: 1px solid var(--lightBlue);
-    padding: 10px 17px;
+  button {
+    background-color: var(--lightBlue) 0;
+    border: 3px solid var(--lightBlue);
+    padding: 10px 20px;
   }
 }
 
@@ -78,6 +80,3 @@
     }
   }
 }
-
-
-
