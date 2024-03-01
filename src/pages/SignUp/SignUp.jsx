@@ -1,13 +1,27 @@
-import React, { useCallback } from "react";
-import { Form } from "react-bootstrap";
+import React, { useCallback, useState } from "react";
+import { Button, FloatingLabel, Form, InputGroup } from "react-bootstrap";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import styles from "./SignUp.module.css";
-import { useDispatch } from "react-redux";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import { signupUser } from "../../redux/slices/userSlice";
+import styles from "./SignUp.module.css";
 
 function SignUp() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { loading } = useSelector((store) => store.properties);
+
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [rePasswordVisible, setRePasswordVisible] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
+
+  const [selectedOption, setSelectedOption] = useState("");
+
+  const handleOptionChange = useCallback((e) => {
+    setSelectedOption(e.target.value);
+  }, []);
 
   const onSubmit = useCallback(
     (e) => {
@@ -20,7 +34,7 @@ function SignUp() {
       const repassword = formData.get("re-password");
 
       if (password !== repassword) {
-        alert("Passwords do not match");
+        setPasswordError("Passwords do not match");
         e.preventDefault();
         e.stopPropagation();
         return;
@@ -44,64 +58,166 @@ function SignUp() {
     },
     [dispatch, navigate]
   );
+  const togglePasswordVisibility = useCallback(() => {
+    setPasswordVisible((prev) => !prev);
+  }, []);
+  const toggleRePasswordVisibility = useCallback(() => {
+    setRePasswordVisible((prev) => !prev);
+  }, []);
+
+  const [selectedCountryCode, setSelectedCountryCode] = useState("+1");
+
+  const handleCountryCodeChange = (e) => {
+    setSelectedCountryCode(e.target.value);
+  };
+
   return (
     <main className={styles.loginPage}>
-      <section className={styles.formContainer}>
-        <form
-          onSubmit={onSubmit}
-          className="d-flex flex-column align-items-start gap-5"
-        >
-          <div className="d-flex flex-column align-items-center text-center w-100">
-            <h1>Sign Up</h1>
-            <span>Create Account to get access</span>
-          </div>
-          <div className="w-100 d-flex flex-column gap-4">
-            <Form.Group className="w-100">
-              <Form.Label>Full Name</Form.Label>
-              <Form.Control
-                required
-                type="text"
-                name="name"
-                placeholder="Your Full Name"
-              />
-            </Form.Group>
-            <Form.Group className="w-100">
-              <Form.Label>Email Address</Form.Label>
-              <Form.Control
-                required
-                type="mail"
-                name="email"
-                placeholder="Email Address"
-              />
-            </Form.Group>
-            <Form.Group className="w-100">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                required
-                type="password"
-                name="password"
-                placeholder="Enter Password"
-              />
-            </Form.Group>
-            <Form.Group className="w-100">
-              <Form.Label>Confirm Password</Form.Label>
-              <Form.Control
-                required
-                type="password"
-                name="re-password"
-                placeholder="Enter Password Again"
-              />
-            </Form.Group>
-          </div>
-          <div className="w-100 d-flex align-items-center justify-content-between">
-            <span>
-              Already have an account? <Link to="/login">Login</Link> here
-            </span>
-            <button type="submit" className={styles.loginBtn}>
-              Sign Up
-            </button>
-          </div>
-        </form>
+      <section className={styles.right}>
+        <div className={styles.formContainer}>
+          <Form
+            onSubmit={onSubmit}
+            className="d-flex flex-column align-items-start gap-2"
+          >
+            <h5>
+              <span>Sign Up</span>
+            </h5>
+            <div className="mt-3 w-100 d-flex flex-column gap-4">
+              <Form.Group className={styles.input}>
+                <Form.Label>I am a</Form.Label>
+                <div className="d-flex align-items-center justify-content-between">
+                  <Form.Check
+                    required
+                    type="radio"
+                    id="check-buyer"
+                    label="Buyer/Owner/Tenant"
+                    name="userType"
+                    value="buyer"
+                    checked={selectedOption === "buyer"}
+                    onChange={handleOptionChange}
+                  />
+                  <Form.Check
+                    required
+                    type="radio"
+                    id="check-agent"
+                    label="Agent"
+                    name="userType"
+                    value="agent"
+                    checked={selectedOption === "agent"}
+                    onChange={handleOptionChange}
+                  />
+                  <Form.Check
+                    required
+                    type="radio"
+                    id="check-builder"
+                    label="Builder"
+                    name="userType"
+                    value="builder"
+                    checked={selectedOption === "builder"}
+                    onChange={handleOptionChange}
+                  />
+                </div>
+              </Form.Group>
+
+              <FloatingLabel
+                label="Name"
+                controlId="floatingEmail"
+                className={styles.input}
+              >
+                <Form.Control
+                  required
+                  type="text"
+                  name="name"
+                  placeholder="Email Address"
+                />
+              </FloatingLabel>
+              <FloatingLabel
+                label="Email Address"
+                controlId="floatingEmail"
+                className={styles.input}
+              >
+                <Form.Control
+                  required
+                  type="email"
+                  name="email"
+                  placeholder="Email Address"
+                />
+              </FloatingLabel>
+              <InputGroup>
+                <FloatingLabel
+                  controlId="floatingPassword"
+                  label="Password"
+                  className={styles.input}
+                >
+                  <Form.Control
+                    required
+                    type={passwordVisible ? "text" : "password"}
+                    name="password"
+                    placeholder="Enter Password"
+                  />
+                </FloatingLabel>
+                <button type="button" onClick={togglePasswordVisibility}>
+                  {passwordVisible ? <FaRegEyeSlash /> : <FaRegEye />}
+                </button>
+              </InputGroup>
+              {passwordError && (
+                <span className="text-danger">{passwordError}</span>
+              )}
+              <InputGroup>
+                <FloatingLabel
+                  controlId="floatingRePassword"
+                  label="Re-Password"
+                  className={styles.input}
+                >
+                  <Form.Control
+                    required
+                    type={rePasswordVisible ? "text" : "password"}
+                    name="re-password"
+                    placeholder="Enter Password again"
+                  />
+                </FloatingLabel>
+                <button type="button" onClick={toggleRePasswordVisibility}>
+                  {rePasswordVisible ? <FaRegEyeSlash /> : <FaRegEye />}
+                </button>
+              </InputGroup>
+              {passwordError && (
+                <span className="text-danger">{passwordError}</span>
+              )}
+              <div className="d-flex align-items-end justify-content-between">
+                <Form.Select
+                  className={styles.countryCode}
+                  value={selectedCountryCode}
+                  onChange={handleCountryCodeChange}
+                >
+                  <option value="+1">+1 USA</option>
+                  <option value="+91">+91 IND</option>
+                  <option value="+123">+123 IND</option>
+                </Form.Select>
+                <FloatingLabel
+                  controlId="floatingPhone"
+                  label="Phone Number"
+                  className={styles.input}
+                >
+                  <Form.Control
+                    required
+                    type="tel"
+                    name="phoneNumber"
+                    placeholder="Enter Phone Number"
+                  />
+                </FloatingLabel>
+              </div>
+              <Button type="submit" className={styles.loginBtn}>
+                {loading ? <LoadingSpinner /> : <span>Sign Up</span>}
+              </Button>
+              <div className="w-100 text-center">
+                Already Have an account? &nbsp;
+                <Link to="/login" className="text-decoration-none">
+                  Login Here.
+                </Link>
+              </div>
+            </div>
+          </Form>
+        </div>
       </section>
     </main>
   );

@@ -7,8 +7,8 @@
   }
 
   & .viewBtn {
-    background-color: #00aeff;
-    border: 1px solid #00aeff;
+    background-color: var(--lightBlue);
+    border: 1px solid var(--lightBlue);
     padding: 10px 17px;
   }
 }
@@ -51,8 +51,8 @@
   }
 
   .viewAllPropertyButton {
-    background: #00aeff;
-    border: 1px solid #00aeff;
+    background: var(--lightBlue);
+    border: 1px solid var(--lightBlue);
     padding: 10px;
   }
 

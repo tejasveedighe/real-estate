@@ -5,7 +5,7 @@
 }
 
 .navbar {
-  background: #004274;
+  background: var(--darkBlue);
   font-weight: 500;
 }
 
@@ -53,7 +53,7 @@
     }
 
     .loginItem {
-      background-color: #004274;
+      background-color: var(--darkBlue);
       color: white;
       text-align: center;
       border-radius: 50px;
@@ -62,7 +62,7 @@
 
     .signUpItem {
       text-align: center;
-      color: #004274;
+      color: var(--darkBlue);
       a {
         font-weight: bold;
         margin-left: 4px;

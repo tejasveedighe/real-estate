@@ -37,7 +37,7 @@
         }
         label {
           border: none;
-          color: #00aeff;
+          color: var(--lightBlue);
         }
       }
 
@@ -49,7 +49,7 @@
       }
     }
     .loginBtn {
-      background: #00aeff;
+      background: var(--lightBlue);
       padding: 10px 43px;
       color: white;
       border: none;
