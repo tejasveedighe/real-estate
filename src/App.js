@@ -15,13 +15,16 @@ import User from "./pages/User/User";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import LogOutNav from "./components/LogOutNav/LogOutNav";
 
 function App() {
   return (
     <>
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
+        <Route element={<LogOutNav />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+        </Route>
 
         <Route element={<LayoutWithNav />}>
           <Route path="/" element={<Home />} />
