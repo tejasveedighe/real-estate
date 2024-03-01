@@ -1,16 +1,11 @@
 import classNames from "classnames";
 import Cookies from "js-cookie";
-import React, { useCallback, useState } from "react";
-import { Badge, Button, Dropdown, NavDropdown } from "react-bootstrap";
+import React, { useCallback } from "react";
+import { Badge, Button, Dropdown } from "react-bootstrap";
 import { PiBellSimpleBold } from "react-icons/pi";
 import { Link } from "react-router-dom";
 import { getUserData, isLoggedIn } from "../../utils/auth";
 import styles from "./Header.module.css";
-import {
-  RiArrowDropDownLine,
-  RiArrowDropUpLine,
-  RiArrowUpLine,
-} from "react-icons/ri";
 
 function Header() {
   const handleSignOut = useCallback(() => {
@@ -97,8 +92,11 @@ function Header() {
           </Dropdown>
         </>
       ) : (
-        <Dropdown className={styles.dropdown} title="Login">
-          <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">
+        <Dropdown className={styles.dropdown}>
+          <Dropdown.Toggle
+            className={styles.dropdownToggle}
+            id="dropdown-custom-components"
+          >
             Login
           </Dropdown.Toggle>
           <Dropdown.Menu>
@@ -129,12 +127,14 @@ function Header() {
             <Dropdown.Divider />
             <div className={styles.listGroup}>
               <Dropdown.Item className={styles.loginItem} type="button">
-                Login
+                <Link to={"/login"} className="text-white text-decoration-none">
+                  Login
+                </Link>
               </Dropdown.Item>
-              <Dropdown.Item className={styles.signUpItem}>
+              <span className={styles.signUpItem}>
                 New To Konio?
                 <Link to="/signup">Sign Up</Link>
-              </Dropdown.Item>
+              </span>
             </div>
           </Dropdown.Menu>
         </Dropdown>
@@ -156,32 +156,5 @@ const Divider = () => {
     </div>
   );
 };
-
-const CustomToggle = React.forwardRef(({ children, onClick, onClose }, ref) => {
-  const [clicked, setClicked] = useState(false);
-
-  const handleClick = (e) => {
-    e.preventDefault();
-    setClicked((prev) => !prev);
-    onClick(e);
-  };
-
-  const handleClose = () => {
-    setClicked(false);
-    onClose();
-  };
-
-  return (
-    <a
-      className={classNames(styles.dropdownToggle)}
-      ref={ref}
-      onClick={handleClick}
-    >
-      {children}
-      {clicked ? <RiArrowDropUpLine /> : <RiArrowDropDownLine />}
-      <Dropdown.Menu show={clicked} onClose={handleClose} />
-    </a>
-  );
-});
 
 export default Header;
