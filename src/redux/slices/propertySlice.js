@@ -77,10 +77,13 @@ export const getPropertyDataByUser = createAsyncThunk(
   }
 );
 
-export const getAllContactRequests = createAsyncThunk("properties/getAllContactRequests", async () => {
-  const res = await Axios.get("/getlistofapprovalrequest/")
-  return res.data;
-})
+export const getAllContactRequests = createAsyncThunk(
+  "properties/getAllContactRequests",
+  async () => {
+    const res = await Axios.get("/getlistofapprovalrequest/");
+    return res.data;
+  }
+);
 
 const propertySlice = createSlice({
   name: "properties",
@@ -210,8 +213,8 @@ const propertySlice = createSlice({
       state.lastAction = "requestForContact";
       state.property = {
         ...state.property,
-        approvalStatus: action.payload.approvalStatus
-      }
+        approvalStatus: action.payload.approvalStatus,
+      };
     });
 
     // get property by user
@@ -231,7 +234,6 @@ const propertySlice = createSlice({
       state.lastAction = "getPropertyDataByUser";
       state.property = action.payload;
     });
-
 
     // get contact requests by type
     builder.addCase(getAllContactRequests.pending, (state) => {

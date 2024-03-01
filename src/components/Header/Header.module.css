@@ -6,11 +6,66 @@
 
 .navbar {
   background: #004274;
-  padding: 15px;
   font-weight: 500;
 }
 
-.signinBtn {
-  background: #00aeff;
-  border: 1px solid #00aeff;
+.dropdown {
+  color: white;
+  background-color: inherit;
+  border: none;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 5px;
+  width: 300px;
+  margin-top: 9px;
+
+  .dropdownToggle {
+    color: white;
+    text-decoration: none;
+    padding: 4px;
+    height: 100%;
+    border-radius: 5px;
+  }
+
+  .show {
+    background-color: white;
+    color: black;
+    height: 110%;
+  }
+
+  .listGroup {
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    width: 240px;
+
+    li {
+      width: 100%;
+    }
+
+    .listItem {
+      padding-left: 20px;
+    }
+
+    .loginItem {
+      background-color: #004274;
+      color: white;
+      text-align: center;
+      border-radius: 50px;
+      padding: 3px;
+    }
+
+    .signUpItem {
+      text-align: center;
+      color: #004274;
+      a {
+        font-weight: bold;
+        margin-left: 4px;
+      }
+    }
+  }
 }
