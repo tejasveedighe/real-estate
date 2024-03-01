@@ -16,11 +16,11 @@ export function Properties({ title }) {
   if (propertiesStore.loading) return <section>Loading</section>;
 
   return (
-    <section className="d-flex align-items-center justify-content-center flex-column mt-5">
+    <section className=" d-flex align-items-center justify-content-center flex-column mt-5">
       <h1>{title}</h1>
 
       <Carousel
-        containerClass={"container my-5"}
+        containerClass={"container my-5 p-5"}
         itemClass="d-flex align-items-center justify-content-center"
         infinite
         rewind

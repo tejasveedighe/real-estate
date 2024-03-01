@@ -1,14 +1,15 @@
+import classNames from "classnames";
 import React, { useCallback } from "react";
-import { Button, Card, ListGroup } from "react-bootstrap";
+import { Card } from "react-bootstrap";
+import { BsBuildingsFill } from "react-icons/bs";
+import { FaLocationDot } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { deleteProperty } from "../../redux/slices/propertySlice";
-import { getUserData } from "../../utils/auth";
 import styles from "./PropertyCard.module.css";
 
 function PropertyCard({ property, index }) {
   const dispatch = useDispatch();
-  const { userRole: role } = getUserData();
 
   const handleDeleteProperty = useCallback(() => {
     dispatch(deleteProperty(property.propertyId))
@@ -18,40 +19,54 @@ function PropertyCard({ property, index }) {
       .catch(() => alert("Failed to delete Property please try later"));
   }, [dispatch, property]);
 
+  console.log(property);
+
+  const navigate = useNavigate();
+  const handleCardClick = useCallback(() => {
+    navigate(`/property/${property.propertyId}`);
+  }, [navigate, property]);
+
   return (
-    <Card style={{ width: "18rem" }}>
+    <Card className={styles.card} onClick={handleCardClick}>
       <Card.Img
         variant="top"
         className={styles.image}
         src={`${process.env.PUBLIC_URL}/house${index}.jpg`}
       />
       <Card.Body>
-        <Card.Title className={styles.title}>
-          {property?.propertyTitle}
-        </Card.Title>
-      </Card.Body>
-      <ListGroup className="list-group-flush">
-        <ListGroup.Item>Location: {property?.location}</ListGroup.Item>
-        <ListGroup.Item>Price: ${property?.price}</ListGroup.Item>
-        <ListGroup.Item>Bedrooms: {property?.noBedroom}</ListGroup.Item>
-        <ListGroup.Item>Bathrooms: {property?.noBathroom}</ListGroup.Item>
-        <ListGroup.Item>Square Feet: {property?.squareFeet}</ListGroup.Item>
-      </ListGroup>
-      <Card.Body>
-        <div className="d-flex align-items-center justify-content-between">
-          <Button variant="primary">
-            <Link
-              to={`/property/${property?.propertyId}`}
-              className="text-white text-decoration-none"
+        <div className={styles.propertyInfo}>
+          <div>
+            <span className={styles.propertyBHK}>
+              {property.noBedroom + property.noBathroom}&nbsp;BHK
+            </span>
+            &nbsp;
+            <span className={styles.propertyTitle}>
+              {property.propertyTitle}
+            </span>
+          </div>
+          <div className="fs-5">
+            <span className={styles.price}>&#x20B9;&nbsp;{property.price}</span>{" "}
+            &nbsp;| &nbsp;
+            <span className={styles.propertyArea}>
+              <BsBuildingsFill />
+              {property.squareFeet} sqft
+            </span>
+          </div>
+          <div>
+            <span className={styles.propertyLocation}>
+              <FaLocationDot />
+              {property.location}
+            </span>
+          </div>
+          <div className={classNames(styles.buttonContainer, styles.hidden)}>
+            <button
+              type="button"
+              onClick={handleCardClick}
+              className="float-end"
             >
-              View
-            </Link>
-          </Button>
-          {role === "Admin" ? (
-            <Button onClick={handleDeleteProperty} variant="danger">
-              Delete
-            </Button>
-          ) : null}
+              View Details
+            </button>
+          </div>
         </div>
       </Card.Body>
     </Card>
