@@ -85,7 +85,7 @@ function SignUp() {
             <div className="mt-3 w-100 d-flex flex-column gap-4">
               <Form.Group className={styles.input}>
                 <Form.Label>I am a</Form.Label>
-                <div className="d-flex align-items-center justify-content-between">
+                <div className="d-flex flex-sm-row flex-column align-items-md-center align-items-start justify-content-between">
                   <Form.Check
                     required
                     type="radio"
