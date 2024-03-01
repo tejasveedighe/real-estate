@@ -58,7 +58,7 @@ const userSlice = createSlice({
       state.status = "pending";
     });
     builder.addCase(loginUser.rejected, (state, action) => {
-      state.loading = true;
+      state.loading = false;
       state.status = "rejected";
       state.errors = action.error;
     });
@@ -74,7 +74,7 @@ const userSlice = createSlice({
       state.status = "pending";
     });
     builder.addCase(signupUser.rejected, (state, action) => {
-      state.loading = true;
+      state.loading = false;
       state.status = "rejected";
       state.errors = action.error;
     });
@@ -90,7 +90,7 @@ const userSlice = createSlice({
       state.status = "pending";
     });
     builder.addCase(getAllUsers.rejected, (state, action) => {
-      state.loading = true;
+      state.loading = false;
       state.status = "rejected";
       state.errors = action.error;
     });
@@ -106,7 +106,7 @@ const userSlice = createSlice({
       state.status = "pending";
     });
     builder.addCase(deleteUserById.rejected, (state, action) => {
-      state.loading = true;
+      state.loading = false;
       state.status = "rejected";
       state.errors = action.error;
     });
@@ -121,7 +121,7 @@ const userSlice = createSlice({
       state.status = "pending";
     });
     builder.addCase(getUserById.rejected, (state, action) => {
-      state.loading = true;
+      state.loading = false;
       state.status = "rejected";
       state.errors = action.error;
     });

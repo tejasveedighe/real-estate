@@ -1,7 +1,6 @@
 import axios from "axios";
-import { URL } from "./constants";
 import Cookies from "js-cookie";
-
+import { URL } from "./constants";
 export const Axios = axios.create({
   baseURL: URL,
 });
@@ -18,3 +17,9 @@ Axios.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
+export function isValidEmail(email) {
+  // Regular expression for validating email addresses
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}

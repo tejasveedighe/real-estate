@@ -1,16 +1,36 @@
+import classNames from "classnames";
+import Cookies from "js-cookie";
 import React, { useCallback, useState } from "react";
-import { Button, Form } from "react-bootstrap";
+import { Button, FloatingLabel, Form, InputGroup } from "react-bootstrap";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
+import { MdArrowBack } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import { loginUser } from "../../redux/slices/userSlice";
+import { isValidEmail } from "../../utils/helpers";
 import styles from "./Login.module.css";
-import Cookies from "js-cookie";
 
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { loading } = useSelector((store) => store.user);
+
+  const [enteredEmail, setEnteredEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [emailCheck, setEmailCheck] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
+  const handleNext = useCallback(() => {
+    if (isValidEmail(enteredEmail) && enteredEmail.trim() !== "") {
+      setEmailCheck(true);
+      setEmailError("");
+    } else {
+      setEmailError("Please enter a valid email address.");
+    }
+  }, [enteredEmail]);
 
   const onSubmit = useCallback(
     (e) => {
@@ -25,76 +45,115 @@ function Login() {
           email,
           password,
         })
-      ).then((res) => {
-        if (res.type === "user/login/fulfilled") {
-          if (res.payload.token) {
-            Cookies.set("userToken", res.payload.token);
-            Cookies.set("userEmail", res.payload.userDetails.email);
-            Cookies.set("userName", res.payload.userDetails.name);
-            Cookies.set("userId", res.payload.userDetails.userId);
-            navigate("/");
+      )
+        .then((res) => {
+          if (res.type === "user/login/fulfilled") {
+            if (res.payload.token) {
+              Cookies.set("userToken", res.payload.token);
+              Cookies.set("userEmail", res.payload.userDetails.email);
+              Cookies.set("userName", res.payload.userDetails.name);
+              Cookies.set("userId", res.payload.userDetails.userId);
+              navigate("/");
+              toast.success("Login Successfull");
+            }
           } else {
-            alert(res?.payload?.message);
+            toast.error("Login Failed, credentials not found");
           }
-        }
-      });
+        })
+        .catch((err) => console.log(err.message));
     },
     [dispatch, navigate]
   );
 
+  const togglePasswordVisibility = useCallback(() => {
+    setPasswordVisible((prev) => !prev);
+  }, []);
+
   return (
     <main className={styles.loginPage}>
-      <section className={styles.formContainer}>
-        <Form
-          onSubmit={onSubmit}
-          className="d-flex flex-column align-items-start gap-5"
-        >
-          <div className="d-flex flex-column align-items-center text-center w-100">
-            <h1>Login</h1>
-            <span>Enter Login Details to get access</span>
-          </div>
-          <div className="w-100 d-flex flex-column gap-4">
-            <Form.Group className="w-100">
-              <Form.Label>Email Address</Form.Label>
-              <Form.Control
-                required
-                type="email"
-                name="email"
-                placeholder="Email Address"
-              />
-            </Form.Group>
-            <Form.Group className="w-100">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                required
-                type="password"
-                name="password"
-                placeholder="Enter Password"
-              />
-            </Form.Group>
-            <div className="w-100 d-flex align-content-center justify-content-between">
-              <Form.Group className="d-flex gap-2">
-                <Form.Check />
-                <Form.Label>Keep Me Logged in</Form.Label>
-              </Form.Group>
-              <Link to="/forgot-password" className="text-decoration-none">
-                Forgot Password?
-              </Link>
+      <section className={styles.right}>
+        <div className={styles.formContainer}>
+          <Form
+            onSubmit={onSubmit}
+            className="d-flex flex-column align-items-start gap-2"
+          >
+            <h5>
+              {emailCheck && (
+                <MdArrowBack
+                  role="button"
+                  onClick={() => setEmailCheck((prev) => !prev)}
+                />
+              )}
+              <span>&nbsp;Login</span>
+            </h5>
+            <div className="w-100 d-flex flex-column gap-4">
+              <FloatingLabel
+                label="Email Address"
+                controlId="floatingEmail"
+                className={styles.input}
+              >
+                <Form.Control
+                  required
+                  type="email"
+                  name="email"
+                  placeholder="Email Address"
+                  value={enteredEmail}
+                  onChange={(e) => setEnteredEmail(e.target.value)}
+                  isValid={emailError.length}
+                />
+              </FloatingLabel>
+              {emailError && <p className="text-danger">{emailError}</p>}
+
+              {!emailCheck && (
+                <Button className={styles.loginBtn} onClick={handleNext}>
+                  Next
+                </Button>
+              )}
+              {emailCheck && (
+                <>
+                  <InputGroup className="mb-3">
+                    <FloatingLabel
+                      controlId="floatingPassword"
+                      label="Password"
+                      className={styles.input}
+                    >
+                      <Form.Control
+                        required
+                        type={passwordVisible ? "text" : "password"}
+                        name="password"
+                        placeholder="Enter Password"
+                      />
+                    </FloatingLabel>
+                    <button type="button" onClick={togglePasswordVisibility}>
+                      {passwordVisible ? <FaRegEyeSlash /> : <FaRegEye />}
+                    </button>
+                  </InputGroup>
+                  <Button type="submit" className={styles.loginBtn}>
+                    {loading ? <LoadingSpinner /> : <span>Login</span>}
+                  </Button>
+                </>
+              )}
+              <div className="w-100">
+                <Link
+                  to="/forgot-password"
+                  className="text-decoration-none float-end"
+                >
+                  Forgot Password?
+                </Link>
+              </div>
             </div>
-          </div>
-          <div className="w-100 d-flex align-items-center justify-content-between">
-            <span>
-              Don't have an account? <Link to="/signup">Sign Up</Link> here
-            </span>
-            {!loading ? (
-              <Button type="submit" className={styles.loginBtn}>
-                Login
-              </Button>
-            ) : (
-              <Button className={styles.loginBtn}>Loading .... </Button>
-            )}
-          </div>
-        </Form>
+          </Form>
+          {!emailCheck ? (
+            <div className={classNames(styles.formBottom, "w-100 text-center")}>
+              Don't have an account?&nbsp;
+              <Link to="/signup" className="fw-semibold">
+                Sign Up
+              </Link>
+              &nbsp; here
+            </div>
+          ) : null}
+        </div>
+        &nbsp;
       </section>
     </main>
   );
