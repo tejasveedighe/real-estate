@@ -21,14 +21,10 @@ function Home() {
           Discover a place
           <br /> you'll love to Live.
         </div>
-        <ButtonGroup>
-          <Button>Buy</Button>
-          <Button>Rent</Button>
-          <Button>Sell</Button>
-        </ButtonGroup>
-        <search>
 
-        </search>
+        <div>
+          <input />
+        </div>
       </section>
 
       <Properties title={"Display Latest & Featured Properties"} />

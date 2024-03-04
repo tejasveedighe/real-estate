@@ -85,6 +85,14 @@ export const getAllContactRequests = createAsyncThunk(
   }
 );
 
+export const requestAction = createAsyncThunk(
+  "properties/requestAction",
+  async (payload) => {
+    const res = await Axios.post("/adminaction", payload);
+    return res.data;
+  }
+);
+
 const propertySlice = createSlice({
   name: "properties",
   initialState: initalState,
@@ -251,6 +259,22 @@ const propertySlice = createSlice({
       state.status = "fulfilled";
       state.lastAction = "getAllContactRequests";
       state.requests = action.payload;
+    });
+
+    // request admin action
+    builder.addCase(requestAction.pending, (state) => {
+      state.loading = true;
+      state.status = "pending";
+    });
+    builder.addCase(requestAction.rejected, (state, action) => {
+      state.loading = false;
+      state.status = "rejected";
+      state.errors = action.error;
+    });
+    builder.addCase(requestAction.fulfilled, (state, action) => {
+      state.loading = false;
+      state.status = "fulfilled";
+      state.lastAction = "requestAction";
     });
   },
 });
