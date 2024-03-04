@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styles from "./Requests.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -14,8 +14,22 @@ function Requests() {
 
   const { requests, loading } = useSelector((store) => store.properties);
 
+  const [count, setCount] = useState({
+    approved: 0,
+    rejected: 0,
+    pending: 0,
+  });
+
   const getContacts = useCallback(() => {
-    dispatch(getAllContactRequests());
+    dispatch(getAllContactRequests()).then((res) => {
+      const newState = { approved: 0, rejected: 0, pending: 0 };
+      for (const request of res.payload) {
+        if (request.approvalStatus === 1) newState.pending++;
+        else if (request.approvalStatus === 2) newState.approved++;
+        else newState.rejected++;
+      }
+      setCount(newState);
+    });
   }, [dispatch]);
 
   useEffect(getContacts, []);
@@ -39,9 +53,41 @@ function Requests() {
   return loading ? (
     <main className="text-center container mt-5 fs-1">Loading...</main>
   ) : (
-    <main className="text-center">
+    <main className={classNames("text-center container", styles.parent)}>
       <h1 className="my-5">Requests</h1>
-      <div className={styles.tableContainer}>
+      <div className={styles.featureContainer}>
+        <div className={classNames(styles.feature, "rounded border-info")}>
+          <span className="badge text-bg-info text-white float-start">All</span>
+          <span className={styles.featureNumber}>{requests.length}</span>
+        </div>
+        <div className={classNames(styles.feature, "rounded border-success")}>
+          <span className="badge text-bg-success text-white float-start">
+            Approved
+          </span>
+          <span className={styles.featureNumber}>{count.approved}</span>
+        </div>
+        <div className={classNames(styles.feature, "rounded border-warning")}>
+          <span className="badge text-bg-warning text-white float-start">
+            Pending
+          </span>
+          <span className={styles.featureNumber}>{count.pending}</span>
+        </div>
+        <div className={classNames(styles.feature, "rounded border-danger")}>
+          <span className="badge text-bg-danger text-white float-start">
+            Rejected
+          </span>
+          <span className={styles.featureNumber}>{count.rejected}</span>
+        </div>
+      </div>
+      <div className={styles.filterContainer}>
+        <select multiple>
+          <option>1</option>
+          <option>1</option>
+          <option>1</option>
+          <option>1</option>
+        </select>
+      </div>
+      <div className={classNames(styles.tableContainer)}>
         <table>
           <thead>
             <tr>
