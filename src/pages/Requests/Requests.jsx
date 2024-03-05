@@ -25,6 +25,9 @@ function Requests() {
   const [selectedApprovalStatus, setSelectedApprovalStatus] = useState("");
   const [selectedProperty, setSelectedProperty] = useState("");
 
+  const [uniquePropertyTitles, setPropertyTitles] = useState([]);
+  const [uniqueUsernames, setUsernames] = useState([]);
+
   const filterRequests = useCallback(() => {
     let filtered = [...requests];
 
@@ -61,13 +64,15 @@ function Requests() {
     dispatch(getAllContactRequests()).then((res) => {
       const newState = { approved: 0, rejected: 0, pending: 0 };
       for (const request of res.payload) {
-        if (request.approvalStatus === 1) newState.pending++;
+        if (request.aprovalStatus === 1) newState.pending++;
         else if (request.approvalStatus === 2) newState.approved++;
         else newState.rejected++;
       }
       setCount(newState);
     });
     filterRequests();
+    getUniqueUsernames();
+    getUniquePropertyTitles();
   }, [dispatch, filterRequests]);
 
   useEffect(getContacts, []);
@@ -122,6 +127,24 @@ function Requests() {
     selectedUser,
   ]);
 
+  // Function to extract unique property titles with property IDs
+  const getUniquePropertyTitles = useCallback(() => {
+    const uniquePropertyTitles = {};
+    for (const request of requests) {
+      uniquePropertyTitles[request.propertyTitle] = request.propertyId;
+    }
+    setPropertyTitles(uniquePropertyTitles);
+  }, [requests]);
+
+  // Function to extract unique usernames with user IDs
+  const getUniqueUsernames = useCallback(() => {
+    const uniqueUsernames = {};
+    for (const request of requests) {
+      uniqueUsernames[request.username] = request.userId;
+    }
+    setUsernames(uniqueUsernames);
+  }, [requests]);
+
   return loading ? (
     <main className="text-center container mt-5 fs-1">
       <LoadingSpinner />
@@ -160,9 +183,9 @@ function Requests() {
           <p>User</p>
           <select value={selectedUser} onChange={handleUserChange}>
             <option value="">All Users</option>
-            {requests.map((request, index) => (
-              <option key={`${request.userId}-${index}`}>
-                {request.username}
+            {Object.keys(uniqueUsernames).map((username, index) => (
+              <option key={`${username}`} value={username}>
+                {username}
               </option>
             ))}
           </select>
@@ -173,9 +196,9 @@ function Requests() {
           <p>Property</p>
           <select value={selectedProperty} onChange={handlePropertyChange}>
             <option value="">All Properties</option>
-            {requests.map((request, index) => (
-              <option key={`${request.propertyId}-${index}`}>
-                {request.propertyTitle}
+            {Object.keys(uniquePropertyTitles).map((title, index) => (
+              <option key={`${title}`} value={title}>
+                {title}
               </option>
             ))}
           </select>
@@ -233,9 +256,13 @@ function Requests() {
                         : "Rejected"}
                     </span>
                   </td>
-                  <td>{new Date(request.createdOn)
-                          .toLocaleString("en-GB")
-                          .split(",")[0]}</td>
+                  <td>
+                    {
+                      new Date(request.createdOn)
+                        .toLocaleString("en-GB")
+                        .split(",")[0]
+                    }
+                  </td>
                   <td>
                     {request.updatedOn
                       ? new Date(request.updatedOn)
