@@ -34,7 +34,6 @@
       }
       select {
         width: 100%;
-        min-width: 300px;
         padding: 3px;
       }
     }

@@ -28,6 +28,24 @@ function Requests() {
   const [uniquePropertyTitles, setPropertyTitles] = useState([]);
   const [uniqueUsernames, setUsernames] = useState([]);
 
+  // Function to extract unique property titles with property IDs
+  const getUniquePropertyTitles = useCallback(() => {
+    const uniquePropertyTitles = {};
+    for (const request of requests) {
+      uniquePropertyTitles[request.propertyTitle] = request.propertyId;
+    }
+    setPropertyTitles(uniquePropertyTitles);
+  }, [requests]);
+
+  // Function to extract unique usernames with user IDs
+  const getUniqueUsernames = useCallback(() => {
+    const uniqueUsernames = {};
+    for (const request of requests) {
+      uniqueUsernames[request.username] = request.userId;
+    }
+    setUsernames(uniqueUsernames);
+  }, [requests]);
+
   const filterRequests = useCallback(() => {
     let filtered = [...requests];
 
@@ -71,11 +89,7 @@ function Requests() {
       setCount(newState);
     });
     filterRequests();
-    getUniqueUsernames();
-    getUniquePropertyTitles();
   }, [dispatch, filterRequests]);
-
-  useEffect(getContacts, []);
 
   const handleRequestAction = useCallback(
     (request, status) => {
@@ -127,24 +141,14 @@ function Requests() {
     selectedUser,
   ]);
 
-  // Function to extract unique property titles with property IDs
-  const getUniquePropertyTitles = useCallback(() => {
-    const uniquePropertyTitles = {};
-    for (const request of requests) {
-      uniquePropertyTitles[request.propertyTitle] = request.propertyId;
-    }
-    setPropertyTitles(uniquePropertyTitles);
-  }, [requests]);
+  useEffect(() => {
+    getContacts();
+  }, []);
 
-  // Function to extract unique usernames with user IDs
-  const getUniqueUsernames = useCallback(() => {
-    const uniqueUsernames = {};
-    for (const request of requests) {
-      uniqueUsernames[request.username] = request.userId;
-    }
-    setUsernames(uniqueUsernames);
+  useEffect(() => {
+    getUniqueUsernames();
+    getUniquePropertyTitles();
   }, [requests]);
-
   return loading ? (
     <main className="text-center container mt-5 fs-1">
       <LoadingSpinner />
