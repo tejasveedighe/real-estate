@@ -30,6 +30,7 @@ function Requests() {
 
   // Function to extract unique property titles with property IDs
   const getUniquePropertyTitles = useCallback(() => {
+    if (!requests) return;
     const uniquePropertyTitles = {};
     for (const request of requests) {
       uniquePropertyTitles[request.propertyTitle] = request.propertyId;
@@ -39,6 +40,7 @@ function Requests() {
 
   // Function to extract unique usernames with user IDs
   const getUniqueUsernames = useCallback(() => {
+    if (!requests) return;
     const uniqueUsernames = {};
     for (const request of requests) {
       uniqueUsernames[request.username] = request.userId;
@@ -47,6 +49,7 @@ function Requests() {
   }, [requests]);
 
   const filterRequests = useCallback(() => {
+    if (!requests) return;
     let filtered = [...requests];
 
     // Filter by user
@@ -154,165 +157,170 @@ function Requests() {
       <LoadingSpinner />
     </main>
   ) : (
-    <main className={classNames("text-center container", styles.parent)}>
-      <h1 className="my-5">Requests</h1>
-      <div className={styles.featureContainer}>
-        <div className={classNames(styles.feature, "rounded border-info")}>
-          <span className="badge text-bg-info text-white float-start">All</span>
-          <span className={styles.featureNumber}>{requests.length}</span>
-        </div>
-        <div className={classNames(styles.feature, "rounded border-success")}>
-          <span className="badge text-bg-success text-white float-start">
-            Approved
-          </span>
-          <span className={styles.featureNumber}>{count.approved}</span>
-        </div>
-        <div className={classNames(styles.feature, "rounded border-warning")}>
-          <span className="badge text-bg-warning text-white float-start">
-            Pending
-          </span>
-          <span className={styles.featureNumber}>{count.pending}</span>
-        </div>
-        <div className={classNames(styles.feature, "rounded border-danger")}>
-          <span className="badge text-bg-danger text-white float-start">
-            Rejected
-          </span>
-          <span className={styles.featureNumber}>{count.rejected}</span>
-        </div>
-      </div>
-
-      <div className={classNames(styles.filterContainer, "rounded")}>
-        {/* User Select Dropdown */}
-        <div>
-          <p>User</p>
-          <select value={selectedUser} onChange={handleUserChange}>
-            <option value="">All Users</option>
-            {Object.keys(uniqueUsernames).map((username, index) => (
-              <option key={`${username}`} value={username}>
-                {username}
-              </option>
-            ))}
-          </select>
+    <>
+      <main className={classNames("text-center container", styles.parent)}>
+        <h1 className="my-5">Requests</h1>
+        <div className={styles.featureContainer}>
+          <div className={classNames(styles.feature, "rounded border-info")}>
+            <span className="badge text-bg-info text-white float-start">
+              All
+            </span>
+            <span className={styles.featureNumber}>{requests.length}</span>
+          </div>
+          <div className={classNames(styles.feature, "rounded border-success")}>
+            <span className="badge text-bg-success text-white float-start">
+              Approved
+            </span>
+            <span className={styles.featureNumber}>{count.approved}</span>
+          </div>
+          <div className={classNames(styles.feature, "rounded border-warning")}>
+            <span className="badge text-bg-warning text-white float-start">
+              Pending
+            </span>
+            <span className={styles.featureNumber}>{count.pending}</span>
+          </div>
+          <div className={classNames(styles.feature, "rounded border-danger")}>
+            <span className="badge text-bg-danger text-white float-start">
+              Rejected
+            </span>
+            <span className={styles.featureNumber}>{count.rejected}</span>
+          </div>
         </div>
 
-        {/* Property Select Dropdown */}
-        <div>
-          <p>Property</p>
-          <select value={selectedProperty} onChange={handlePropertyChange}>
-            <option value="">All Properties</option>
-            {Object.keys(uniquePropertyTitles).map((title, index) => (
-              <option key={`${title}`} value={title}>
-                {title}
-              </option>
-            ))}
-          </select>
+        <div className={classNames(styles.filterContainer, "rounded")}>
+          {/* User Select Dropdown */}
+          <div>
+            <p>User</p>
+            <select value={selectedUser} onChange={handleUserChange}>
+              <option value="">All Users</option>
+              {Object.keys(uniqueUsernames).map((username, index) => (
+                <option key={`${username}`} value={username}>
+                  {username}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Property Select Dropdown */}
+          <div>
+            <p>Property</p>
+            <select value={selectedProperty} onChange={handlePropertyChange}>
+              <option value="">All Properties</option>
+              {Object.keys(uniquePropertyTitles).map((title, index) => (
+                <option key={`${title}`} value={title}>
+                  {title}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Approval Status Select Dropdown */}
+          <div>
+            <p>Status</p>
+            <select
+              value={selectedApprovalStatus}
+              onChange={handleApprovalStatusChange}
+            >
+              <option value="">All Statuses</option>
+              <option value="Pending">Pending</option>
+              <option value="Approved">Approved</option>
+              <option value="Rejected">Rejected</option>
+            </select>
+          </div>
         </div>
 
-        {/* Approval Status Select Dropdown */}
-        <div>
-          <p>Status</p>
-          <select
-            value={selectedApprovalStatus}
-            onChange={handleApprovalStatusChange}
-          >
-            <option value="">All Statuses</option>
-            <option value="Pending">Pending</option>
-            <option value="Approved">Approved</option>
-            <option value="Rejected">Rejected</option>
-          </select>
-        </div>
-      </div>
-
-      <div className={classNames(styles.tableContainer)}>
-        {filteredRequests.length ? (
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>User</th>
-                <th>Property</th>
-                <th>Status</th>
-                <th>Created On</th>
-                <th>Updated On</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredRequests?.map((request, index) => (
-                <tr key={uuid()}>
-                  <td>{index + 1}</td>
-                  <td>{request.username}</td>
-                  <td>{request.propertyTitle}</td>
-                  <td>
-                    <span
-                      className={classNames("badge rounded-pill", {
-                        "bg-warning text-white": request.approvalStatus === 1,
-                        "bg-success text-white": request.approvalStatus === 2,
-                        "bg-danger text-white":
-                          request.approvalStatus !== 1 &&
-                          request.approvalStatus !== 2,
-                      })}
-                    >
-                      {request.approvalStatus === 1
-                        ? "Pending"
-                        : request.approvalStatus === 2
-                        ? "Approved"
-                        : "Rejected"}
-                    </span>
-                  </td>
-                  <td>
-                    {
-                      new Date(request.createdOn)
-                        .toLocaleString("en-GB")
-                        .split(",")[0]
-                    }
-                  </td>
-                  <td>
-                    {request.updatedOn
-                      ? new Date(request.updatedOn)
+        <div className={classNames(styles.tableContainer)}>
+          {filteredRequests.length ? (
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>User</th>
+                  <th>Property</th>
+                  <th>Status</th>
+                  <th>Created On</th>
+                  <th>Updated On</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredRequests?.map((request, index) => (
+                  <tr key={uuid()}>
+                    <td>{index + 1}</td>
+                    <td>{request.username}</td>
+                    <td>{request.propertyTitle}</td>
+                    <td>
+                      <span
+                        className={classNames("badge rounded-pill", {
+                          "bg-warning text-white": request.approvalStatus === 1,
+                          "bg-success text-white": request.approvalStatus === 2,
+                          "bg-danger text-white":
+                            request.approvalStatus !== 1 &&
+                            request.approvalStatus !== 2,
+                        })}
+                      >
+                        {request.approvalStatus === 1
+                          ? "Pending"
+                          : request.approvalStatus === 2
+                          ? "Approved"
+                          : "Rejected"}
+                      </span>
+                    </td>
+                    <td>
+                      {
+                        new Date(request.createdOn)
                           .toLocaleString("en-GB")
                           .split(",")[0]
-                      : "-"}
-                  </td>
-                  <td>
-                    {request.approvalStatus === 1 && (
-                      <>
-                        <Button
-                          className="text-white"
-                          type="button"
-                          onClick={() => handleRequestAction(request, 2)}
-                        >
-                          Approve
-                        </Button>
+                      }
+                    </td>
+                    <td>
+                      {request.updatedOn
+                        ? new Date(request.updatedOn)
+                            .toLocaleString("en-GB")
+                            .split(",")[0]
+                        : "-"}
+                    </td>
+                    <td>
+                      {request.approvalStatus === 1 && (
+                        <>
+                          <Button
+                            className="text-white"
+                            type="button"
+                            onClick={() => handleRequestAction(request, 2)}
+                          >
+                            Approve
+                          </Button>
+                          <Button
+                            className="text-white"
+                            variant="danger"
+                            type="button"
+                            onClick={() => handleRequestAction(request, 3)}
+                          >
+                            Reject
+                          </Button>
+                        </>
+                      )}
+                      {request.approvalStatus !== 1 && (
                         <Button
                           className="text-white"
                           variant="danger"
                           type="button"
                           onClick={() => handleRequestAction(request, 3)}
                         >
-                          Reject
+                          Dis-Approve
                         </Button>
-                      </>
-                    )}
-                    {request.approvalStatus !== 1 && (
-                      <Button
-                        className="text-white"
-                        variant="info"
-                        type="button"
-                      >
-                        View
-                      </Button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <div>No Data Found</div>
-        )}
-      </div>
-    </main>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <div>No Data Found</div>
+          )}
+        </div>
+      </main>
+    </>
   );
 }
 
