@@ -19,8 +19,6 @@ function PropertyCard({ property, index }) {
       .catch(() => alert("Failed to delete Property please try later"));
   }, [dispatch, property]);
 
-  console.log(property);
-
   const navigate = useNavigate();
   const handleCardClick = useCallback(() => {
     navigate(`/property/${property.propertyId}`);

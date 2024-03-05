@@ -4,6 +4,7 @@ import { Axios } from "../../utils/helpers";
 const initialState = {
   user: null,
   users: [],
+  userProperties: [],
   loading: false,
   status: "idle",
   errors: {},
@@ -32,7 +33,7 @@ export const deleteUserById = createAsyncThunk(
   }
 );
 
-export const getUserById = createAsyncThunk(
+export const getUserPropertiesById = createAsyncThunk(
   "properties/getUserById",
   async (userId) => {
     const res = await Axios.get(`/user/${userId}`);
@@ -116,19 +117,19 @@ const userSlice = createSlice({
     });
 
     // get user by id
-    builder.addCase(getUserById.pending, (state) => {
+    builder.addCase(getUserPropertiesById.pending, (state) => {
       state.loading = true;
       state.status = "pending";
     });
-    builder.addCase(getUserById.rejected, (state, action) => {
+    builder.addCase(getUserPropertiesById.rejected, (state, action) => {
       state.loading = false;
       state.status = "rejected";
       state.errors = action.error;
     });
-    builder.addCase(getUserById.fulfilled, (state, action) => {
+    builder.addCase(getUserPropertiesById.fulfilled, (state, action) => {
       state.loading = false;
       state.status = "fulfilled";
-      state.user = action.payload;
+      state.userProperties = action.payload;
     });
   },
 });
