@@ -1,8 +1,8 @@
 import classNames from "classnames";
 import Cookies from "js-cookie";
 import React, { useCallback } from "react";
-import { Badge, Button, Dropdown } from "react-bootstrap";
-import { PiBellSimpleBold } from "react-icons/pi";
+import { Button, Dropdown } from "react-bootstrap";
+import { FaRegUser } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { getUserData, isLoggedIn } from "../../utils/auth";
 import styles from "./Header.module.css";
@@ -57,28 +57,41 @@ function Header() {
 
       {isLoggedIn() ? (
         <>
-          {role === "Admin" ? (
-            <div className={styles.navLink}>
-              <Dropdown>
-                <Dropdown.Toggle className="bg-none">
-                  <PiBellSimpleBold /> <Badge>{null}</Badge>
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
+          <Dropdown>
+            <Dropdown.Toggle
+              className={classNames(
+                "d-flex align-items-center border-0",
+                styles.dropdownToggle
+              )}
+            >
+                <div className={styles.usericon}>
+                  <FaRegUser />
+                </div>
+                {getUserData().userName[0]}
+                {getUserData().userName.split(" ")?.[1]?.[0]}
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              {role === "Admin" ? (
+                <div className={styles.navLink}>
                   <Dropdown.Item>
                     <Link
                       to="/requests"
                       className="text-black text-decoration-none"
                     >
-                      You have {} requests pending click here to check
+                      Contact Requests
                     </Link>
                   </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </div>
-          ) : null}
-          <Dropdown>
-            <Dropdown.Toggle>{Cookies.get("userName")}</Dropdown.Toggle>
-            <Dropdown.Menu>
+                </div>
+              ) : null}
+              <Dropdown.Item>
+                <Link
+                  to="/myProperties"
+                  className="text-black text-decoration-none"
+                >
+                  My Properties
+                </Link>
+              </Dropdown.Item>
+              <Dropdown.Divider />
               <Dropdown.Item>
                 <Button
                   variant="danger"

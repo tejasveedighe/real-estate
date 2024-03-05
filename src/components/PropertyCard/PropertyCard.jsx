@@ -6,11 +6,12 @@ import { FaLocationDot } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { deleteProperty } from "../../redux/slices/propertySlice";
-import styles from "./PropertyCard.module.css";
 import { getUserData } from "../../utils/auth";
+import styles from "./PropertyCard.module.css";
 
 function PropertyCard({ property, index }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleDeleteProperty = useCallback(() => {
     dispatch(deleteProperty(property.propertyId))
@@ -20,7 +21,6 @@ function PropertyCard({ property, index }) {
       .catch(() => alert("Failed to delete Property please try later"));
   }, [dispatch, property]);
 
-  const navigate = useNavigate();
   const handleCardClick = useCallback(() => {
     navigate(`/property/${property.propertyId}`);
   }, [navigate, property]);
