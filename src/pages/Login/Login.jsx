@@ -118,6 +118,7 @@ function Login() {
                       className={styles.input}
                     >
                       <Form.Control
+                        autoFocus
                         required
                         type={passwordVisible ? "text" : "password"}
                         name="password"
