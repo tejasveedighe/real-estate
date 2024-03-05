@@ -4,6 +4,7 @@ import PropertyCard from "../PropertyCard/PropertyCard";
 import { responsiveProperties } from "../../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProperty } from "../../redux/slices/propertySlice";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 export function Properties({ title }) {
   const dispatch = useDispatch();
@@ -13,7 +14,12 @@ export function Properties({ title }) {
     dispatch(getAllProperty());
   }, [dispatch]);
 
-  if (propertiesStore.loading) return <section>Loading</section>;
+  if (propertiesStore.loading)
+    return (
+      <section className="d-flex align-items-center justify-content-center">
+        <LoadingSpinner />
+      </section>
+    );
 
   return (
     <section className=" d-flex align-items-center justify-content-center flex-column mt-5">

@@ -6,12 +6,13 @@ import { Link, useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import { signupUser } from "../../redux/slices/userSlice";
 import styles from "./SignUp.module.css";
+import { toast } from "react-toastify";
 
 function SignUp() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { loading } = useSelector((store) => store.properties);
+  const { loading, errors } = useSelector((store) => store.properties);
 
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [rePasswordVisible, setRePasswordVisible] = useState(false);
@@ -32,11 +33,11 @@ function SignUp() {
       const email = formData.get("email");
       const password = formData.get("password");
       const repassword = formData.get("re-password");
+      const userType = formData.get("userType");
+      const phoneNumber = formData.get("phoneNumber");
 
       if (password !== repassword) {
         setPasswordError("Passwords do not match");
-        e.preventDefault();
-        e.stopPropagation();
         return;
       }
 
@@ -46,30 +47,28 @@ function SignUp() {
           email,
           password,
           userId: 1,
-          userType: "Admin",
+          userType,
+          phoneNumber
         })
       )
         .then((res) => {
           if (res.type === "user/signup/fulfilled") {
             navigate("/login");
+          } else {
+            toast.error(res.error.message);
           }
         })
         .catch((err) => alert(err.message));
     },
     [dispatch, navigate]
   );
+
   const togglePasswordVisibility = useCallback(() => {
     setPasswordVisible((prev) => !prev);
   }, []);
   const toggleRePasswordVisibility = useCallback(() => {
     setRePasswordVisible((prev) => !prev);
   }, []);
-
-  const [selectedCountryCode, setSelectedCountryCode] = useState("+1");
-
-  const handleCountryCodeChange = (e) => {
-    setSelectedCountryCode(e.target.value);
-  };
 
   return (
     <main className={styles.loginPage}>
@@ -102,18 +101,8 @@ function SignUp() {
                     id="check-agent"
                     label="Agent"
                     name="userType"
-                    value="agent"
-                    checked={selectedOption === "agent"}
-                    onChange={handleOptionChange}
-                  />
-                  <Form.Check
-                    required
-                    type="radio"
-                    id="check-builder"
-                    label="Builder"
-                    name="userType"
-                    value="builder"
-                    checked={selectedOption === "builder"}
+                    value="seller"
+                    checked={selectedOption === "seller"}
                     onChange={handleOptionChange}
                   />
                 </div>
@@ -128,7 +117,7 @@ function SignUp() {
                   required
                   type="text"
                   name="name"
-                  placeholder="Email Address"
+                  placeholder="Name"
                 />
               </FloatingLabel>
               <FloatingLabel
@@ -153,7 +142,7 @@ function SignUp() {
                     required
                     type={passwordVisible ? "text" : "password"}
                     name="password"
-                    placeholder="Enter Password"
+                    placeholder="Password"
                   />
                 </FloatingLabel>
                 <button type="button" onClick={togglePasswordVisibility}>
@@ -173,7 +162,7 @@ function SignUp() {
                     required
                     type={rePasswordVisible ? "text" : "password"}
                     name="re-password"
-                    placeholder="Enter Password again"
+                    placeholder="Re-Password"
                   />
                 </FloatingLabel>
                 <button type="button" onClick={toggleRePasswordVisibility}>
@@ -184,14 +173,10 @@ function SignUp() {
                 <span className="text-danger">{passwordError}</span>
               )}
               <div className="d-flex align-items-end justify-content-between">
-                <Form.Select
-                  className={styles.countryCode}
-                  value={selectedCountryCode}
-                  onChange={handleCountryCodeChange}
-                >
-                  <option value="+1">+1 USA</option>
-                  <option value="+91">+91 IND</option>
-                  <option value="+123">+123 IND</option>
+                <Form.Select className={styles.countryCode}>
+                  <option>+1 USA</option>
+                  <option>+91 IND</option>
+                  <option>+123 IND</option>
                 </Form.Select>
                 <FloatingLabel
                   controlId="floatingPhone"
@@ -202,7 +187,8 @@ function SignUp() {
                     required
                     type="tel"
                     name="phoneNumber"
-                    placeholder="Enter Phone Number"
+                    pattern="[0-9]{10}"
+                    placeholder="Phone Number"
                   />
                 </FloatingLabel>
               </div>

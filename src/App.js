@@ -16,6 +16,7 @@ import User from "./pages/User/User";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LogOutNav from "./components/LogOutNav/LogOutNav";
+import MyProperties from "./pages/MyProperties/MyProperties";
 
 function App() {
   return (
@@ -33,10 +34,14 @@ function App() {
           <Route path="/about" element={<About />} />
 
           <Route element={<ProtectedRoutes />}>
+            {/* Admin Routes */}
             <Route path="/addProperty" element={<AddProperty />} />
             <Route path="/requests" element={<Requests />} />
             <Route path="/manageUsers" element={<ManageUser />} />
             <Route path="/user/:userId" element={<User />} />
+
+            {/* User Routes */}
+            <Route path="/myProperties" element={<MyProperties />} />
           </Route>
         </Route>
       </Routes>

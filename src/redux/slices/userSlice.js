@@ -11,33 +11,53 @@ const initialState = {
 };
 
 export const loginUser = createAsyncThunk("user/login", async (payload) => {
-  const res = await Axios.post("/login", payload);
-  return res.data;
+  try {
+    const res = await Axios.post("/login", payload);
+    return res.data;
+  } catch (error) {
+    throw new Error(error.response.data.message || error.message);
+  }
 });
 
 export const signupUser = createAsyncThunk("user/signup", async (payload) => {
-  const res = await Axios.post("/AddUser", payload);
-  return res.data;
+  try {
+    const res = await Axios.post("/AddUser", payload);
+    return res.data;
+  } catch (error) {
+    throw new Error(error.response.data.message || error.message);
+  }
 });
 
 export const getAllUsers = createAsyncThunk("user/getAllUsers", async () => {
-  const res = await Axios.get("/user");
-  return res.data;
+  try {
+    const res = await Axios.get("/user");
+    return res.data;
+  } catch (error) {
+    throw new Error(error.response.data.message || error.message);
+  }
 });
 
 export const deleteUserById = createAsyncThunk(
   "user/deleteUserById",
   async (userId) => {
-    const res = await Axios.delete(`/delete/${userId}`);
-    return res.data;
+    try {
+      const res = await Axios.delete(`/delete/${userId}`);
+      return res.data;
+    } catch (error) {
+      throw new Error(error.response.data.message || error.message);
+    }
   }
 );
 
 export const getUserPropertiesById = createAsyncThunk(
   "properties/getUserById",
   async (userId) => {
-    const res = await Axios.get(`/user/${userId}`);
-    return res.data;
+    try {
+      const res = await Axios.get(`/user/${userId}`);
+      return res.data;
+    } catch (error) {
+      throw new Error(error.response.data.message || error.message);
+    }
   }
 );
 
