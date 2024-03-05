@@ -47,6 +47,9 @@
     transition: transform 0.3s;
     transform: translateY(150%);
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
     button {
       background-color: var(--lightBlue);
@@ -55,6 +58,10 @@
       border-radius: 20px;
       color: white;
       float: right;
+    }
+
+    .deleteBtn {
+      background-color: red;
     }
   }
 

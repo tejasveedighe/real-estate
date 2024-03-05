@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { deleteProperty } from "../../redux/slices/propertySlice";
 import styles from "./PropertyCard.module.css";
+import { getUserData } from "../../utils/auth";
 
 function PropertyCard({ property, index }) {
   const dispatch = useDispatch();
@@ -57,6 +58,15 @@ function PropertyCard({ property, index }) {
             </span>
           </div>
           <div className={classNames(styles.buttonContainer, styles.hidden)}>
+            {getUserData().userRole === "Admin" ? (
+              <button
+                type="button"
+                onClick={handleDeleteProperty}
+                className={classNames("float-start", styles.deleteBtn)}
+              >
+                Delete
+              </button>
+            ) : null}
             <button
               type="button"
               onClick={handleCardClick}
