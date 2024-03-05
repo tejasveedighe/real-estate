@@ -81,11 +81,10 @@ function AddProperty() {
               required
               placeholder="Enter Property Type"
             >
-              <option defaultChecked value="type 1">
-                1
-              </option>
-              <option value="type 2">2</option>
-              <option value="type 3">3</option>
+              <option value="Bunglow">Bunglow</option>
+              <option value="House">House</option>
+              <option value="Flat">Flat</option>
+              <option value="Resident">Resident</option>
             </Form.Select>
           </Form.Group>
           <Form.Group className="mt-3">
@@ -157,8 +156,16 @@ function AddProperty() {
             >
               <option disabled>Select one</option>
               <option value={true}>True</option>
-              <option value={false}>False</option>
+              <option defaultChecked value={false}>
+                False
+              </option>
             </Form.Select>
+          </Form.Group>
+        </div>
+        <div className="mt-2 w-100">
+          <Form.Group className="w-100">
+            <Form.Label>Property Images</Form.Label>
+            <Form.Control type="file" />
           </Form.Group>
         </div>
 

@@ -23,7 +23,6 @@ function Home() {
         </div>
 
         <div>
-          <input />
         </div>
       </section>
 
