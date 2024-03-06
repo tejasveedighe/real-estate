@@ -15,6 +15,8 @@ function Property() {
   const dispatch = useDispatch();
   const { propertyId } = useParams();
 
+  const { userRole } = getUserData();
+
   const { loading, status, property } = useSelector(
     (store) => store.properties
   );
@@ -127,7 +129,7 @@ function Property() {
             <Button variant="info">Pending Approval</Button>
           ) : property.approvalStatus === 3 ? (
             <Button variant="danger">Rejected</Button>
-          ) : isLoggedIn() && property.approvalStatus === 0 ? (
+          ) : userRole === "Buyer" && property.approvalStatus === 0 ? (
             <Button onClick={handleRequestClick} variant="info">
               Request Approval
             </Button>

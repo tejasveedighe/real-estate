@@ -39,15 +39,15 @@ function Header() {
           Properties
         </Link>
 
+        {role === "seller" ? (
+          <Link className={styles.navLink} to="/addProperty">
+            Add Property
+          </Link>
+        ) : null}
         {role === "Admin" ? (
-          <>
-            <Link className={styles.navLink} to="/addProperty">
-              Add Property
-            </Link>
-            <Link className={styles.navLink} to="/manageUsers">
-              Manage Users
-            </Link>
-          </>
+          <Link className={styles.navLink} to="/manageUsers">
+            Manage Users
+          </Link>
         ) : null}
 
         <Link className={styles.navLink} to="/about">
@@ -64,11 +64,11 @@ function Header() {
                 styles.dropdownToggle
               )}
             >
-                <div className={styles.usericon}>
-                  <FaRegUser />
-                </div>
-                {getUserData().userName[0]}
-                {getUserData().userName.split(" ")?.[1]?.[0]}
+              <div className={styles.usericon}>
+                <FaRegUser />
+              </div>
+              {getUserData().userName[0]}
+              {getUserData().userName.split(" ")?.[1]?.[0]}
             </Dropdown.Toggle>
             <Dropdown.Menu>
               {role === "Admin" ? (
