@@ -12,7 +12,7 @@ function SignUp() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { loading, errors } = useSelector((store) => store.properties);
+  const { loading } = useSelector((store) => store.properties);
 
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [rePasswordVisible, setRePasswordVisible] = useState(false);
@@ -34,7 +34,7 @@ function SignUp() {
       const password = formData.get("password");
       const repassword = formData.get("re-password");
       const userType = formData.get("userType");
-      const phoneNumber = formData.get("phoneNumber");
+      const phone= formData.get("phoneNumber");
 
       if (password !== repassword) {
         setPasswordError("Passwords do not match");
@@ -48,11 +48,12 @@ function SignUp() {
           password,
           userId: 1,
           userType,
-          phoneNumber
+          phone,
         })
       )
         .then((res) => {
           if (res.type === "user/signup/fulfilled") {
+            toast.success("Sign Up successfull.")
             navigate("/login");
           } else {
             toast.error(res.error.message);
@@ -99,7 +100,7 @@ function SignUp() {
                     required
                     type="radio"
                     id="check-agent"
-                    label="Agent"
+                    label="Agent/Seller"
                     name="userType"
                     value="seller"
                     checked={selectedOption === "seller"}
@@ -174,9 +175,7 @@ function SignUp() {
               )}
               <div className="d-flex align-items-end justify-content-between">
                 <Form.Select className={styles.countryCode}>
-                  <option>+1 USA</option>
-                  <option>+91 IND</option>
-                  <option>+123 IND</option>
+                  <option defaultChecked>+91 IND</option>
                 </Form.Select>
                 <FloatingLabel
                   controlId="floatingPhone"
