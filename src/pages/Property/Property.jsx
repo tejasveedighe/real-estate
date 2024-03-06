@@ -10,6 +10,7 @@ import {
 } from "../../redux/slices/propertySlice";
 import { getUserData, isLoggedIn } from "../../utils/auth";
 import styles from "./Property.module.css";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 
 function Property() {
   const dispatch = useDispatch();
@@ -56,7 +57,7 @@ function Property() {
   if (loading) {
     return (
       <main className="d-flex align-items-center justify-content-center text-center mt-5">
-        <h1>Loading....</h1>
+        <LoadingSpinner />
       </main>
     );
   }

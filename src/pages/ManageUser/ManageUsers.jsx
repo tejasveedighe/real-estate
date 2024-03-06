@@ -6,6 +6,7 @@ import AddNewUserModal from "../../components/AddNewUserModal/AddNewUserModal";
 import UserProfileCard from "../../components/UserProfileCard/UserProfileCard";
 import { deleteUserById, getAllUsers } from "../../redux/slices/userSlice";
 import styles from "./ManageUser.module.css";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 
 function ManageUser() {
   const dispatch = useDispatch();
@@ -45,7 +46,7 @@ function ManageUser() {
     return (
       <main>
         <h1 className="text-center">Manage User</h1>
-        <h1 className="text-center">Loading ...</h1>
+        <LoadingSpinner />
       </main>
     );
   }

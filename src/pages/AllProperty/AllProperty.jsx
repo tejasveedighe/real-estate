@@ -10,6 +10,7 @@ import {
 import styles from "./AllProperty.module.css";
 import { Button, Form, InputGroup } from "react-bootstrap";
 import { CiSearch } from "react-icons/ci";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 
 function AllProperty() {
   const propertiesStore = useSelector((store) => store.properties);
@@ -88,7 +89,7 @@ function AllProperty() {
   if (propertiesStore.loading) {
     return (
       <main className="d-flex align-items-center justify-content-center text-center">
-        <h4>Loading....</h4>
+        <LoadingSpinner />
       </main>
     );
   }
