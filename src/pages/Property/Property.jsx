@@ -12,6 +12,7 @@ import styles from "./Property.module.css";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import { ContactContainer } from "./ContactContainer";
 import { toast } from "react-toastify";
+import { Button } from "react-bootstrap";
 
 function Property() {
   const dispatch = useDispatch();

@@ -24,10 +24,23 @@
   height: 5px;
 }
 
-.contactContainer {
-  border: 1px solid grey;
-  border-left: 5px solid var(--lightBlue);
-  border-radius: 5px;
-  padding: 20px;
+.propertySide {
   width: 30%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: 10px;
+
+  .contactContainer {
+    border: 1px solid grey;
+    border-left: 5px solid var(--lightBlue);
+    border-radius: 5px;
+    padding: 20px;
+  }
+
+  button {
+    background-color: var(--lightBlue);
+    border: none;
+  }
 }
