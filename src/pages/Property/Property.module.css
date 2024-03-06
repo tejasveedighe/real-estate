@@ -32,12 +32,14 @@
   flex-direction: column;
   gap: 10px;
 
-  .contactContainer {
+  .contactContainer, .offerStatusContainer {
     border: 1px solid grey;
     border-left: 5px solid var(--lightBlue);
     border-radius: 5px;
     padding: 20px;
+    width: 100%;
   }
+
 
   button {
     background-color: var(--lightBlue);

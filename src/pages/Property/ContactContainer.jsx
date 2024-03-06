@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, FloatingLabel, Form, Modal } from "react-bootstrap";
+import { Badge, Button, FloatingLabel, Form, Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserById } from "../../redux/slices/userSlice";
 import { getUserData, isLoggedIn } from "../../utils/auth";
@@ -147,7 +147,58 @@ const Offer = ({ property }) => {
   if (loading) return <LoadingSpinner />;
 
   if (isObjectNotEmpty(offer)) {
-    return <Button disabled>Offer Sent</Button>;
+    return (
+      <div className={styles.offerStatusContainer}>
+        <h5>
+          Offer Status:&nbsp;
+          {offer.offerStatus === 3 ? (
+            <Badge bg="danger">Rejected</Badge>
+          ) : offer.offerStatus === 2 ? (
+            <Badge bg="success">Completed</Badge>
+          ) : (
+            <Badge bg="warning">Pending</Badge>
+          )}
+        </h5>
+        <span className="d-flex align-items-center gap-2">
+          <Form.Check
+            checked={offer.adminStatus === 2}
+            type="checkbox"
+            label="Admin"
+          />
+          {offer.adminStatus === 3 ? (
+            <Badge bg="danger">Rejected</Badge>
+          ) : offer.adminStatus === 2 ? (
+            <Badge bg="success">Approved</Badge>
+          ) : (
+            <Badge bg="warning">Pending</Badge>
+          )}
+        </span>
+        <span className="d-flex align-items-center gap-2">
+          <Form.Check
+            checked={offer.sellerStatus === 2}
+            type="checkbox"
+            label="Seller"
+          />
+          {offer.sellerStatus === 3 ? (
+            <Badge bg="danger">Rejected</Badge>
+          ) : offer.sellerStatus === 2 ? (
+            <Badge bg="success">Approved</Badge>
+          ) : (
+            <Badge bg="warning">Pending</Badge>
+          )}
+        </span>
+
+        {offer.offerStatus === 3 ? (
+          <Button className="mt-4" variant="warning" onClick={handleShow}>
+            Retry Offer
+          </Button>
+        ) : (
+          <Button className="mt-4" variant="info" disabled>
+            Offer Sent
+          </Button>
+        )}
+      </div>
+    );
   }
 
   return (
