@@ -4,6 +4,7 @@ import { Axios } from "../../utils/helpers";
 const initialState = {
   user: null,
   users: [],
+  userDetails: {},
   userProperties: [],
   loading: false,
   status: "idle",
@@ -15,7 +16,7 @@ export const loginUser = createAsyncThunk("user/login", async (payload) => {
     const res = await Axios.post("/login", payload);
     return res.data;
   } catch (error) {
-    throw new Error(error.response.data.message || error.message);
+    return error.message;
   }
 });
 
@@ -24,7 +25,7 @@ export const signupUser = createAsyncThunk("user/signup", async (payload) => {
     const res = await Axios.post("/AddUser", payload);
     return res.data;
   } catch (error) {
-    throw new Error(error.response.data.message || error.message);
+    return error.message;
   }
 });
 
@@ -33,7 +34,7 @@ export const getAllUsers = createAsyncThunk("user/getAllUsers", async () => {
     const res = await Axios.get("/user");
     return res.data;
   } catch (error) {
-    throw new Error(error.response.data.message || error.message);
+    return error.message;
   }
 });
 
@@ -44,19 +45,31 @@ export const deleteUserById = createAsyncThunk(
       const res = await Axios.delete(`/delete/${userId}`);
       return res.data;
     } catch (error) {
-      throw new Error(error.response.data.message || error.message);
+      return error.message;
     }
   }
 );
 
 export const getUserPropertiesById = createAsyncThunk(
-  "properties/getUserById",
+  "properties/getUserPropertiesById",
   async (userId) => {
     try {
       const res = await Axios.get(`/user/${userId}`);
       return res.data;
     } catch (error) {
-      throw new Error(error.response.data.message || error.message);
+      return error.message;
+    }
+  }
+);
+
+export const getUserById = createAsyncThunk(
+  "user/getUserById",
+  async (userId) => {
+    try {
+      const res = await Axios.get(`/userDetails/${userId}`);
+      return res.data;
+    } catch (error) {
+      return error.message;
     }
   }
 );
@@ -136,7 +149,7 @@ const userSlice = createSlice({
       state.status = "fulfilled";
     });
 
-    // get user by id
+    // get user properties by id
     builder.addCase(getUserPropertiesById.pending, (state) => {
       state.loading = true;
       state.status = "pending";
@@ -150,6 +163,22 @@ const userSlice = createSlice({
       state.loading = false;
       state.status = "fulfilled";
       state.userProperties = action.payload;
+    });
+
+    // get user by id
+    builder.addCase(getUserById.pending, (state) => {
+      state.loading = true;
+      state.status = "pending";
+    });
+    builder.addCase(getUserById.rejected, (state, action) => {
+      state.loading = false;
+      state.status = "rejected";
+      state.errors = action.error;
+    });
+    builder.addCase(getUserById.fulfilled, (state, action) => {
+      state.loading = false;
+      state.status = "fulfilled";
+      state.userDetails = action.payload;
     });
   },
 });
