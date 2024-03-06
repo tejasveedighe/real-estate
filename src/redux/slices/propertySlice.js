@@ -14,82 +14,122 @@ const initalState = {
 export const getAllProperty = createAsyncThunk(
   "properties/getAllProperties",
   async () => {
-    const res = await Axios.get("/getAllproperty");
-    return res.data;
+    try {
+      const res = await Axios.get("/getAllproperty");
+      return res.data;
+    } catch (error) {
+      throw new Error(error.message || "Error Occurred");
+    }
   }
 );
 
 export const addProperty = createAsyncThunk(
   "properties/addProperty",
   async (payload) => {
-    const res = await Axios.post("/property", payload);
-    return res.data;
+    try {
+      const res = await Axios.post("/property", payload);
+      return res.data;
+    } catch (error) {
+      throw new Error(error.message || "Error Occurred");
+    }
   }
 );
 
 export const getPropertyById = createAsyncThunk(
   "properties/getPropertyById",
   async (propertyId) => {
-    const res = await Axios.get(`/Property/${propertyId}`);
-    return res.data;
+    try {
+      const res = await Axios.get(`/Property/${propertyId}`);
+      return res.data;
+    } catch (error) {
+      throw new Error(error.message || "Error Occurred");
+    }
   }
 );
 
 export const searchProperty = createAsyncThunk(
   "properties/searchProperty",
   async (payload) => {
-    const res = await Axios.post("/searchProperty", payload);
-    return res.data;
+    try {
+      const res = await Axios.post("/searchProperty", payload);
+      return res.data;
+    } catch (error) {
+      throw new Error(error.message || "Error Occurred");
+    }
   }
 );
 
 export const deleteProperty = createAsyncThunk(
   "properties/deleteProperty",
   async (propertyId) => {
-    const res = await Axios.delete(`/property/${propertyId}`);
-    return res.data;
+    try {
+      const res = await Axios.delete(`/property/${propertyId}`);
+      return res.data;
+    } catch (error) {
+      throw new Error(error.message || "Error Occurred");
+    }
   }
 );
 
 export const approveProperty = createAsyncThunk(
   "properties/approveProperty",
   async (propertyId) => {
-    const res = await Axios.put(`/property/approve/${propertyId}`);
-    return res.data;
+    try {
+      const res = await Axios.put(`/property/approve/${propertyId}`);
+      return res.data;
+    } catch (error) {
+      throw new Error(error.message || "Error Occurred");
+    }
   }
 );
 
 export const requestForContact = createAsyncThunk(
   "properties/requestForContact",
   async (payload) => {
-    const res = await Axios.post("/contactApproval", payload);
-    return res.data;
+    try {
+      const res = await Axios.post("/contactApproval", payload);
+      return res.data;
+    } catch (error) {
+      throw new Error(error.message || "Error Occurred");
+    }
   }
 );
 
 export const getPropertyDataByUser = createAsyncThunk(
   "properties/getPropertyByUser",
   async (payload) => {
-    const res = await Axios.get(
-      `/Property/${payload.userId}/${payload.propertyId}`
-    );
-    return res.data;
+    try {
+      const res = await Axios.get(
+        `/Property/${payload.userId}/${payload.propertyId}`
+      );
+      return res.data;
+    } catch (error) {
+      throw new Error(error.message || "Error Occurred");
+    }
   }
 );
 
 export const getAllContactRequests = createAsyncThunk(
   "properties/getAllContactRequests",
   async () => {
-    const res = await Axios.get("/getlistofapprovalrequest/");
-    return res.data;
+    try {
+      const res = await Axios.get("/getlistofapprovalrequest/");
+      return res.data;
+    } catch (error) {
+      throw new Error(error.message || "Error Occurred");
+    }
   }
 );
 
 export const requestAction = createAsyncThunk(
   "properties/requestAction",
   async (payload) => {
-    const res = await Axios.post("/adminaction", payload);
-    return res.data;
+    try {
+      const res = await Axios.post("/adminaction", payload);
+      return res.data;
+    } catch (error) {
+      throw new Error(error.message || "Error Occurred");
+    }
   }
 );
 

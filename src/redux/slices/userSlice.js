@@ -16,7 +16,7 @@ export const loginUser = createAsyncThunk("user/login", async (payload) => {
     const res = await Axios.post("/login", payload);
     return res.data;
   } catch (error) {
-    return error.message;
+    throw new Error(error.message || "Error occured")
   }
 });
 
@@ -25,7 +25,7 @@ export const signupUser = createAsyncThunk("user/signup", async (payload) => {
     const res = await Axios.post("/AddUser", payload);
     return res.data;
   } catch (error) {
-    return error.message;
+    throw new Error(error.message || "Error occured")
   }
 });
 
@@ -34,7 +34,7 @@ export const getAllUsers = createAsyncThunk("user/getAllUsers", async () => {
     const res = await Axios.get("/user");
     return res.data;
   } catch (error) {
-    return error.message;
+    throw new Error(error.message || "Error occured")
   }
 });
 
@@ -45,7 +45,7 @@ export const deleteUserById = createAsyncThunk(
       const res = await Axios.delete(`/delete/${userId}`);
       return res.data;
     } catch (error) {
-      return error.message;
+      throw new Error(error.message || "Error occured")
     }
   }
 );
@@ -57,7 +57,7 @@ export const getUserPropertiesById = createAsyncThunk(
       const res = await Axios.get(`/user/${userId}`);
       return res.data;
     } catch (error) {
-      return error.message;
+    throw new Error(error.message || "Error occured")
     }
   }
 );
@@ -69,7 +69,7 @@ export const getUserById = createAsyncThunk(
       const res = await Axios.get(`/userDetails/${userId}`);
       return res.data;
     } catch (error) {
-      return error.message;
+    throw new Error(error.message || "Error occured")
     }
   }
 );

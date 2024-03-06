@@ -14,7 +14,7 @@ export const sendOffer = createAsyncThunk("offer/sendOffer", async (offer) => {
     const res = await Axios.post("/sendOffer", offer);
     return res.data;
   } catch (error) {
-    return error.message;
+    throw new Error(error.message || "Error occured");
   }
 });
 
@@ -27,7 +27,7 @@ export const getOfferById = createAsyncThunk(
       });
       return res.data;
     } catch (error) {
-      return error.message;
+      throw new Error(error.message || "Error occured");
     }
   }
 );
