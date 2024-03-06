@@ -11,8 +11,9 @@ import DatePicker from "react-date-picker";
 import "react-date-picker/dist/DatePicker.css";
 import "react-calendar/dist/Calendar.css";
 import { useCallback } from "react";
-import { sendOffer } from "../../redux/slices/offerSlice";
+import { getOfferById, sendOffer } from "../../redux/slices/offerSlice";
 import { toast } from "react-toastify";
+import { isObjectNotEmpty } from "../../utils/helpers";
 
 export function ContactContainer({ property, handleRequestClick }) {
   const dispatch = useDispatch();
@@ -112,6 +113,8 @@ const Offer = ({ property }) => {
   const handleClose = useCallback(() => setShow(false), []);
   const handleShow = useCallback(() => setShow(true), []);
 
+  const { offer, loading } = useSelector((store) => store.offer);
+
   const onSubmit = useCallback(
     (e) => {
       e.preventDefault();
@@ -137,7 +140,15 @@ const Offer = ({ property }) => {
     [dispatch, property, userId, value, handleClose]
   );
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    dispatch(getOfferById({ propertyId: property.propertyId, userId }));
+  }, [dispatch, property.propertyId, userId]);
+
+  if (loading) return <LoadingSpinner />;
+
+  if (isObjectNotEmpty(offer)) {
+    return <Button disabled>Offer Sent</Button>;
+  }
 
   return (
     <>

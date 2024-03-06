@@ -23,3 +23,7 @@ export function isValidEmail(email) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 }
+
+export function isObjectNotEmpty(obj) {
+  return Object.keys(obj).length > 0;
+}
