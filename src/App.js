@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import LayoutWithNav from "./components/LayoutWithNav/LayoutWithNav";
-import ProtectedRoutes from "./components/ProtectedRoutes/ProtectedRoutes";
+import AdminRoutes from "./components/ProtectedRoutes/AdminRoutes";
 import About from "./pages/About/About";
 import AddProperty from "./pages/AddProperty/AddProperty";
 import AllProperty from "./pages/AllProperty/AllProperty";
@@ -17,6 +17,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LogOutNav from "./components/LogOutNav/LogOutNav";
 import MyProperties from "./pages/MyProperties/MyProperties";
+import SellerRoutes from "./components/ProtectedRoutes/SellerRoutes";
 
 function App() {
   return (
@@ -33,15 +34,17 @@ function App() {
           <Route path="/property/:propertyId" element={<Property />} />
           <Route path="/about" element={<About />} />
 
-          <Route element={<ProtectedRoutes />}>
-            {/* Admin Routes */}
-            <Route path="/addProperty" element={<AddProperty />} />
+          {/* Admin Routes */}
+          <Route element={<AdminRoutes />}>
             <Route path="/requests" element={<Requests />} />
             <Route path="/manageUsers" element={<ManageUser />} />
             <Route path="/user/:userId" element={<User />} />
+          </Route>
 
-            {/* User Routes */}
+          {/* Seller Routes */}
+          <Route element={<SellerRoutes />}>
             <Route path="/myProperties" element={<MyProperties />} />
+            <Route path="/addProperty" element={<AddProperty />} />
           </Route>
         </Route>
       </Routes>

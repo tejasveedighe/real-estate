@@ -84,7 +84,7 @@ function AddProperty() {
               <option value="Bunglow">Bunglow</option>
               <option value="House">House</option>
               <option value="Flat">Flat</option>
-              <option value="Resident">Resident</option>
+              <option value="Residential">Residential</option>
             </Form.Select>
           </Form.Group>
           <Form.Group className="mt-3">
