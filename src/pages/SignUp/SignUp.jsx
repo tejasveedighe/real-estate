@@ -92,7 +92,7 @@ function SignUp() {
                     id="check-buyer"
                     label="Buyer/Owner/Tenant"
                     name="userType"
-                    value="buyer"
+                    value="Buyer"
                     checked={selectedOption === "buyer"}
                     onChange={handleOptionChange}
                   />
@@ -102,7 +102,7 @@ function SignUp() {
                     id="check-agent"
                     label="Agent/Seller"
                     name="userType"
-                    value="seller"
+                    value="Seller"
                     checked={selectedOption === "seller"}
                     onChange={handleOptionChange}
                   />
