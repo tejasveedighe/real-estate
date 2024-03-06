@@ -11,6 +11,8 @@ import DatePicker from "react-date-picker";
 import "react-date-picker/dist/DatePicker.css";
 import "react-calendar/dist/Calendar.css";
 import { useCallback } from "react";
+import { sendOffer } from "../../redux/slices/offerSlice";
+import { toast } from "react-toastify";
 
 export function ContactContainer({ property, handleRequestClick }) {
   const dispatch = useDispatch();
@@ -18,24 +20,6 @@ export function ContactContainer({ property, handleRequestClick }) {
   const { userRole } = getUserData();
   const { userDetails, loading } = useSelector((store) => store.user);
   const [error, setError] = useState(false);
-
-  const [show, setShow] = useState(false);
-  const [value, onChange] = useState(new Date());
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  const onSubmit = useCallback(
-    (e) => {
-      e.preventDefault();
-      const formData = new FormData(e.target);
-      const offerPrice = formData.get("offerPrice");
-      const text = formData.get("text");
-      console.log(offerPrice, text, value);
-    },
-    [value]
-  );
-
   useEffect(() => {
     if (property.approvalStatus === 2) {
       dispatch(getUserById(property.userId)).then((res) => {
@@ -46,7 +30,7 @@ export function ContactContainer({ property, handleRequestClick }) {
     }
   }, [dispatch, property]);
 
-  if (!isLoggedIn()) return null;
+  if (!isLoggedIn() || getUserData().userRole !== "Buyer") return null;
 
   return (
     <>
@@ -62,6 +46,12 @@ export function ContactContainer({ property, handleRequestClick }) {
               <LoadingSpinner />
             ) : (
               <div className="w-100 d-flex flex-column align-items-start">
+                <span>
+                  Name -&nbsp;
+                  <span className="text-decoration-none">
+                    {userDetails.name}
+                  </span>
+                </span>
                 <span>
                   Contact -&nbsp;
                   <a
@@ -91,12 +81,6 @@ export function ContactContainer({ property, handleRequestClick }) {
                     {userDetails.email}
                   </a>
                 </span>
-                <span>
-                  Name -&nbsp;
-                  <a href="#" className="text-decoration-none">
-                    {userDetails.name}
-                  </a>
-                </span>
               </div>
             )
           ) : property.approvalStatus === 1 ? (
@@ -113,8 +97,51 @@ export function ContactContainer({ property, handleRequestClick }) {
             </Button>
           ) : null}
         </div>
-        <Button onClick={handleShow}>Make Offer</Button>
+        <Offer property={property} />
       </div>
+    </>
+  );
+}
+
+const Offer = ({ property }) => {
+  const dispatch = useDispatch();
+  const { userId } = getUserData();
+  const [show, setShow] = useState(false);
+  const [value, onChange] = useState(new Date());
+
+  const handleClose = useCallback(() => setShow(false), []);
+  const handleShow = useCallback(() => setShow(true), []);
+
+  const onSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const offerPrice = formData.get("offerPrice");
+      const offerText = formData.get("text");
+      dispatch(
+        sendOffer({
+          offerPrice,
+          offerText,
+          offerLastDate: value,
+          propertyId: property.propertyId,
+          sellerId: property.userId,
+          buyerId: userId,
+        })
+      )
+        .then((res) => {
+          toast.success(res.payload);
+        })
+        .then(handleClose)
+        .catch((err) => toast.error(err.message));
+    },
+    [dispatch, property, userId, value, handleClose]
+  );
+
+  useEffect(() => {}, []);
+
+  return (
+    <>
+      <Button onClick={handleShow}>Make Offer</Button>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Make an Offer</Modal.Title>
@@ -130,12 +157,12 @@ export function ContactContainer({ property, handleRequestClick }) {
                 defaultValue={property.price}
               />
             </FloatingLabel>
-            <Form.Group className="mt-3">
-              <Form.Label>Offer Last Date</Form.Label>
+            <div className="mt-3 d-flex align-items-center gap-3">
+              <div>Offer Last Date</div>
               <div>
                 <DatePicker onChange={onChange} value={value} />
               </div>
-            </Form.Group>
+            </div>
             <Form.Group className="mt-3">
               <label htmlFor="floatingInputCustom">
                 Anything Regarding the offer
@@ -156,4 +183,4 @@ export function ContactContainer({ property, handleRequestClick }) {
       </Modal>
     </>
   );
-}
+};
