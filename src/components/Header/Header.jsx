@@ -39,10 +39,15 @@ function Header() {
           Properties
         </Link>
 
-        {role === "seller" ? (
-          <Link className={styles.navLink} to="/addProperty">
-            Add Property
-          </Link>
+        {role === "Seller" ? (
+          <>
+            <Link className={styles.navLink} to="/addProperty">
+              Add Property
+            </Link>
+            <Link className={styles.navLink} to="/offers">
+              Offers
+            </Link>
+          </>
         ) : null}
         {role === "Admin" ? (
           <Link className={styles.navLink} to="/manageUsers">
@@ -71,9 +76,9 @@ function Header() {
               {getUserData().userName.split(" ")?.[1]?.[0]}
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              {role === "Admin" ? (
-                <div className={styles.navLink}>
-                  <Dropdown.Item>
+              <div className={styles.listGroup}>
+                {role === "Admin" ? (
+                  <Dropdown.Item className={styles.listItem}>
                     <Link
                       to="/requests"
                       className="text-black text-decoration-none"
@@ -81,26 +86,26 @@ function Header() {
                       Contact Requests
                     </Link>
                   </Dropdown.Item>
-                </div>
-              ) : null}
-              <Dropdown.Item>
-                <Link
-                  to="/myProperties"
-                  className="text-black text-decoration-none"
-                >
-                  My Properties
-                </Link>
-              </Dropdown.Item>
-              <Dropdown.Divider />
-              <Dropdown.Item>
-                <Button
-                  variant="danger"
-                  className="w-100"
-                  onClick={handleSignOut}
-                >
-                  Sign Out
-                </Button>
-              </Dropdown.Item>
+                ) : null}
+                <Dropdown.Item className={styles.listItem}>
+                  <Link
+                    to="/myProperties"
+                    className="text-black text-decoration-none"
+                  >
+                    My Properties
+                  </Link>
+                </Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item className={styles.listItem}>
+                  <Button
+                    variant="danger"
+                    className="w-100"
+                    onClick={handleSignOut}
+                  >
+                    Sign Out
+                  </Button>
+                </Dropdown.Item>
+              </div>
             </Dropdown.Menu>
           </Dropdown>
         </>

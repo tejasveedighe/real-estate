@@ -1,7 +1,7 @@
 import React from "react";
-import { getUserData } from "../../utils/auth";
 import { Navigate, Outlet } from "react-router-dom";
 import { toast } from "react-toastify";
+import { getUserData } from "../../utils/auth";
 
 function SellerRoutes() {
   try {

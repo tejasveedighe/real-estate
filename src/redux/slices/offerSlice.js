@@ -32,6 +32,20 @@ export const getOfferById = createAsyncThunk(
   }
 );
 
+export const getOfferByUserId = createAsyncThunk(
+  "offer/getOfferByUserId",
+  async (payload) => {
+    try {
+      const res = await Axios.get("/getOffersById", {
+        params: payload,
+      });
+      return res.data;
+    } catch (error) {
+      throw new Error(error.message || "Error occured");
+    }
+  }
+);
+
 const offerSlice = createSlice({
   name: "user",
   initialState,
@@ -49,7 +63,7 @@ const offerSlice = createSlice({
       state.offer = action.payload;
     });
 
-    // send offer
+    // get offer
     builder.addCase(getOfferById.pending, (state) => {
       state.loading = true;
     });
@@ -60,6 +74,19 @@ const offerSlice = createSlice({
     builder.addCase(getOfferById.fulfilled, (state, action) => {
       state.loading = false;
       state.offer = action.payload;
+    });
+
+    // get offers
+    builder.addCase(getOfferByUserId.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getOfferByUserId.rejected, (state, action) => {
+      state.loading = false;
+      state.errors = action.error;
+    });
+    builder.addCase(getOfferByUserId.fulfilled, (state, action) => {
+      state.loading = false;
+      state.offers = action.payload;
     });
   },
 });

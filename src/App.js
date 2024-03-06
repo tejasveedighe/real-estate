@@ -18,6 +18,7 @@ import "react-toastify/dist/ReactToastify.css";
 import LogOutNav from "./components/LogOutNav/LogOutNav";
 import MyProperties from "./pages/MyProperties/MyProperties";
 import SellerRoutes from "./components/ProtectedRoutes/SellerRoutes";
+import Offers from "./pages/Offers/Offers";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
           <Route element={<SellerRoutes />}>
             <Route path="/myProperties" element={<MyProperties />} />
             <Route path="/addProperty" element={<AddProperty />} />
+            <Route path="/offers" element={<Offers />} />
           </Route>
         </Route>
       </Routes>

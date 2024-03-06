@@ -10,6 +10,7 @@ import {
 } from "../../redux/slices/propertySlice";
 import styles from "./Requests.module.css";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+
 function Requests() {
   const dispatch = useDispatch();
 
@@ -20,6 +21,7 @@ function Requests() {
     rejected: 0,
     pending: 0,
   });
+
   const [filteredRequests, setFilteredRequests] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
   const [selectedApprovalStatus, setSelectedApprovalStatus] = useState("");
@@ -300,7 +302,7 @@ function Requests() {
                           </Button>
                         </>
                       )}
-                      {request.approvalStatus !== 1 && (
+                      {request.approvalStatus === 2 && (
                         <Button
                           className="text-white"
                           variant="danger"
