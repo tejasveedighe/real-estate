@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { v4 as uuid } from "uuid";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import { getOfferByUserId } from "../../redux/slices/offerSlice";
-import { sellerOfferAction } from "../../redux/slices/propertySlice";
+import { offerAction } from "../../redux/slices/propertySlice";
 import { getUserData } from "../../utils/auth";
 import styles from "./Offers.module.css";
 
@@ -22,18 +22,30 @@ function Offers() {
 
   const handleOfferAction = useCallback(
     (offer, status) => {
-      const payload = {
+      let payload = {
         ...offer,
-        sellerStatus: status,
       };
-      dispatch(sellerOfferAction(payload))
+
+      // Check user type and update the payload accordingly
+      if (userType === "Seller") {
+        payload = {
+          ...payload,
+          sellerStatus: status,
+        };
+      } else if (userType === "Admin") {
+        payload = {
+          ...payload,
+          adminStatus: status,
+        };
+      }
+      dispatch(offerAction({ offer: payload, userType: userType }))
         .then(() => {
           toast.success("Action Completed Successfully");
         })
         .then(getOffer)
         .catch((err) => toast.error(err.message));
     },
-    [dispatch, getOffer]
+    [dispatch, getOffer, userType]
   );
 
   useEffect(() => {
@@ -110,7 +122,7 @@ function Offers() {
                 </td>
 
                 <td>
-                  {offer.sellerStatus === 1 && (
+                  {userType === "Seller" && offer.sellerStatus === 1 && (
                     <>
                       <Button
                         className="text-white"
@@ -129,7 +141,36 @@ function Offers() {
                       </Button>
                     </>
                   )}
-                  {offer.sellerStatus === 2 && (
+                  {userType === "Admin" && offer.adminStatus === 1 && (
+                    <>
+                      <Button
+                        className="text-white"
+                        type="button"
+                        onClick={() => handleOfferAction(offer, 2)}
+                      >
+                        Approve
+                      </Button>
+                      <Button
+                        className="text-white"
+                        variant="danger"
+                        type="button"
+                        onClick={() => handleOfferAction(offer, 3)}
+                      >
+                        Reject
+                      </Button>
+                    </>
+                  )}
+                  {userType === "Seller" && offer.sellerStatus === 2 && (
+                    <Button
+                      className="text-white"
+                      variant="danger"
+                      type="button"
+                      onClick={() => handleOfferAction(offer, 3)}
+                    >
+                      Dis-Approve
+                    </Button>
+                  )}
+                  {userType === "Admin" && offer.adminStatus === 2 && (
                     <Button
                       className="text-white"
                       variant="danger"

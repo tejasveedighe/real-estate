@@ -19,6 +19,7 @@ import LogOutNav from "./components/LogOutNav/LogOutNav";
 import MyProperties from "./pages/MyProperties/MyProperties";
 import SellerRoutes from "./components/ProtectedRoutes/SellerRoutes";
 import Offers from "./pages/Offers/Offers";
+import AuthRoutes from "./components/ProtectedRoutes/AuthRoutes";
 
 function App() {
   return (
@@ -35,18 +36,23 @@ function App() {
           <Route path="/property/:propertyId" element={<Property />} />
           <Route path="/about" element={<About />} />
 
-          {/* Admin Routes */}
-          <Route element={<AdminRoutes />}>
-            <Route path="/requests" element={<Requests />} />
-            <Route path="/manageUsers" element={<ManageUser />} />
-            <Route path="/user/:userId" element={<User />} />
-          </Route>
-
-          {/* Seller Routes */}
-          <Route element={<SellerRoutes />}>
-            <Route path="/myProperties" element={<MyProperties />} />
-            <Route path="/addProperty" element={<AddProperty />} />
+          {/* Auth Routes */}
+          <Route element={<AuthRoutes />}>
+            {/* Common to all authenticated users */}
             <Route path="/offers" element={<Offers />} />
+
+            {/* Admin Routes */}
+            <Route element={<AdminRoutes />}>
+              <Route path="/requests" element={<Requests />} />
+              <Route path="/manageUsers" element={<ManageUser />} />
+              <Route path="/user/:userId" element={<User />} />
+            </Route>
+
+            {/* Seller Routes */}
+            <Route element={<SellerRoutes />}>
+              <Route path="/myProperties" element={<MyProperties />} />
+              <Route path="/addProperty" element={<AddProperty />} />
+            </Route>
           </Route>
         </Route>
       </Routes>
