@@ -11,7 +11,11 @@ import DatePicker from "react-date-picker";
 import "react-date-picker/dist/DatePicker.css";
 import "react-calendar/dist/Calendar.css";
 import { useCallback } from "react";
-import { getOfferById, sendOffer } from "../../redux/slices/offerSlice";
+import {
+  getOfferById,
+  retryOffer,
+  sendOffer,
+} from "../../redux/slices/offerSlice";
 import { toast } from "react-toastify";
 import { isObjectNotEmpty } from "../../utils/helpers";
 
@@ -109,6 +113,7 @@ const Offer = ({ property }) => {
   const { userId } = getUserData();
   const [show, setShow] = useState(false);
   const [value, onChange] = useState(new Date());
+  const [retry, setRetry] = useState(false);
 
   const handleClose = useCallback(() => setShow(false), []);
   const handleShow = useCallback(() => {
@@ -117,34 +122,59 @@ const Offer = ({ property }) => {
 
   const { offer, loading } = useSelector((store) => store.offer);
 
+  const getOffer = useCallback(() => {
+    dispatch(getOfferById({ propertyId: property.propertyId, userId }));
+  }, [dispatch, property.propertyId, userId]);
+
   const onSubmit = useCallback(
     (e) => {
       e.preventDefault();
       const formData = new FormData(e.target);
       const offerPrice = formData.get("offerPrice");
       const offerText = formData.get("text");
-      dispatch(
-        sendOffer({
-          offerPrice,
-          offerText,
-          offerLastDate: value,
-          propertyId: property.propertyId,
-          sellerId: property.userId,
-          buyerId: userId,
-        })
-      )
-        .then((res) => {
-          toast.success(res.payload);
-        })
-        .then(handleClose)
-        .catch((err) => toast.error(err.message));
+
+      if (retry) {
+        dispatch(
+          retryOffer({
+            ...offer,
+            offerPrice,
+            offerText,
+            offerLastDate: value,
+          })
+        )
+          .then((res) => toast.success(res.payload))
+          .then(getOffer)
+          .then(handleClose)
+          .catch((err) => toast.error(err.message));
+      } else {
+        dispatch(
+          sendOffer({
+            offerPrice,
+            offerText,
+            offerLastDate: value,
+            propertyId: property.propertyId,
+            sellerId: property.userId,
+            buyerId: userId,
+          })
+        )
+          .then((res) => {
+            toast.success(res.payload);
+          })
+          .then(handleClose)
+          .catch((err) => toast.error(err.message));
+      }
     },
-    [dispatch, property, userId, value, handleClose]
+    [retry, dispatch, value, offer, getOffer, handleClose, property, userId]
   );
 
+  const handleRetryOffer = useCallback(() => {
+    setRetry((prev) => !prev);
+    handleShow();
+  }, [handleShow]);
+
   useEffect(() => {
-    dispatch(getOfferById({ propertyId: property.propertyId, userId }));
-  }, [dispatch, property.propertyId, userId]);
+    getOffer();
+  }, []);
 
   if (loading) return <LoadingSpinner />;
 
@@ -195,7 +225,7 @@ const Offer = ({ property }) => {
             </span>
 
             {offer.sellerStatus === 3 || offer.adminStatus === 3 ? (
-              <Button className="mt-4 text-white" onClick={handleShow}>
+              <Button className="mt-4 text-white" onClick={handleRetryOffer}>
                 Retry Offer
               </Button>
             ) : (
@@ -242,7 +272,7 @@ const Offer = ({ property }) => {
               />
             </Form.Group>
             <Button className="mt-3 float-end" variant="primary" type="submit">
-              Send Offer
+              {retry ? "Re-send Offer" : "Send Offer"}
             </Button>
           </Form>
         </Modal.Body>

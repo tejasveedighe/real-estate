@@ -46,6 +46,18 @@ export const getOfferByUserId = createAsyncThunk(
   }
 );
 
+export const retryOffer = createAsyncThunk(
+  "offer/retryOffer",
+  async (payload) => {
+    try {
+      const res = await Axios.post("/Retry", payload);
+      return res.data;
+    } catch (error) {
+      throw new Error(error.message || "Error occured");
+    }
+  }
+);
+
 const offerSlice = createSlice({
   name: "user",
   initialState,
@@ -85,6 +97,19 @@ const offerSlice = createSlice({
       state.errors = action.error;
     });
     builder.addCase(getOfferByUserId.fulfilled, (state, action) => {
+      state.loading = false;
+      state.offers = action.payload;
+    });
+
+    // retry offer
+    builder.addCase(retryOffer.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(retryOffer.rejected, (state, action) => {
+      state.loading = false;
+      state.errors = action.error;
+    });
+    builder.addCase(retryOffer.fulfilled, (state, action) => {
       state.loading = false;
       state.offers = action.payload;
     });
