@@ -133,6 +133,28 @@ export const requestAction = createAsyncThunk(
   }
 );
 
+export const sellerOfferAction = createAsyncThunk(
+  "properties/sellerOfferAction",
+  async (payload) => {
+    try {
+      const res = await Axios.post("/sellerOfferAction", payload);
+      return res.data;
+    } catch (error) {
+      throw new Error(error.message || "Error Occurred");
+    }
+  }
+);
+export const adminOfferAction = createAsyncThunk(
+  "properties/adminOfferAction",
+  async (payload) => {
+    try {
+      const res = await Axios.post("/adminOfferAction", payload);
+      return res.data;
+    } catch (error) {
+      throw new Error(error.message || "Error Occurred");
+    }
+  }
+);
 const propertySlice = createSlice({
   name: "properties",
   initialState: initalState,
@@ -315,6 +337,38 @@ const propertySlice = createSlice({
       state.loading = false;
       state.status = "fulfilled";
       state.lastAction = "requestAction";
+    });
+
+    // offer seller action
+    builder.addCase(sellerOfferAction.pending, (state) => {
+      state.loading = true;
+      state.status = "pending";
+    });
+    builder.addCase(sellerOfferAction.rejected, (state, action) => {
+      state.loading = false;
+      state.status = "rejected";
+      state.errors = action.error;
+    });
+    builder.addCase(sellerOfferAction.fulfilled, (state, action) => {
+      state.loading = false;
+      state.status = "fulfilled";
+      state.lastAction = "offerAction";
+    });
+
+    // offer admin action
+    builder.addCase(adminOfferAction.pending, (state) => {
+      state.loading = true;
+      state.status = "pending";
+    });
+    builder.addCase(adminOfferAction.rejected, (state, action) => {
+      state.loading = false;
+      state.status = "rejected";
+      state.errors = action.error;
+    });
+    builder.addCase(adminOfferAction.fulfilled, (state, action) => {
+      state.loading = false;
+      state.status = "fulfilled";
+      state.lastAction = "adminOfferAction";
     });
   },
 });

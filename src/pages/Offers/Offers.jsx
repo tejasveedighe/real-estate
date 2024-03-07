@@ -1,11 +1,13 @@
-import { v4 as uuid } from "uuid";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getUserData } from "../../utils/auth";
-import { getOfferByUserId } from "../../redux/slices/offerSlice";
-import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
-import { Button, Table } from "react-bootstrap";
 import classNames from "classnames";
+import React, { useCallback, useEffect } from "react";
+import { Button, Table } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { v4 as uuid } from "uuid";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import { getOfferByUserId } from "../../redux/slices/offerSlice";
+import { sellerOfferAction } from "../../redux/slices/propertySlice";
+import { getUserData } from "../../utils/auth";
 import styles from "./Offers.module.css";
 
 function Offers() {
@@ -14,9 +16,29 @@ function Offers() {
 
   const { offers, loading } = useSelector((store) => store.offer);
 
-  useEffect(() => {
+  const getOffer = useCallback(() => {
     if (userId && userType) dispatch(getOfferByUserId({ userType, userId }));
   }, [dispatch, userId, userType]);
+
+  const handleOfferAction = useCallback(
+    (offer, status) => {
+      const payload = {
+        ...offer,
+        sellerStatus: status,
+      };
+      dispatch(sellerOfferAction(payload))
+        .then(() => {
+          toast.success("Action Completed Successfully");
+        })
+        .then(getOffer)
+        .catch((err) => toast.error(err.message));
+    },
+    [dispatch, getOffer]
+  );
+
+  useEffect(() => {
+    getOffer();
+  }, []);
 
   if (loading)
     return (
@@ -93,7 +115,7 @@ function Offers() {
                       <Button
                         className="text-white"
                         type="button"
-                        // onClick={() => handleRequestAction(request, 2)}
+                        onClick={() => handleOfferAction(offer, 2)}
                       >
                         Approve
                       </Button>
@@ -101,7 +123,7 @@ function Offers() {
                         className="text-white"
                         variant="danger"
                         type="button"
-                        // onClick={() => handleRequestAction(request, 3)}
+                        onClick={() => handleOfferAction(offer, 3)}
                       >
                         Reject
                       </Button>
@@ -112,7 +134,7 @@ function Offers() {
                       className="text-white"
                       variant="danger"
                       type="button"
-                      // onClick={() => handleRequestAction(request, 3)}
+                      onClick={() => handleOfferAction(offer, 3)}
                     >
                       Dis-Approve
                     </Button>
