@@ -86,13 +86,6 @@ function AllProperty() {
     }
   }, [propertiesStore.lastAction, propertiesStore.status, setData]);
 
-  if (propertiesStore.loading) {
-    return (
-      <main className="d-flex align-items-center justify-content-center text-center">
-        <LoadingSpinner />
-      </main>
-    );
-  }
   if (propertiesStore.status === "rejected") {
     return (
       <main className="d-flex align-items-center justify-content-center text-center">
@@ -117,96 +110,105 @@ function AllProperty() {
           </div>
         </div>
       </div>
-      <section className="container text-center my-5">
-        <div className="d-flex align-items-center justify-content-between">
-          <h1>Properties for Sale</h1>
-          <Form onSubmit={onSearchSubmit}>
-            <Form.Group>
-              <InputGroup className="mb-3">
-                <Form.Select
-                  name="propertyType"
-                  aria-placeholder="Select Property Type"
-                >
-                  <option disabled>Type</option>
-                  {propertyType.map((type, index) => (
-                    <option key={`Type-${index} ${type}`} value={type}>
-                      {type}
-                    </option>
-                  ))}
-                </Form.Select>
-                <Form.Select name="status">
-                  <option disabled>Status</option>
-                  {status.map((status, index) => (
-                    <option key={`Status-${index} ${status}`} value={status}>
-                      {status}
-                    </option>
-                  ))}
-                </Form.Select>
-                <Form.Select name="location">
-                  <option disabled>Location</option>
-                  {locations.map((location, index) => (
-                    <option
-                      key={`Location-${index} ${location}`}
-                      value={location}
-                    >
-                      {location}
-                    </option>
-                  ))}
-                </Form.Select>
-                <Form.Select name="squareFeet">
-                  <option disabled>Area</option>
-                  {squareFeet.map((area, index) => (
-                    <option key={`Area-${index} ${area}`} value={area}>
-                      {area}
-                    </option>
-                  ))}
-                </Form.Select>
-                <Form.Select name="noBathroom">
-                  <option disabled>Bathroom</option>
-                  {noBathroom.map((bathroom, index) => (
-                    <option
-                      key={`Bathroom-${index} ${bathroom}`}
-                      value={bathroom}
-                    >
-                      {bathroom}
-                    </option>
-                  ))}
-                </Form.Select>
-                <Form.Select name="noBedroom">
-                  <option disabled>Bedroom</option>
-                  {noBedroom.map((bedroom, index) => (
-                    <option key={`Bedroom-${index} ${bedroom}`} value={bedroom}>
-                      {bedroom}
-                    </option>
-                  ))}
-                </Form.Select>
-                <Button
-                  type="submit"
-                  variant="outline-primary"
-                  id="button-addon2"
-                >
-                  <CiSearch />
-                </Button>
-              </InputGroup>
-            </Form.Group>
-          </Form>
-        </div>
-        <div className={classNames("mt-5", styles.propertyGrid)}>
-          {!propertiesStore?.loading &&
-          propertiesStore?.status === "fulfilled" &&
-          propertiesStore?.properties?.length ? (
-            propertiesStore?.properties?.map((property, index) => (
-              <PropertyCard
-                key={property?.propertyId}
-                property={property}
-                index={index > 8 ? index - 8 : index}
-              />
-            ))
-          ) : (
-            <>No Data to show</>
-          )}
-        </div>
-      </section>
+      {propertiesStore.loading ? (
+        <section className="container text-center my-5">
+          <LoadingSpinner />
+        </section>
+      ) : (
+        <section className="container text-center my-5">
+          <div className="d-flex align-items-center justify-content-between">
+            <h1>Properties for Sale</h1>
+            <Form onSubmit={onSearchSubmit}>
+              <Form.Group>
+                <InputGroup className="mb-3">
+                  <Form.Select
+                    name="propertyType"
+                    aria-placeholder="Select Property Type"
+                  >
+                    <option disabled>Type</option>
+                    {propertyType.map((type, index) => (
+                      <option key={`Type-${index} ${type}`} value={type}>
+                        {type}
+                      </option>
+                    ))}
+                  </Form.Select>
+                  <Form.Select name="status">
+                    <option disabled>Status</option>
+                    {status.map((status, index) => (
+                      <option key={`Status-${index} ${status}`} value={status}>
+                        {status}
+                      </option>
+                    ))}
+                  </Form.Select>
+                  <Form.Select name="location">
+                    <option disabled>Location</option>
+                    {locations.map((location, index) => (
+                      <option
+                        key={`Location-${index} ${location}`}
+                        value={location}
+                      >
+                        {location}
+                      </option>
+                    ))}
+                  </Form.Select>
+                  <Form.Select name="squareFeet">
+                    <option disabled>Area</option>
+                    {squareFeet.map((area, index) => (
+                      <option key={`Area-${index} ${area}`} value={area}>
+                        {area}
+                      </option>
+                    ))}
+                  </Form.Select>
+                  <Form.Select name="noBathroom">
+                    <option disabled>Bathroom</option>
+                    {noBathroom.map((bathroom, index) => (
+                      <option
+                        key={`Bathroom-${index} ${bathroom}`}
+                        value={bathroom}
+                      >
+                        {bathroom}
+                      </option>
+                    ))}
+                  </Form.Select>
+                  <Form.Select name="noBedroom">
+                    <option disabled>Bedroom</option>
+                    {noBedroom.map((bedroom, index) => (
+                      <option
+                        key={`Bedroom-${index} ${bedroom}`}
+                        value={bedroom}
+                      >
+                        {bedroom}
+                      </option>
+                    ))}
+                  </Form.Select>
+                  <Button
+                    type="submit"
+                    variant="outline-primary"
+                    id="button-addon2"
+                  >
+                    <CiSearch />
+                  </Button>
+                </InputGroup>
+              </Form.Group>
+            </Form>
+          </div>
+          <div className={classNames("mt-5", styles.propertyGrid)}>
+            {!propertiesStore?.loading &&
+            propertiesStore?.status === "fulfilled" &&
+            propertiesStore?.properties?.length ? (
+              propertiesStore?.properties?.map((property, index) => (
+                <PropertyCard
+                  key={property?.propertyId}
+                  property={property}
+                  index={index > 8 ? index - 8 : index}
+                />
+              ))
+            ) : (
+              <>No Data to show</>
+            )}
+          </div>
+        </section>
+      )}
       <Newsletter />
     </main>
   );
