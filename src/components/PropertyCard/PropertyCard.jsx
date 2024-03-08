@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import React, { useCallback } from "react";
-import { Card } from "react-bootstrap";
+import { Badge, Card } from "react-bootstrap";
 import { BsBuildingsFill } from "react-icons/bs";
 import { FaLocationDot } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
@@ -41,6 +41,14 @@ function PropertyCard({ property, index }) {
             &nbsp;
             <span className={styles.propertyTitle}>
               {property.propertyTitle}
+            </span>
+            &nbsp;
+            <span>
+              {property.status === "Sold" ? (
+                <Badge bg="danger">Sold</Badge>
+              ) : property.status === "Rented" ? (
+                <Badge bg="danger">Rented</Badge>
+              ) : null}
             </span>
           </div>
           <div className="fs-5">

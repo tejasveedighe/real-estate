@@ -1,18 +1,18 @@
 import classNames from "classnames";
 import React, { useCallback, useEffect } from "react";
+import { Badge, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import {
   getPropertyById,
   getPropertyDataByUser,
   requestForContact,
 } from "../../redux/slices/propertySlice";
 import { getUserData, isLoggedIn } from "../../utils/auth";
-import styles from "./Property.module.css";
-import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import { ContactContainer } from "./ContactContainer";
-import { toast } from "react-toastify";
-import { Button } from "react-bootstrap";
+import styles from "./Property.module.css";
 
 function Property() {
   const dispatch = useDispatch();
@@ -84,9 +84,18 @@ function Property() {
           />
           <hr className={styles.solid} />
           <div className=" w-100 mt-4">
-            <h3>
-              {property.propertyTitle} ({property.propertyType})
-            </h3>
+            <div className="d-flex align-items-center gap-3 justify-content-start">
+              <h3>
+                {property.propertyTitle} {property.propertyType}
+              </h3>
+              {property.status === "Sold" ? (
+                <Badge variant="danger">Sold</Badge>
+              ) : property.status === "Rented" ? (
+                <Badge variant="danger">Rented</Badge>
+              ) : (
+                <Badge variant="info">Available</Badge>
+              )}
+            </div>
             <p className={styles.propertyDescription}>{property.description}</p>
           </div>
           <hr className={styles.solid} />

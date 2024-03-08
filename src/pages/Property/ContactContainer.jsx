@@ -28,6 +28,8 @@ export function ContactContainer({ property, handleRequestClick }) {
 
   if (!isLoggedIn() || getUserData().userRole !== "Buyer") return null;
 
+  if (property.status === "Sold" || property.status === "Rented") return null;
+
   return (
     <>
       <div className={styles.propertySide}>
