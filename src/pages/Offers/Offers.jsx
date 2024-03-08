@@ -72,6 +72,7 @@ function Offers() {
               <th>Last Date</th>
               <th>Seller Status</th>
               <th>Admin Status</th>
+              <th>Payment Status</th>
               <th>Offer Action</th>
             </tr>
           </thead>
@@ -120,7 +121,22 @@ function Offers() {
                       : "Rejected"}
                   </span>
                 </td>
-
+                <td>
+                  <span
+                    className={classNames("badge rounded-pill", {
+                      "bg-warning text-white": offer.offerStatus === 0,
+                      "bg-success text-white": offer.offerStatus === 1,
+                      "bg-danger text-white":
+                        offer.offerStatus !== 0 && offer.offerStatus !== 1,
+                    })}
+                  >
+                    {offer.offerStatus === 1
+                      ? "Completed"
+                      : offer.offerStatus === 2
+                      ? "Rejected"
+                      : "Pending"}
+                  </span>
+                </td>
                 <td>
                   {userType === "Seller" && offer.sellerStatus === 1 && (
                     <>
@@ -160,29 +176,30 @@ function Offers() {
                       </Button>
                     </>
                   )}
-                  {userType === "Seller" && offer.sellerStatus === 2 && (
-                    <Button
-                      className="text-white"
-                      variant="danger"
-                      type="button"
-                      onClick={() => handleOfferAction(offer, 3)}
-                    >
-                      Dis-Approve
-                    </Button>
+                  {offer.offerStatus === 1 ? null : (
+                    <>
+                      {userType === "Seller" && offer.sellerStatus === 2 && (
+                        <Button
+                          className="text-white"
+                          variant="danger"
+                          type="button"
+                          onClick={() => handleOfferAction(offer, 3)}
+                        >
+                          Dis-Approve
+                        </Button>
+                      )}
+                      {userType === "Admin" && offer.adminStatus === 2 && (
+                        <Button
+                          className="text-white"
+                          variant="danger"
+                          type="button"
+                          onClick={() => handleOfferAction(offer, 3)}
+                        >
+                          Dis-Approve
+                        </Button>
+                      )}
+                    </>
                   )}
-                  {userType === "Admin" && offer.adminStatus === 2 && (
-                    <Button
-                      className="text-white"
-                      variant="danger"
-                      type="button"
-                      onClick={() => handleOfferAction(offer, 3)}
-                    >
-                      Dis-Approve
-                    </Button>
-                  )}
-                  <Button variant="info" className="text-white">
-                    View
-                  </Button>
                 </td>
               </tr>
             ))}
