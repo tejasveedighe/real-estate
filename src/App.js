@@ -20,6 +20,7 @@ import MyProperties from "./pages/MyProperties/MyProperties";
 import SellerRoutes from "./components/ProtectedRoutes/SellerRoutes";
 import Offers from "./pages/Offers/Offers";
 import AuthRoutes from "./components/ProtectedRoutes/AuthRoutes";
+import Owned from "./pages/Owned/Owned";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
           <Route element={<AuthRoutes />}>
             {/* Common to all authenticated users */}
             <Route path="/offers" element={<Offers />} />
+            <Route path="/owned" element={<Owned />} />
 
             {/* Admin Routes */}
             <Route element={<AdminRoutes />}>

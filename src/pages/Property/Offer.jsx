@@ -36,7 +36,7 @@ export const Offer = ({ property }) => {
 
   const handleCloseOfferModal = useCallback(() => setShowOfferModal(false), []);
   const handleShowOfferModal = useCallback(() => {
-    setShowOfferModal((prev) => !prev);
+    setShowOfferModal(true);
   }, []);
 
   const getOffer = useCallback(() => {
@@ -77,6 +77,7 @@ export const Offer = ({ property }) => {
           .then((res) => {
             toast.success(res.payload);
           })
+          .then(getOffer)
           .then(handleCloseOfferModal)
           .catch((err) => toast.error(err.message));
       }

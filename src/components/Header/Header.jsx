@@ -71,8 +71,7 @@ function Header() {
               <div className={styles.usericon}>
                 <FaRegUser />
               </div>
-              {getUserData().userName[0]}
-              {getUserData().userName.split(" ")?.[1]?.[0]}
+              {getUserData().userName.split(" ")}
             </Dropdown.Toggle>
             <Dropdown.Menu>
               <div className={styles.listGroup}>
@@ -88,7 +87,7 @@ function Header() {
                 ) : null}
                 <Dropdown.Item className={styles.listItem}>
                   <Link
-                    to="/myProperties"
+                    to={role === "Seller" ? "/myProperties" : "/owned"}
                     className="text-black text-decoration-none"
                   >
                     My Properties

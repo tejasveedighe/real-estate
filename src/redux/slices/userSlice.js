@@ -16,7 +16,7 @@ export const loginUser = createAsyncThunk("user/login", async (payload) => {
     const res = await Axios.post("/login", payload);
     return res.data;
   } catch (error) {
-    throw new Error(error.message || "Error occured")
+    throw new Error(error.message || "Error occured");
   }
 });
 
@@ -25,7 +25,7 @@ export const signupUser = createAsyncThunk("user/signup", async (payload) => {
     const res = await Axios.post("/AddUser", payload);
     return res.data;
   } catch (error) {
-    throw new Error(error.message || "Error occured")
+    throw new Error(error.message || "Error occured");
   }
 });
 
@@ -34,7 +34,7 @@ export const getAllUsers = createAsyncThunk("user/getAllUsers", async () => {
     const res = await Axios.get("/user");
     return res.data;
   } catch (error) {
-    throw new Error(error.message || "Error occured")
+    throw new Error(error.message || "Error occured");
   }
 });
 
@@ -45,7 +45,7 @@ export const deleteUserById = createAsyncThunk(
       const res = await Axios.delete(`/delete/${userId}`);
       return res.data;
     } catch (error) {
-      throw new Error(error.message || "Error occured")
+      throw new Error(error.message || "Error occured");
     }
   }
 );
@@ -57,7 +57,7 @@ export const getUserPropertiesById = createAsyncThunk(
       const res = await Axios.get(`/user/${userId}`);
       return res.data;
     } catch (error) {
-    throw new Error(error.message || "Error occured")
+      throw new Error(error.message || "Error occured");
     }
   }
 );
@@ -69,7 +69,19 @@ export const getUserById = createAsyncThunk(
       const res = await Axios.get(`/userDetails/${userId}`);
       return res.data;
     } catch (error) {
-    throw new Error(error.message || "Error occured")
+      throw new Error(error.message || "Error occured");
+    }
+  }
+);
+
+export const getOwnedProperties = createAsyncThunk(
+  "user/getOwnedProperties",
+  async (buyerId) => {
+    try {
+      const res = await Axios.get(`/getOwnedProperties/${buyerId}`);
+      return res.data;
+    } catch (error) {
+      throw new Error(error.message || "Error occured");
     }
   }
 );
@@ -179,6 +191,22 @@ const userSlice = createSlice({
       state.loading = false;
       state.status = "fulfilled";
       state.userDetails = action.payload;
+    });
+
+    // get user owned properties
+    builder.addCase(getOwnedProperties.pending, (state) => {
+      state.loading = true;
+      state.status = "pending";
+    });
+    builder.addCase(getOwnedProperties.rejected, (state, action) => {
+      state.loading = false;
+      state.status = "rejected";
+      state.errors = action.error;
+    });
+    builder.addCase(getOwnedProperties.fulfilled, (state, action) => {
+      state.loading = false;
+      state.status = "fulfilled";
+      state.userProperties = action.payload;
     });
   },
 });
