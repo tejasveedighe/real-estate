@@ -32,7 +32,8 @@
   flex-direction: column;
   gap: 10px;
 
-  .contactContainer, .offerStatusContainer {
+  .contactContainer,
+  .offerStatusContainer {
     border: 1px solid grey;
     border-left: 5px solid var(--lightBlue);
     border-radius: 5px;
@@ -40,9 +41,14 @@
     width: 100%;
   }
 
-
   button {
-    background-color: var(--lightBlue);
     border: none;
   }
+  button.retryBtn {
+    background-color: none;
+  }
+}
+
+.paymentModalPropertyImgContainer {
+  width: 50px;
 }

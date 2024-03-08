@@ -5,6 +5,8 @@ const initialState = {
   offer: {},
   offers: [],
   loading: false,
+  payLoading: false,
+  payment: {},
   errors: {},
   lastAction: "",
 };
@@ -54,6 +56,30 @@ export const retryOffer = createAsyncThunk(
       return res.data;
     } catch (error) {
       throw new Error(error.message || "Error occured");
+    }
+  }
+);
+
+export const buyProperty = createAsyncThunk(
+  "offer/buyProperty",
+  async (payload) => {
+    try {
+      const res = await Axios.post("/BuyProperty", payload);
+      return res.data;
+    } catch (error) {
+      throw new Error(error.message || "Error Occured");
+    }
+  }
+);
+
+export const rentProperty = createAsyncThunk(
+  "offer/rentProperty",
+  async (payload) => {
+    try {
+      const res = await Axios.post("/RentProperty", payload);
+      return res.data;
+    } catch (error) {
+      throw new Error(error.message || "Error Occured");
     }
   }
 );
@@ -112,6 +138,32 @@ const offerSlice = createSlice({
     builder.addCase(retryOffer.fulfilled, (state, action) => {
       state.loading = false;
       state.offers = action.payload;
+    });
+
+    // pay offer
+    builder.addCase(buyProperty.pending, (state) => {
+      state.payLoading = true;
+    });
+    builder.addCase(buyProperty.rejected, (state, action) => {
+      state.payLoading = false;
+      state.errors = action.error;
+    });
+    builder.addCase(buyProperty.fulfilled, (state, action) => {
+      state.payLoading = false;
+      state.payment = action.payload;
+    });
+
+    // rent offer
+    builder.addCase(rentProperty.pending, (state) => {
+      state.payLoading = true;
+    });
+    builder.addCase(rentProperty.rejected, (state, action) => {
+      state.payLoading = false;
+      state.errors = action.error;
+    });
+    builder.addCase(rentProperty.fulfilled, (state, action) => {
+      state.payLoading = false;
+      state.payment = action.payload;
     });
   },
 });
