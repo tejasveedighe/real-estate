@@ -21,6 +21,7 @@ import SellerRoutes from "./components/ProtectedRoutes/SellerRoutes";
 import Offers from "./pages/Offers/Offers";
 import AuthRoutes from "./components/ProtectedRoutes/AuthRoutes";
 import Owned from "./pages/Owned/Owned";
+import Payments from "./pages/Payments/Payments";
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
               <Route path="/requests" element={<Requests />} />
               <Route path="/manageUsers" element={<ManageUser />} />
               <Route path="/user/:userId" element={<User />} />
+              <Route path="/payments" element={<Payments />} />
             </Route>
 
             {/* Seller Routes */}

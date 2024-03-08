@@ -3,15 +3,18 @@
   height: 690px;
 
   .searchProperty {
-    font-weight: bolder;
-    font-size: 50px;
-    line-height: 50px;
-  }
-
-  button {
-    background-color: var(--lightBlue) 0;
-    border: 3px solid var(--lightBlue);
-    padding: 10px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    span {
+      font-weight: bolder;
+      font-size: 50px;
+      line-height: 50px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+    }
   }
 }
 

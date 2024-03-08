@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import React from "react";
-import { Button, ButtonGroup } from "react-bootstrap";
+import { Button, ButtonGroup, Form } from "react-bootstrap";
 import "react-multi-carousel/lib/styles.css";
 import { Link } from "react-router-dom";
 import { AgentsCarousel } from "../../components/AgentsGridCarousel/AgentsCarousel";
@@ -18,11 +18,18 @@ function Home() {
         )}
       >
         <div className={classNames("text-white", styles.searchProperty)}>
-          Discover a place
-          <br /> you'll love to Live.
-        </div>
-
-        <div>
+          <span>
+            Discover a place
+            <br /> you'll love to Live.
+          </span>
+          <ButtonGroup>
+            <Button variant="secondary">Buy</Button>
+            <Button variant="secondary">Rent</Button>
+          </ButtonGroup>
+          <Form.Control
+            placeholder="Enter your preferences"
+            className={styles.input}
+          />
         </div>
       </section>
 
