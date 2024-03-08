@@ -14,38 +14,35 @@ export function Properties({ title }) {
     dispatch(getAllProperty());
   }, [dispatch]);
 
-  if (propertiesStore.loading)
-    return (
-      <section className="d-flex align-items-center justify-content-center">
-        <LoadingSpinner />
-      </section>
-    );
-
   return (
     <section className=" d-flex align-items-center justify-content-center flex-column mt-5">
       <h1>{title}</h1>
-
-      <Carousel
-        containerClass={"container my-5 p-5"}
-        itemClass="d-flex align-items-center justify-content-center"
-        infinite
-        rewind
-        rewindWithAnimation
-        partialVisbile="false"
-        responsive={responsiveProperties}
-      >
-        {!propertiesStore.loading && propertiesStore.status === "fulfilled" ? (
-          propertiesStore.properties.map((property, index) => (
-            <PropertyCard
-              key={property?.propertyId}
-              property={property}
-              index={index}
-            />
-          ))
-        ) : (
-          <>No Data to show</>
-        )}
-      </Carousel>
+      {propertiesStore.loading ? (
+        <LoadingSpinner />
+      ) : (
+        <Carousel
+          containerClass={"container my-5 p-5"}
+          itemClass="d-flex align-items-center justify-content-center"
+          infinite
+          rewind
+          rewindWithAnimation
+          partialVisbile="false"
+          responsive={responsiveProperties}
+        >
+          {!propertiesStore.loading &&
+          propertiesStore.status === "fulfilled" ? (
+            propertiesStore.properties.map((property, index) => (
+              <PropertyCard
+                key={property?.propertyId}
+                property={property}
+                index={index}
+              />
+            ))
+          ) : (
+            <>No Data to show</>
+          )}
+        </Carousel>
+      )}
     </section>
   );
 }
