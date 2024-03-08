@@ -16,7 +16,7 @@ function Owned() {
 
   return (
     <main className="mt-5">
-      <h1 className="text-center w-100">My Listed Properties</h1>
+      <h1 className="text-center w-100">My Owned Properties</h1>
       <section className="container d-flex flex-wrap gap-5 mt-5">
         {loading ? (
           <LoadingSpinner />
