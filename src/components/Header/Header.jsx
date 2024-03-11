@@ -43,17 +43,17 @@ function Header() {
           <Link className={styles.navLink} to="/addProperty">
             Add Property
           </Link>
-        ) : (
+        ) : isLoggedIn() ? (
           <Link className={styles.navLink} to="/offers">
             Offers
           </Link>
-        )}
+        ) : null}
         {role === "Admin" ? (
           <>
             <Link className={styles.navLink} to="/manageUsers">
               Manage Users
             </Link>
-            <Link className={styles.navLink} to="/Payments">
+            <Link className={styles.navLink} to="/payments">
               Payments
             </Link>
           </>

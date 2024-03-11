@@ -11,7 +11,7 @@ function Payments() {
   const { loading, payments } = useSelector((store) => store.payment);
 
   useEffect(() => {
-    dispatch(getAllPayments());
+    dispatch(getAllPayments()).catch(err => console.log(err.message));
   }, [dispatch]);
 
   return (
@@ -35,7 +35,7 @@ function Payments() {
               </tr>
             </thead>
             <tbody>
-              {payments.map((payment) => (
+              {payments?.map((payment) => (
                 <tr key={payment.paymentId}>
                   <td>{payment.paymentId}</td>
                   <td>{payment.propertyId}</td>

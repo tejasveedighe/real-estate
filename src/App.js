@@ -22,44 +22,92 @@ import Offers from "./pages/Offers/Offers";
 import AuthRoutes from "./components/ProtectedRoutes/AuthRoutes";
 import Owned from "./pages/Owned/Owned";
 import Payments from "./pages/Payments/Payments";
+import React, { Component } from "react";
+
+class ErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      hasError: false,
+      error: null,
+      errorInfo: null,
+    };
+    this.redirect = this.redirect.bind(this);
+  }
+
+
+  componentDidCatch(error, errorInfo) {
+    this.setState({
+      hasError: true,
+      error: error,
+      errorInfo: errorInfo,
+    });
+  }
+
+  redirect() {
+    window.history.back();
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="d-flex align-items-center flex-column container mt-5 justify-content-center h-100">
+          <h2>Something went wrong.</h2>
+          <p>{this.state.error?.toString()}</p>
+          <p>Component stack trace: {this.state.errorInfo?.componentStack}</p>
+          <button
+            type="button"
+            className="btn btn-warning"
+            onClick={this.redirect}
+          >
+            Get Back to Previous Page
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 function App() {
   return (
     <>
-      <Routes>
-        <Route element={<LogOutNav />}>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-        </Route>
+      <ErrorBoundary>
+        <Routes>
+          <Route element={<LogOutNav />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
+          </Route>
 
-        <Route element={<LayoutWithNav />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/property" element={<AllProperty />} />
-          <Route path="/property/:propertyId" element={<Property />} />
-          <Route path="/about" element={<About />} />
+          <Route element={<LayoutWithNav />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/property" element={<AllProperty />} />
+            <Route path="/property/:propertyId" element={<Property />} />
+            <Route path="/about" element={<About />} />
 
-          {/* Auth Routes */}
-          <Route element={<AuthRoutes />}>
-            {/* Common to all authenticated users */}
-            <Route path="/offers" element={<Offers />} />
-            <Route path="/owned" element={<Owned />} />
+            {/* Auth Routes */}
+            <Route element={<AuthRoutes />}>
+              {/* Common to all authenticated users */}
+              <Route path="/offers" element={<Offers />} />
+              <Route path="/owned" element={<Owned />} />
 
-            {/* Admin Routes */}
-            <Route element={<AdminRoutes />}>
-              <Route path="/requests" element={<Requests />} />
-              <Route path="/manageUsers" element={<ManageUser />} />
-              <Route path="/user/:userId" element={<User />} />
-              <Route path="/payments" element={<Payments />} />
-            </Route>
+              {/* Admin Routes */}
+              <Route element={<AdminRoutes />}>
+                <Route path="/requests" element={<Requests />} />
+                <Route path="/manageUsers" element={<ManageUser />} />
+                <Route path="/user/:userId" element={<User />} />
+                <Route path="/payments" element={<Payments />} />
+              </Route>
 
-            {/* Seller Routes */}
-            <Route element={<SellerRoutes />}>
-              <Route path="/myProperties" element={<MyProperties />} />
-              <Route path="/addProperty" element={<AddProperty />} />
+              {/* Seller Routes */}
+              <Route element={<SellerRoutes />}>
+                <Route path="/myProperties" element={<MyProperties />} />
+                <Route path="/addProperty" element={<AddProperty />} />
+              </Route>
             </Route>
           </Route>
-        </Route>
-      </Routes>
+        </Routes>
+      </ErrorBoundary>
       <ToastContainer />
     </>
   );

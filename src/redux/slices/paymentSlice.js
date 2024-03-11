@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Axios } from "../../utils/helpers";
 
 const initialState = {
-  payments: {},
+  payments: [],
   loading: false,
   errors: {},
 };
@@ -10,8 +10,12 @@ const initialState = {
 export const getAllPayments = createAsyncThunk(
   "payment/getAllPayments",
   async () => {
-    const res = await Axios.get("/getAllPayments");
-    return res.data;
+    try {
+      const res = await Axios.get("/getAllPayments");
+      return res.data;
+    } catch (error) {
+      throw new Error(error.message || "Error Occured");
+    }
   }
 );
 

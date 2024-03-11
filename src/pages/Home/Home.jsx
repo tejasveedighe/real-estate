@@ -22,14 +22,14 @@ function Home() {
             Discover a place
             <br /> you'll love to Live.
           </span>
-          <ButtonGroup>
+          {/* <ButtonGroup>
             <Button variant="secondary">Buy</Button>
             <Button variant="secondary">Rent</Button>
           </ButtonGroup>
           <Form.Control
             placeholder="Enter your preferences"
             className={styles.input}
-          />
+          /> */}
         </div>
       </section>
 
