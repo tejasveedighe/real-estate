@@ -5,7 +5,7 @@ import { Button } from "react-bootstrap";
 
 export function UserTable({ filteredUser, handleDeleteUser }) {
   return (
-    <div className={classNames("container", styles.tableContainer)}>
+    <div className={classNames(styles.tableContainer)}>
       <table>
         <thead>
           <tr>

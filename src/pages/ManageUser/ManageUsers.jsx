@@ -72,6 +72,22 @@ function ManageUser() {
     [dispatch]
   );
 
+  const handleSearchChange = useCallback(
+    (e) => {
+      const searchValue = e.target.value.toLowerCase(); // Convert search value to lowercase for case-insensitive comparison
+      const filteredItems = users.filter((user) => {
+        // Check if username includes the search value
+        return (
+          user.name.toLowerCase().includes(searchValue) ||
+          user.email.toLowerCase().includes(searchValue) ||
+          user.phone.includes(searchValue)
+        );
+      });
+      setFilteredUsers(filteredItems);
+    },
+    [users]
+  );
+
   useEffect(() => {
     let filtered;
     if (userType === "") {
@@ -99,10 +115,6 @@ function ManageUser() {
     );
   }
 
-  const handleSearchChange = (e) => {
-    const searchQuery = e.target.value;
-  };
-
   return (
     <main className={classNames(styles.parent, "container")}>
       <div className="d-flex align-items-center justify-content-center">
@@ -115,7 +127,9 @@ function ManageUser() {
         <div>
           <p>User Type</p>
           <Form.Select onChange={(e) => setUserType(e.target.value)}>
-            <option value="" defaultChecked>All Types</option>
+            <option value="" defaultChecked>
+              All Types
+            </option>
             <option value="Seller">Seller</option>
             <option value="Buyer">Buyer</option>
           </Form.Select>
