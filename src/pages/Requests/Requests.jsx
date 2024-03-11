@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import React, { useCallback, useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { v4 as uuid } from "uuid";
@@ -154,6 +154,18 @@ function Requests() {
     getUniquePropertyTitles();
   }, [requests]);
 
+  const handleSearchChange = useCallback(
+    (e) => {
+      const searchValue = e.target.value.toLowerCase(); // Convert search value to lowercase for case-insensitive comparison
+      const filteredItems = requests.filter((item) => {
+        // Check if username includes the search value
+        return item.username.toLowerCase().includes(searchValue) || item.propertyTitle.toLowerCase().includes(searchValue);
+      });
+      setFilteredRequests(filteredItems);
+    },
+    [requests]
+  );
+
   return loading ? (
     <main className="text-center container mt-5 fs-1">
       <h1 className="my-5">Requests</h1>
@@ -168,33 +180,33 @@ function Requests() {
         {/* User Select Dropdown */}
         <div>
           <p>User</p>
-          <select value={selectedUser} onChange={handleUserChange}>
+          <Form.Select value={selectedUser} onChange={handleUserChange}>
             <option value="">All Users</option>
             {Object.keys(uniqueUsernames).map((username, index) => (
               <option key={`${username}`} value={username}>
                 {username}
               </option>
             ))}
-          </select>
+          </Form.Select>
         </div>
 
         {/* Property Select Dropdown */}
         <div>
           <p>Property</p>
-          <select value={selectedProperty} onChange={handlePropertyChange}>
+          <Form.Select value={selectedProperty} onChange={handlePropertyChange}>
             <option value="">All Properties</option>
             {Object.keys(uniquePropertyTitles).map((title, index) => (
               <option key={`${title}`} value={title}>
                 {title}
               </option>
             ))}
-          </select>
+          </Form.Select>
         </div>
 
         {/* Approval Status Select Dropdown */}
         <div>
           <p>Status</p>
-          <select
+          <Form.Select
             value={selectedApprovalStatus}
             onChange={handleApprovalStatusChange}
           >
@@ -202,7 +214,16 @@ function Requests() {
             <option value="Pending">Pending</option>
             <option value="Approved">Approved</option>
             <option value="Rejected">Rejected</option>
-          </select>
+          </Form.Select>
+        </div>
+
+        {/* Search Input Continaer */}
+        <div>
+          <p>Search</p>
+          <Form.Control
+            placeholder="Enter query"
+            onChange={handleSearchChange}
+          />
         </div>
       </div>
 
