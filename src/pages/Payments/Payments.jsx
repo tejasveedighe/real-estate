@@ -11,7 +11,7 @@ function Payments() {
   const { loading, payments } = useSelector((store) => store.payment);
 
   useEffect(() => {
-    dispatch(getAllPayments()).catch(err => console.log(err.message));
+    dispatch(getAllPayments()).catch((err) => console.log(err.message));
   }, [dispatch]);
 
   return (
@@ -24,10 +24,7 @@ function Payments() {
           <table>
             <thead>
               <tr>
-                <th>Payment ID</th>
-                <th>Property ID</th>
-                <th>Seller ID</th>
-                <th>Buyer ID</th>
+                <th>Id</th>
                 <th>Price</th>
                 <th>Payment Date</th>
                 <th>Payment Status</th>
@@ -35,12 +32,9 @@ function Payments() {
               </tr>
             </thead>
             <tbody>
-              {payments?.map((payment) => (
+              {payments?.map((payment, index) => (
                 <tr key={payment.paymentId}>
-                  <td>{payment.paymentId}</td>
-                  <td>{payment.propertyId}</td>
-                  <td>{payment.sellerId}</td>
-                  <td>{payment.buyerId}</td>
+                  <td>{index + 1}</td>
                   <td>{payment.price}</td>
                   <td>{new Date(payment.paymentDate).toLocaleString()}</td>
                   <td>
