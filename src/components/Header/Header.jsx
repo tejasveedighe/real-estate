@@ -66,7 +66,7 @@ function Header() {
 
       {isLoggedIn() ? (
         <>
-          <Dropdown>
+          <Dropdown className={styles.dropdown}>
             <Dropdown.Toggle
               className={classNames(
                 "d-flex align-items-center border-0",

@@ -68,5 +68,9 @@
     button:last-child {
       margin-right: 0;
     }
+    .paginationContainer {
+      float: right;
+      margin-top: 10px;
+    }
   }
 }
