@@ -1,6 +1,5 @@
 import { Button } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
-import { Link } from "react-router-dom";
 
 function UserProfileCard({ user, deleteUser }) {
   return (
@@ -8,8 +7,8 @@ function UserProfileCard({ user, deleteUser }) {
       <Card.Body>
         <Card.Title>{user.name}</Card.Title>
         <Card.Subtitle className="mb-2 text-muted">{user.email}</Card.Subtitle>
-        <div className="d-flex align-items-center justify-content-around">
-          <Link to={`/user/${user.userId}`}>View Profile</Link>
+        <div className="d-flex align-items-center justify-content-end">
+          {/* <Link to={`/user/${user.userId}`}>View Profile</Link> */}
           <Button onClick={deleteUser.bind(this, user.userId)} variant="danger">
             Delete User
           </Button>

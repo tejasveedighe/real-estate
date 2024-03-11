@@ -90,14 +90,16 @@ function Header() {
                     </Link>
                   </Dropdown.Item>
                 ) : null}
-                <Dropdown.Item className={styles.listItem}>
-                  <Link
-                    to={role === "Seller" ? "/myProperties" : "/owned"}
-                    className="text-black text-decoration-none"
-                  >
-                    My Properties
-                  </Link>
-                </Dropdown.Item>
+                {role !== "Admin" ? (
+                  <Dropdown.Item className={styles.listItem}>
+                    <Link
+                      to={role === "Seller" ? "/myProperties" : "/owned"}
+                      className="text-black text-decoration-none"
+                    >
+                      My Properties
+                    </Link>
+                  </Dropdown.Item>
+                ) : null}
                 <Dropdown.Divider />
                 <Dropdown.Item className={styles.listItem}>
                   <Button

@@ -44,7 +44,7 @@ function ManageUser() {
 
   if (loading) {
     return (
-      <main>
+      <main className="text-center">
         <h1 className="text-center">Manage User</h1>
         <LoadingSpinner />
       </main>
@@ -53,7 +53,7 @@ function ManageUser() {
 
   if (status === "rejected") {
     return (
-      <main>
+      <main className="text-center">
         <h1 className="text-center">Failed To fetch users, try again later</h1>
       </main>
     );
