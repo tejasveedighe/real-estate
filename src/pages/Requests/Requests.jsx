@@ -16,12 +16,6 @@ function Requests() {
 
   const { requests, loading } = useSelector((store) => store.properties);
 
-  const [count, setCount] = useState({
-    approved: 0,
-    rejected: 0,
-    pending: 0,
-  });
-
   const [filteredRequests, setFilteredRequests] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
   const [selectedApprovalStatus, setSelectedApprovalStatus] = useState("");
@@ -30,6 +24,11 @@ function Requests() {
   const [uniquePropertyTitles, setPropertyTitles] = useState([]);
   const [uniqueUsernames, setUsernames] = useState([]);
 
+  const [count, setCount] = useState({
+    approved: 0,
+    rejected: 0,
+    pending: 0,
+  });
   // Function to extract unique property titles with property IDs
   const getUniquePropertyTitles = useCallback(() => {
     if (!requests) return;
@@ -80,8 +79,6 @@ function Requests() {
       );
     }
 
-    filtered.slice();
-
     setFilteredRequests(filtered);
   }, [requests, selectedUser, selectedApprovalStatus, selectedProperty]);
 
@@ -89,9 +86,9 @@ function Requests() {
     dispatch(getAllContactRequests()).then((res) => {
       const newState = { approved: 0, rejected: 0, pending: 0 };
       for (const request of res.payload) {
-        if (request.aprovalStatus === 1) newState.pending++;
+        if (request.approvalStatus === 1) newState.pending++;
         else if (request.approvalStatus === 2) newState.approved++;
-        else newState.rejected++;
+        else if (request.approvalStatus === 3) newState.rejected++;
       }
       setCount(newState);
     });
@@ -165,30 +162,7 @@ function Requests() {
   ) : (
     <main className={classNames("text-center container", styles.parent)}>
       <h1 className="my-5">Requests</h1>
-      <div className={styles.featureContainer}>
-        <div className={classNames(styles.feature, "rounded border-info")}>
-          <span className="badge text-bg-info text-white float-start">All</span>
-          <span className={styles.featureNumber}>{requests.length}</span>
-        </div>
-        <div className={classNames(styles.feature, "rounded border-success")}>
-          <span className="badge text-bg-success text-white float-start">
-            Approved
-          </span>
-          <span className={styles.featureNumber}>{count.approved}</span>
-        </div>
-        <div className={classNames(styles.feature, "rounded border-warning")}>
-          <span className="badge text-bg-warning text-white float-start">
-            Pending
-          </span>
-          <span className={styles.featureNumber}>{count.pending}</span>
-        </div>
-        <div className={classNames(styles.feature, "rounded border-danger")}>
-          <span className="badge text-bg-danger text-white float-start">
-            Rejected
-          </span>
-          <span className={styles.featureNumber}>{count.rejected}</span>
-        </div>
-      </div>
+      <Features requests={requests} count={count} />
 
       <div className={classNames(styles.filterContainer, "rounded")}>
         {/* User Select Dropdown */}
@@ -241,6 +215,35 @@ function Requests() {
 }
 
 export default Requests;
+
+function Features({ requests, count }) {
+  return (
+    <div className={styles.featureContainer}>
+      <div className={classNames(styles.feature, "rounded border-info")}>
+        <span className="badge text-bg-info text-white float-start">All</span>
+        <span className={styles.featureNumber}>{requests.length}</span>
+      </div>
+      <div className={classNames(styles.feature, "rounded border-success")}>
+        <span className="badge text-bg-success text-white float-start">
+          Approved
+        </span>
+        <span className={styles.featureNumber}>{count.approved}</span>
+      </div>
+      <div className={classNames(styles.feature, "rounded border-warning")}>
+        <span className="badge text-bg-warning text-white float-start">
+          Pending
+        </span>
+        <span className={styles.featureNumber}>{count.pending}</span>
+      </div>
+      <div className={classNames(styles.feature, "rounded border-danger")}>
+        <span className="badge text-bg-danger text-white float-start">
+          Rejected
+        </span>
+        <span className={styles.featureNumber}>{count.rejected}</span>
+      </div>
+    </div>
+  );
+}
 
 function PaginatedTable({ filteredRequests, handleRequestAction }) {
   const itemsPerPage = 10;
@@ -341,58 +344,68 @@ function PaginatedTable({ filteredRequests, handleRequestAction }) {
               ))}
             </tbody>
           </table>
-          <div className={styles.paginationContainer}>
-            <nav aria-label="Page navigation example">
-              <ul class="pagination">
-                <li
-                  class="page-item"
-                  onClick={() =>
-                    setCurrentPage((prev) => {
-                      if (prev > 0) {
-                        return prev - 1;
-                      }
-                      return prev;
-                    })
-                  }
-                >
-                  <a class="page-link" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                  </a>
-                </li>
-                {[...Array(pageCount)].map((_, index) => (
-                  <li
-                    key={uuid()}
-                    className={classNames(
-                      "page-link",
-                      currentPage === index ? "active" : ""
-                    )}
-                    onClick={() => setCurrentPage(index)}
-                  >
-                    {index + 1}
-                  </li>
-                ))}
-                <li
-                  class="page-item"
-                  onClick={() =>
-                    setCurrentPage((prev) => {
-                      if (prev === pageCount - 1) {
-                        return 0;
-                      }
-                      return prev + 1;
-                    })
-                  }
-                >
-                  <a class="page-link" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
+
+          <PaginationContainer
+            setCurrentPage={setCurrentPage}
+            pageCount={pageCount}
+            currentePage={currentPage}
+          />
         </>
       ) : (
         <div>No Data Found</div>
       )}
+    </div>
+  );
+}
+function PaginationContainer({ setCurrentPage, pageCount, currentPage }) {
+  return (
+    <div className={styles.paginationContainer}>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          <li
+            class="page-item"
+            onClick={() =>
+              setCurrentPage((prev) => {
+                if (prev > 0) {
+                  return prev - 1;
+                }
+                return prev;
+              })
+            }
+          >
+            <a class="page-link" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          {[...Array(pageCount)].map((_, index) => (
+            <li
+              key={uuid()}
+              className={classNames(
+                "page-link",
+                currentPage === index ? "active" : ""
+              )}
+              onClick={() => setCurrentPage(index)}
+            >
+              {index + 1}
+            </li>
+          ))}
+          <li
+            class="page-item"
+            onClick={() =>
+              setCurrentPage((prev) => {
+                if (prev === pageCount - 1) {
+                  return 0;
+                }
+                return prev + 1;
+              })
+            }
+          >
+            <a class="page-link" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
     </div>
   );
 }
