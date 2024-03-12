@@ -23,6 +23,8 @@ import AuthRoutes from "./components/ProtectedRoutes/AuthRoutes";
 import Owned from "./pages/Owned/Owned";
 import Payments from "./pages/Payments/Payments";
 import React, { Component } from "react";
+import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
+import NotFound from "./pages/NotFound/NotFound";
 
 class ErrorBoundary extends Component {
   constructor(props) {
@@ -34,7 +36,6 @@ class ErrorBoundary extends Component {
     };
     this.redirect = this.redirect.bind(this);
   }
-
 
   componentDidCatch(error, errorInfo) {
     this.setState({
@@ -93,6 +94,7 @@ function App() {
 
               {/* Admin Routes */}
               <Route element={<AdminRoutes />}>
+                <Route path="/adminDashboard" element={<AdminDashboard />} />
                 <Route path="/requests" element={<Requests />} />
                 <Route path="/manageUsers" element={<ManageUser />} />
                 <Route path="/user/:userId" element={<User />} />
@@ -105,6 +107,8 @@ function App() {
                 <Route path="/addProperty" element={<AddProperty />} />
               </Route>
             </Route>
+
+            <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
       </ErrorBoundary>
