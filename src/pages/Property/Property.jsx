@@ -31,10 +31,6 @@ function Property() {
       dispatch(getPropertyById(propertyId)).catch((err) => alert(err.message));
   }, [dispatch, propertyId]);
 
-  useEffect(() => {
-    getPropertyData();
-  }, [getPropertyData]);
-
   const handleRequestClick = useCallback(() => {
     dispatch(
       requestForContact({
@@ -53,6 +49,10 @@ function Property() {
         toast.error(`Unable to request: ${err.message}`);
       });
   }, [dispatch, propertyId]);
+
+  useEffect(() => {
+    getPropertyData();
+  }, [getPropertyData]);
 
   if (loading) {
     return (
@@ -124,6 +124,23 @@ function Property() {
             </div>
           </div>
           <hr className={styles.solid} />
+          <div className="w-100">
+            <h5 className={styles.subHeading}>Amenities:</h5>
+            <div className={styles.propertyConditionGrid}>
+              {property.amenities &&
+                Object.entries(property.amenities).map(([key, value]) => {
+                  if (key === "id") {
+                    return null;
+                  }
+                  return (
+                    <div className="text-capitalize" key={key}>
+                      <b>{key}: </b>
+                      <span>{value ? "Yes" : "No"}</span>
+                    </div>
+                  );
+                })}
+            </div>
+          </div>
         </section>
         <ContactContainer
           property={property}
