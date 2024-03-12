@@ -1,13 +1,33 @@
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import styles from "./AddProperty.module.css";
 import { useDispatch } from "react-redux";
 import { Button, Form } from "react-bootstrap";
 import classNames from "classnames";
 import { addProperty } from "../../redux/slices/propertySlice";
+import { getUserData } from "../../utils/auth";
 
 function AddProperty() {
   const dispatch = useDispatch();
   const formRef = useRef();
+
+  const { userId } = getUserData();
+
+  const [amenities, setAmenities] = useState({
+    swimmingPool: false,
+    parking: false,
+    lifts: false,
+    temple: false,
+    rooftopAccess: false,
+    parks: false,
+  });
+
+  const handleAmenitiesChange = useCallback((e) => {
+    const { name, checked } = e.target;
+    setAmenities((prevState) => ({
+      ...prevState,
+      [name]: checked,
+    }));
+  }, []);
 
   const onSubmit = useCallback(
     (e) => {
@@ -26,6 +46,8 @@ function AddProperty() {
         noBathroom: parseInt(formData.get("noBathroom")),
         squareFeet: parseInt(formData.get("squareFeet")),
         approved: formData.get("approved") === "true",
+        amenities: amenities,
+        userId: userId,
       };
 
       dispatch(addProperty(propertyData))
@@ -37,7 +59,7 @@ function AddProperty() {
         })
         .catch((err) => alert(err.message));
     },
-    [dispatch]
+    [amenities, userId, dispatch]
   );
 
   return (
@@ -110,12 +132,13 @@ function AddProperty() {
 
           <Form.Group>
             <Form.Label>Status</Form.Label>
-            <Form.Control
-              type="text"
-              name="status"
-              required
-              placeholder="Enter Property Status"
-            />
+            <Form.Select name="status" required aria-label="Select Status">
+              <option disabled>Select one</option>
+              <option value={"Rent"}>Rent</option>
+              <option defaultChecked value={"Sale"}>
+                Sale
+              </option>
+            </Form.Select>
           </Form.Group>
 
           <Form.Group>
@@ -161,13 +184,30 @@ function AddProperty() {
               </option>
             </Form.Select>
           </Form.Group>
+
+          <Form.Group>
+            <Form.Label>Amenities</Form.Label>
+            <div className={styles.amenitiesGrid}>
+              {Object.entries(amenities).map(([key, value]) => (
+                <Form.Check
+                  className="col"
+                  key={key}
+                  type="checkbox"
+                  name={key}
+                  checked={value}
+                  onChange={handleAmenitiesChange}
+                  label={key}
+                />
+              ))}
+            </div>
+          </Form.Group>
         </div>
-        <div className="mt-2 w-100">
+        {/* <div className="mt-2 w-100">
           <Form.Group className="w-100">
             <Form.Label>Property Images</Form.Label>
             <Form.Control type="file" />
           </Form.Group>
-        </div>
+        </div> */}
 
         <Button type="submit" variant="success" className="align-self-end mt-3">
           Add Property
