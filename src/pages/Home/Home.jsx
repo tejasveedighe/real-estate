@@ -26,7 +26,7 @@ function Home() {
   const handlePropertyTypeChange = (selectedOptions) => {
     setSearchData((prevData) => ({
       ...prevData,
-      propertyTypes: selectedOptions.map((option) => option.value),
+      propertyType: selectedOptions.value,
     }));
   };
 
@@ -67,7 +67,7 @@ function Home() {
                 checked={radioValue === radio.value}
                 onChange={handlePropertyStatusChange}
               >
-                {radio.name}
+                {radio.label}
               </ToggleButton>
             ))}
           </ButtonGroup>
@@ -75,7 +75,6 @@ function Home() {
         <div className={styles.searchContainer}>
           <Select
             className={classNames(styles.searchInput, styles.propertyType)}
-            isMulti
             placeholder="Property Type.."
             options={propertyTypes}
             onChange={handlePropertyTypeChange}

@@ -27,6 +27,7 @@ function AllProperty() {
     statusFilter: null,
     typeFilter: null,
   });
+  console.log(location.state, filters);
 
   const setData = useCallback(() => {
     if (propertiesStore.status === "fulfilled") {
@@ -58,6 +59,7 @@ function AllProperty() {
   }, [propertiesStore.lastAction, propertiesStore.status, setData]);
 
   const [filteredProperties, setFilteredProperties] = useState([]);
+
   useEffect(() => {
     !propertiesStore.loading &&
       setFilteredProperties(
@@ -78,7 +80,19 @@ function AllProperty() {
         })
       );
   }, [filters, propertiesStore]);
-  console.log(filters, filteredProperties);
+
+  // Check if the location object is not null and update filteredProperties accordingly
+  useEffect(() => {
+    if (location.state) {
+      setFilters((prev) => ({
+        ...prev,
+        locationFilter: location.state?.propertyLocation,
+        statusFilter: location.state?.propertyStatus,
+        typeFilter: location.state?.propertyType,
+      }));
+    }
+  }, [location.state]);
+
   if (propertiesStore.status === "rejected") {
     return (
       <main className="d-flex align-items-center justify-content-center text-center">
@@ -195,7 +209,7 @@ function AllProperty() {
           <div className={classNames("mt-5", styles.propertyGrid)}>
             {!propertiesStore?.loading &&
             propertiesStore?.status === "fulfilled" &&
-            propertiesStore?.properties?.length ? (
+            filteredProperties?.length ? (
               filteredProperties?.map((property, index) => (
                 <PropertyCard
                   key={property?.propertyId}
@@ -204,7 +218,7 @@ function AllProperty() {
                 />
               ))
             ) : (
-              <>No Data to show</>
+              <h5>No Data found</h5>
             )}
           </div>
         </section>
