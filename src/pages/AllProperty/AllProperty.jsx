@@ -27,7 +27,6 @@ function AllProperty() {
     statusFilter: null,
     typeFilter: null,
   });
-  console.log(location.state, filters);
 
   const setData = useCallback(() => {
     if (propertiesStore.status === "fulfilled") {
