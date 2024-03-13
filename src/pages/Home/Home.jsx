@@ -1,35 +1,105 @@
 import classNames from "classnames";
-import React from "react";
-import { Button, ButtonGroup, Form } from "react-bootstrap";
+import React, { useState } from "react";
+import { Button, ButtonGroup, Form, ToggleButton } from "react-bootstrap";
 import "react-multi-carousel/lib/styles.css";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import Select from "react-select";
+import Creatable from "react-select/creatable";
+import { v4 as uuid } from "uuid";
 import { AgentsCarousel } from "../../components/AgentsGridCarousel/AgentsCarousel";
 import { Newsletter } from "../../components/Newsletter/Newsletter";
 import { Properties } from "../../components/Properties/Properties";
 import styles from "./Home.module.css";
 
+const radios = [
+  { name: "Rent", value: "Rent" },
+  { name: "Buy", value: "Buy" },
+];
+
+const propertyTypes = [
+  { value: "Residential", label: "Residential" },
+  { value: "House", label: "House" },
+  { value: "Flat", label: "Flat" },
+  { value: "Bunglow", label: "Bunglow" },
+];
+
 function Home() {
+  const navigate = useNavigate();
+
+  const [radioValue, setRadioValue] = useState("Buy");
+  const [searchData, setSearchData] = useState({});
+  const handlePropertyStatusChange = (e) => {
+    setRadioValue(e.target.value);
+    setSearchData((prevData) => ({
+      ...prevData,
+      propertyStatus: e.target.value,
+    }));
+  };
+  const handlePropertyTypeChange = (selectedOptions) => {
+    setSearchData((prevData) => ({
+      ...prevData,
+      propertyTypes: selectedOptions.map((option) => option.value),
+    }));
+  };
+
+  const handlePropertyLocationChange = (newValue) => {
+    setSearchData((prevData) => ({
+      ...prevData,
+      propertyLocation: newValue ? newValue.value : "",
+    }));
+  };
+
+  const handleSearchButtonClick = () => {
+    console.log(searchData);
+    navigate("/property", { state: searchData });
+  };
   return (
     <main className="">
       <section
         className={classNames(
-          "d-flex align-items-center flex-column justify-content-center",
+          "d-flex gap-4 align-items-center flex-column justify-content-center",
           styles.imageSection
         )}
       >
-        <div className={classNames("text-white", styles.searchProperty)}>
-          <span>
+        <div className={classNames(styles.searchProperty)}>
+          <span className="text-white">
             Discover a place
             <br /> you'll love to Live.
           </span>
-          {/* <ButtonGroup>
-            <Button variant="secondary">Buy</Button>
-            <Button variant="secondary">Rent</Button>
+          <ButtonGroup>
+            {radios.map((radio, idx) => (
+              <ToggleButton
+                key={uuid()}
+                className={styles.toggleBtn}
+                id={`radio-${idx}`}
+                type="radio"
+                variant={idx % 2 ? "info" : "success"}
+                name="radio"
+                value={radio.value}
+                checked={radioValue === radio.value}
+                onChange={handlePropertyStatusChange}
+              >
+                {radio.name}
+              </ToggleButton>
+            ))}
           </ButtonGroup>
-          <Form.Control
-            placeholder="Enter your preferences"
-            className={styles.input}
-          /> */}
+        </div>
+        <div className={styles.searchContainer}>
+          <Select
+            className={classNames(styles.searchInput, styles.propertyType)}
+            isMulti
+            placeholder="Property Type.."
+            options={propertyTypes}
+            onChange={handlePropertyTypeChange}
+          />
+          <Creatable
+            isClearable
+            className={classNames(styles.searchInput, styles.propertyLocation)}
+            placeholder="Property Location"
+            onChange={handlePropertyLocationChange}
+          />
+          <Button onClick={handleSearchButtonClick}>Search</Button>
         </div>
       </section>
 
