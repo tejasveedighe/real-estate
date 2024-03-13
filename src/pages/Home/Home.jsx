@@ -1,8 +1,7 @@
 import classNames from "classnames";
 import React, { useState } from "react";
-import { Button, ButtonGroup, Form, ToggleButton } from "react-bootstrap";
+import { Button, ButtonGroup, ToggleButton } from "react-bootstrap";
 import "react-multi-carousel/lib/styles.css";
-import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Select from "react-select";
 import Creatable from "react-select/creatable";
@@ -10,20 +9,8 @@ import { v4 as uuid } from "uuid";
 import { AgentsCarousel } from "../../components/AgentsGridCarousel/AgentsCarousel";
 import { Newsletter } from "../../components/Newsletter/Newsletter";
 import { Properties } from "../../components/Properties/Properties";
+import { propertyStatus, propertyTypes } from "../../utils/constants";
 import styles from "./Home.module.css";
-
-const radios = [
-  { name: "Rent", value: "Rent" },
-  { name: "Buy", value: "Buy" },
-];
-
-const propertyTypes = [
-  { value: "Residential", label: "Residential" },
-  { value: "House", label: "House" },
-  { value: "Flat", label: "Flat" },
-  { value: "Bunglow", label: "Bunglow" },
-];
-
 function Home() {
   const navigate = useNavigate();
 
@@ -68,7 +55,7 @@ function Home() {
             <br /> you'll love to Live.
           </span>
           <ButtonGroup>
-            {radios.map((radio, idx) => (
+            {propertyStatus.map((radio, idx) => (
               <ToggleButton
                 key={uuid()}
                 className={styles.toggleBtn}

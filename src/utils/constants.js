@@ -18,3 +18,14 @@ export const responsiveProperties = {
     items: 1,
   },
 };
+export const propertyStatus = [
+  { label: "Rent", value: "Rent" },
+  { label: "Buy", value: "Sale" },
+];
+
+export const propertyTypes = [
+  { value: "Residential", label: "Residential" },
+  { value: "House", label: "House" },
+  { value: "Flat", label: "Flat" },
+  { value: "Bunglow", label: "Bunglow" },
+];

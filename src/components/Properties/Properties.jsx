@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import Carousel from "react-multi-carousel";
-import PropertyCard from "../PropertyCard/PropertyCard";
-import { responsiveProperties } from "../../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProperty } from "../../redux/slices/propertySlice";
+import { responsiveProperties } from "../../utils/constants";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
+import PropertyCard from "../PropertyCard/PropertyCard";
 
 export function Properties({ title }) {
   const dispatch = useDispatch();

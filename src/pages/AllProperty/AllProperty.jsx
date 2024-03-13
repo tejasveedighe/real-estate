@@ -1,75 +1,46 @@
 import classNames from "classnames";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
+import Select from "react-select";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import { Newsletter } from "../../components/Newsletter/Newsletter";
 import PropertyCard from "../../components/PropertyCard/PropertyCard";
-import {
-  getAllProperty,
-  searchProperty,
-} from "../../redux/slices/propertySlice";
+import { getAllProperty } from "../../redux/slices/propertySlice";
+import { propertyStatus, propertyTypes } from "../../utils/constants";
 import styles from "./AllProperty.module.css";
-import { Button, Form, InputGroup } from "react-bootstrap";
-import { CiSearch } from "react-icons/ci";
-import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 
 function AllProperty() {
-  const propertiesStore = useSelector((store) => store.properties);
   const dispatch = useDispatch();
+  const location = useLocation();
 
-  const [locations, setLocations] = useState([]);
-  const [squareFeet, setSquareFeet] = useState([]);
-  const [noBedroom, setNoBedroom] = useState([]);
-  const [noBathroom, setNoBathroom] = useState([]);
-  const [propertyType, setPropertyType] = useState([]);
-  const [status, setStatus] = useState([]);
+  const propertiesStore = useSelector((store) => store.properties);
 
-  const onSearchSubmit = useCallback(
-    (event) => {
-      event.preventDefault();
+  const [propertyData, setPropertyData] = useState({
+    locations: [],
+    maxPrice: 0,
+  });
 
-      const formData = new FormData(event.target);
-
-      const propertyType = formData.get("propertyType");
-      const status = formData.get("status");
-      const location = formData.get("location");
-      const squareFeet = formData.get("squareFeet");
-      const noBathroom = formData.get("noBathroom");
-      const noBedroom = formData.get("noBedroom");
-
-      dispatch(
-        searchProperty({
-          propertyType,
-          status,
-          location,
-          squareFeet,
-          noBathroom,
-          noBedroom,
-        })
-      );
-    },
-    [dispatch]
-  );
+  const [filters, setFilters] = useState({
+    priceFilter: 0,
+    locationFilter: null,
+    statusFilter: null,
+    typeFilter: null,
+  });
 
   const setData = useCallback(() => {
     if (propertiesStore.status === "fulfilled") {
-      setLocations(() =>
-        propertiesStore.properties.map((property) => property.location)
-      );
-      setPropertyType(() =>
-        propertiesStore.properties.map((property) => property.propertyType)
-      );
-      setSquareFeet(() =>
-        propertiesStore.properties.map((property) => property.squareFeet)
-      );
-      setNoBedroom(() =>
-        propertiesStore.properties.map((property) => property.noBedroom)
-      );
-      setNoBathroom(() =>
-        propertiesStore.properties.map((property) => property.noBathroom)
-      );
-      setStatus(() =>
-        propertiesStore.properties.map((property) => property.status)
-      );
+      setPropertyData((prev) => ({
+        ...prev,
+        locations: propertiesStore.properties.map((property) => ({
+          label: property.location,
+          value: property.location,
+        })),
+        maxPrice: propertiesStore.properties.reduce(
+          (max, property) => (property.price > max ? property.price : max),
+          0
+        ),
+      }));
     }
   }, [propertiesStore.properties, propertiesStore.status]);
 
@@ -86,6 +57,28 @@ function AllProperty() {
     }
   }, [propertiesStore.lastAction, propertiesStore.status, setData]);
 
+  const [filteredProperties, setFilteredProperties] = useState([]);
+  useEffect(() => {
+    !propertiesStore.loading &&
+      setFilteredProperties(
+        propertiesStore.properties.filter((property) => {
+          const matchesPrice =
+            !filters.priceFilter || property.price <= filters.priceFilter;
+          const matchesLocation =
+            !filters.locationFilter ||
+            property.location === filters.locationFilter;
+          const matchesStatus =
+            !filters.statusFilter || property.status === filters.statusFilter;
+          const matchesType =
+            !filters.typeFilter || property.propertyType === filters.typeFilter;
+
+          return (
+            matchesPrice && matchesLocation && matchesStatus && matchesType
+          );
+        })
+      );
+  }, [filters, propertiesStore]);
+  console.log(filters, filteredProperties);
   if (propertiesStore.status === "rejected") {
     return (
       <main className="d-flex align-items-center justify-content-center text-center">
@@ -116,87 +109,94 @@ function AllProperty() {
         </section>
       ) : (
         <section className="container text-center my-5">
-          <div className="d-flex align-items-center justify-content-between">
-            <h1>Properties for Sale</h1>
-            <Form onSubmit={onSearchSubmit}>
-              <Form.Group>
-                <InputGroup className="mb-3">
-                  <Form.Select
-                    name="propertyType"
-                    aria-placeholder="Select Property Type"
-                  >
-                    <option disabled>Type</option>
-                    {propertyType.map((type, index) => (
-                      <option key={`Type-${index} ${type}`} value={type}>
-                        {type}
-                      </option>
-                    ))}
-                  </Form.Select>
-                  <Form.Select name="status">
-                    <option disabled>Status</option>
-                    {status.map((status, index) => (
-                      <option key={`Status-${index} ${status}`} value={status}>
-                        {status}
-                      </option>
-                    ))}
-                  </Form.Select>
-                  <Form.Select name="location">
-                    <option disabled>Location</option>
-                    {locations.map((location, index) => (
-                      <option
-                        key={`Location-${index} ${location}`}
-                        value={location}
-                      >
-                        {location}
-                      </option>
-                    ))}
-                  </Form.Select>
-                  <Form.Select name="squareFeet">
-                    <option disabled>Area</option>
-                    {squareFeet.map((area, index) => (
-                      <option key={`Area-${index} ${area}`} value={area}>
-                        {area}
-                      </option>
-                    ))}
-                  </Form.Select>
-                  <Form.Select name="noBathroom">
-                    <option disabled>Bathroom</option>
-                    {noBathroom.map((bathroom, index) => (
-                      <option
-                        key={`Bathroom-${index} ${bathroom}`}
-                        value={bathroom}
-                      >
-                        {bathroom}
-                      </option>
-                    ))}
-                  </Form.Select>
-                  <Form.Select name="noBedroom">
-                    <option disabled>Bedroom</option>
-                    {noBedroom.map((bedroom, index) => (
-                      <option
-                        key={`Bedroom-${index} ${bedroom}`}
-                        value={bedroom}
-                      >
-                        {bedroom}
-                      </option>
-                    ))}
-                  </Form.Select>
-                  <Button
-                    type="submit"
-                    variant="outline-primary"
-                    id="button-addon2"
-                  >
-                    <CiSearch />
-                  </Button>
-                </InputGroup>
-              </Form.Group>
-            </Form>
+          <h1>Properties for Sale</h1>
+          <div className="d-flex align-items-center justify-content-between mt-5">
+            <div className="d-flex align-items-center justify-content-end gap-3 w-100">
+              <span>Filters :</span>
+              <Select
+                isClearable
+                onChange={(selectedOption) =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    typeFilter: selectedOption ? selectedOption.value : null,
+                  }))
+                }
+                value={
+                  filters.typeFilter
+                    ? { label: filters.typeFilter, value: filters.typeFilter }
+                    : null
+                }
+                name="typeFilter"
+                options={propertyTypes}
+              />
+
+              <Select
+                isClearable
+                onChange={(selectedOption) =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    statusFilter: selectedOption ? selectedOption.value : null,
+                  }))
+                }
+                value={
+                  filters.statusFilter
+                    ? {
+                        label: filters.statusFilter,
+                        value: filters.statusFilter,
+                      }
+                    : null
+                }
+                name="statusFilter"
+                options={propertyStatus}
+              />
+
+              <Select
+                isClearable
+                onChange={(selectedOption) =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    locationFilter: selectedOption
+                      ? selectedOption.value
+                      : null,
+                  }))
+                }
+                value={
+                  filters.locationFilter
+                    ? {
+                        label: filters.locationFilter,
+                        value: filters.locationFilter,
+                      }
+                    : null
+                }
+                name="locationFilter"
+                options={propertyData.locations}
+              />
+
+              <div className="d-flex flex-column">
+                <label>Price : {filters.priceFilter}</label>
+                <input
+                  type="range"
+                  name="priceFilter"
+                  step={50000}
+                  min={0}
+                  max={propertyData.maxPrice}
+                  value={filters.priceFilter}
+                  list="markers"
+                  onChange={(e) =>
+                    setFilters((prev) => ({
+                      ...prev,
+                      priceFilter: Number.parseInt(e.target.value),
+                    }))
+                  }
+                />
+              </div>
+            </div>
           </div>
           <div className={classNames("mt-5", styles.propertyGrid)}>
             {!propertiesStore?.loading &&
             propertiesStore?.status === "fulfilled" &&
             propertiesStore?.properties?.length ? (
-              propertiesStore?.properties?.map((property, index) => (
+              filteredProperties?.map((property, index) => (
                 <PropertyCard
                   key={property?.propertyId}
                   property={property}
