@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Axios } from "../../utils/helpers";
-import EditProperty from "../../pages/AddProperty/EditProperty";
 
 const initalState = {
   properties: [],
   property: {},
   requests: [],
   loading: false,
+  updateLoading: false,
   status: "idle",
   errors: {},
   lastAction: "",
@@ -152,9 +152,12 @@ export const offerAction = createAsyncThunk(
 
 export const updateProperty = createAsyncThunk(
   "property/update",
-  async ({ id, propertyData }) => {
+  async ({ propertyId, propertyData }) => {
     try {
-      const response = await Axios.put(`/${id}`, propertyData);
+      const response = await Axios.put(
+        `/editProperty/${propertyId}`,
+        propertyData
+      );
       return response.data;
     } catch (error) {
       throw new Error(error.message || "Error Occurred");
@@ -364,16 +367,16 @@ const propertySlice = createSlice({
 
     // edit property
     builder.addCase(updateProperty.pending, (state) => {
-      state.loading = true;
+      state.updateLoading = true;
       state.status = "pending";
     });
     builder.addCase(updateProperty.rejected, (state, action) => {
-      state.loading = false;
-      state.status = "rejected";
+      state.updateLoading = false;
+      state.updateLoading = "rejected";
       state.errors = action.error;
     });
     builder.addCase(updateProperty.fulfilled, (state, action) => {
-      state.loading = false;
+      state.updateLoading = false;
       state.status = "fulfilled";
       state.lastAction = "updateProperty";
     });

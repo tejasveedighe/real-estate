@@ -20,7 +20,9 @@ function EditProperty() {
   const { userId } = getUserData();
   const { propertyId } = useParams();
 
-  const { loading, property } = useSelector((state) => state.properties);
+  const { loading, property, updateLoading } = useSelector(
+    (state) => state.properties
+  );
 
   const [amenities, setAmenities] = useState({
     swimmingPool: false,
@@ -92,11 +94,12 @@ function EditProperty() {
         approved: formData.get("approved") === "true",
         amenities: amenities,
         userId: userId,
+        propertyId,
       };
 
-      dispatch(updateProperty(propertyId, propertyData))
+      dispatch(updateProperty({ propertyId, propertyData }))
         .then((res) => {
-          if (res.type === "property/updateProperty/fulfilled") {
+          if (res.type === "property/update/fulfilled") {
             toast.success("Property updated successfully");
             formRef.current.reset();
           }
@@ -235,17 +238,19 @@ function EditProperty() {
             <Form.Group>
               <Form.Label>Amenities</Form.Label>
               <div className={styles.amenitiesGrid}>
-                {Object.entries(amenities).map(([key, value]) => (
-                  <Form.Check
-                    className="col"
-                    key={key}
-                    type="checkbox"
-                    name={key}
-                    checked={value}
-                    onChange={handleAmenitiesChange}
-                    label={key}
-                  />
-                ))}
+                {Object.entries(amenities).map(([key, value]) =>
+                  key !== "id" ? (
+                    <Form.Check
+                      className="col"
+                      key={key}
+                      type="checkbox"
+                      name={key}
+                      checked={value}
+                      onChange={handleAmenitiesChange}
+                      label={key}
+                    />
+                  ) : null
+                )}
               </div>
             </Form.Group>
           </div>
@@ -254,8 +259,9 @@ function EditProperty() {
             type="submit"
             variant="success"
             className="align-self-end mt-3"
+            disabled={updateLoading}
           >
-            Update Property
+            {updateLoading ? <LoadingSpinner /> : " Update Property "}
           </Button>
         </Form>
       )}

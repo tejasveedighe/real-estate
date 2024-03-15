@@ -5,6 +5,7 @@ import { Button, Form } from "react-bootstrap";
 import classNames from "classnames";
 import { addProperty } from "../../redux/slices/propertySlice";
 import { getUserData } from "../../utils/auth";
+import { toast } from "react-toastify";
 
 function AddProperty() {
   const dispatch = useDispatch();
@@ -53,11 +54,11 @@ function AddProperty() {
       dispatch(addProperty(propertyData))
         .then((res) => {
           if (res.type === "properties/addProperty/fulfilled") {
-            alert("Property added successfully");
+            toast.success("Property added successfully");
             formRef.current.reset();
           }
         })
-        .catch((err) => alert(err.message));
+        .catch((err) => toast.error(err.message));
     },
     [amenities, userId, dispatch]
   );
