@@ -101,7 +101,6 @@ function EditProperty() {
         .then((res) => {
           if (res.type === "property/update/fulfilled") {
             toast.success("Property updated successfully");
-            formRef.current.reset();
           }
         })
         .catch((err) => toast.error(err.message));
