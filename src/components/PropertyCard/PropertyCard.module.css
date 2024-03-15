@@ -58,10 +58,17 @@
       border-radius: 20px;
       color: white;
       float: right;
+      transition: background-color 0.3s;
+      &:hover {
+        background-color: gold;
+      }
     }
 
     .deleteBtn {
       background-color: red;
+    }
+    .editBtn {
+      background-color: rgb(5, 138, 94);
     }
   }
 

@@ -25,6 +25,7 @@ import Payments from "./pages/Payments/Payments";
 import React, { Component } from "react";
 import AdminDashboard from "./pages/AdminDashboard/AdminDashboard";
 import NotFound from "./pages/NotFound/NotFound";
+import EditProperty from "./pages/AddProperty/EditProperty";
 
 class ErrorBoundary extends Component {
   constructor(props) {
@@ -76,40 +77,49 @@ function App() {
       <ErrorBoundary>
         <Routes>
           <Route element={<LogOutNav />}>
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<SignUp />} />
+            <Route caseSensitive path="/login" element={<Login />} />
+            <Route caseSensitive path="/signup" element={<SignUp />} />
           </Route>
 
           <Route element={<LayoutWithNav />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/property" element={<AllProperty />} />
-            <Route path="/property/:propertyId" element={<Property />} />
-            <Route path="/about" element={<About />} />
+            <Route caseSensitive path="/" element={<Home />} />
+            <Route caseSensitive path="/property" element={<AllProperty />} />
+            <Route caseSensitive path="/property/:propertyId" element={<Property />} />
+            <Route caseSensitive path="/about" element={<About />} />
 
             {/* Auth Routes */}
             <Route element={<AuthRoutes />}>
               {/* Common to all authenticated users */}
-              <Route path="/offers" element={<Offers />} />
-              <Route path="/owned" element={<Owned />} />
+              <Route caseSensitive path="/offers" element={<Offers />} />
+              <Route caseSensitive path="/owned" element={<Owned />} />
 
               {/* Admin Routes */}
               <Route element={<AdminRoutes />}>
-                <Route path="/adminDashboard" element={<AdminDashboard />} />
-                <Route path="/requests" element={<Requests />} />
-                <Route path="/manageUsers" element={<ManageUser />} />
-                <Route path="/user/:userId" element={<User />} />
-                <Route path="/payments" element={<Payments />} />
+                <Route
+                  caseSensitive
+                  path="/adminDashboard"
+                  element={<AdminDashboard />}
+                />
+                <Route caseSensitive path="/requests" element={<Requests />} />
+                <Route caseSensitive path="/manageUsers" element={<ManageUser />} />
+                <Route caseSensitive path="/user/:userId" element={<User />} />
+                <Route caseSensitive path="/payments" element={<Payments />} />
               </Route>
 
               {/* Seller Routes */}
               <Route element={<SellerRoutes />}>
-                <Route path="/myProperties" element={<MyProperties />} />
-                <Route path="/addProperty" element={<AddProperty />} />
+                <Route caseSensitive path="/myProperties" element={<MyProperties />} />
+                <Route caseSensitive path="/addProperty" element={<AddProperty />} />
+                <Route
+                  caseSensitive
+                  path="/editProperty/:propertyId"
+                  element={<EditProperty />}
+                />
               </Route>
             </Route>
 
             {/* 404 */}
-            <Route path="*" element={<NotFound />} />
+            <Route caseSensitive path="*" element={<NotFound />} />
           </Route>
         </Routes>
       </ErrorBoundary>

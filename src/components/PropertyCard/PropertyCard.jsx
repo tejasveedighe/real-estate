@@ -4,30 +4,36 @@ import { Badge, Card } from "react-bootstrap";
 import { BsBuildingsFill } from "react-icons/bs";
 import { FaLocationDot } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { deleteProperty } from "../../redux/slices/propertySlice";
 import { getUserData } from "../../utils/auth";
 import styles from "./PropertyCard.module.css";
+import { toast } from "react-toastify";
 
 function PropertyCard({ property, index }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const { userRole } = getUserData();
 
   const handleDeleteProperty = useCallback(() => {
     dispatch(deleteProperty(property.propertyId))
       .then((res) => {
-        alert("Property has been deleted");
+        toast.success("Property has been deleted");
       })
-      .catch(() => alert("Failed to delete Property please try later"));
+      .catch(() => toast.error("Failed to delete Property please try later"));
   }, [dispatch, property]);
 
   const handleCardClick = useCallback(() => {
+    console.trace("called");
     navigate(`/property/${property.propertyId}`);
   }, [navigate, property]);
 
   return (
-    <Card className={styles.card} onClick={handleCardClick}>
+    <Card className={styles.card}>
       <Card.Img
+        onClick={handleCardClick}
         variant="top"
         className={styles.image}
         src={`${process.env.PUBLIC_URL}/house${index}.jpg`}
@@ -66,7 +72,7 @@ function PropertyCard({ property, index }) {
             </span>
           </div>
           <div className={classNames(styles.buttonContainer, styles.hidden)}>
-            {getUserData().userRole === "Admin" ? (
+            {userRole === "Admin" ? (
               <button
                 type="button"
                 onClick={handleDeleteProperty}
@@ -74,6 +80,25 @@ function PropertyCard({ property, index }) {
               >
                 Delete
               </button>
+            ) : userRole === "Seller" &&
+              location.pathname.includes("myProperties") ? (
+              <>
+                <button
+                  type="button"
+                  onClick={handleDeleteProperty}
+                  className={classNames("float-start", styles.deleteBtn)}
+                >
+                  Delete
+                </button>
+                <Link to={`/editProperty/${property.propertyId}`} role="button">
+                  <button
+                    type="button"
+                    className={classNames("", styles.editBtn)}
+                  >
+                    Edit
+                  </button>
+                </Link>
+              </>
             ) : null}
             <button
               type="button"

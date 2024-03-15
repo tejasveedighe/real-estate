@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Axios } from "../../utils/helpers";
+import EditProperty from "../../pages/AddProperty/EditProperty";
 
 const initalState = {
   properties: [],
@@ -143,6 +144,18 @@ export const offerAction = createAsyncThunk(
         },
       });
       return res.data;
+    } catch (error) {
+      throw new Error(error.message || "Error Occurred");
+    }
+  }
+);
+
+export const updateProperty = createAsyncThunk(
+  "property/update",
+  async ({ id, propertyData }) => {
+    try {
+      const response = await Axios.put(`/${id}`, propertyData);
+      return response.data;
     } catch (error) {
       throw new Error(error.message || "Error Occurred");
     }
@@ -347,6 +360,22 @@ const propertySlice = createSlice({
       state.loading = false;
       state.status = "fulfilled";
       state.lastAction = "offerAction";
+    });
+
+    // edit property
+    builder.addCase(updateProperty.pending, (state) => {
+      state.loading = true;
+      state.status = "pending";
+    });
+    builder.addCase(updateProperty.rejected, (state, action) => {
+      state.loading = false;
+      state.status = "rejected";
+      state.errors = action.error;
+    });
+    builder.addCase(updateProperty.fulfilled, (state, action) => {
+      state.loading = false;
+      state.status = "fulfilled";
+      state.lastAction = "updateProperty";
     });
   },
 });
