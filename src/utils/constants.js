@@ -29,3 +29,11 @@ export const propertyTypes = [
   { value: "Flat", label: "Flat" },
   { value: "Bunglow", label: "Bunglow" },
 ];
+
+export const bhkOptions = [
+  { value: 1, label: '1 BHK' },
+  { value: 2, label: '2 BHK' },
+  { value: 3, label: '3 BHK' },
+  { value: 4, label: '4 BHK' },
+  { value: 5, label: '5 BHK' },
+];

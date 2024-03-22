@@ -9,7 +9,11 @@ import { v4 as uuid } from "uuid";
 import { AgentsCarousel } from "../../components/AgentsGridCarousel/AgentsCarousel";
 import { Newsletter } from "../../components/Newsletter/Newsletter";
 import { Properties } from "../../components/Properties/Properties";
-import { propertyStatus, propertyTypes } from "../../utils/constants";
+import {
+  bhkOptions,
+  propertyStatus,
+  propertyTypes,
+} from "../../utils/constants";
 import styles from "./Home.module.css";
 
 function Home() {
@@ -31,6 +35,13 @@ function Home() {
     }));
   };
 
+  const handlePropertyBHKChange = (selectedOptions) => {
+    setSearchData((prevData)=> ({
+      ...prevData,
+      propertyBHK: selectedOptions.value
+    }));
+  }
+
   const handlePropertyLocationChange = (newValue) => {
     setSearchData((prevData) => ({
       ...prevData,
@@ -39,7 +50,7 @@ function Home() {
   };
 
   const handleSearchButtonClick = () => {
-    console.log(searchData);
+    console.log(searchData)
     navigate("/property", { state: searchData });
   };
   return (
@@ -84,6 +95,12 @@ function Home() {
             className={classNames(styles.searchInput, styles.propertyLocation)}
             placeholder="Property Location"
             onChange={handlePropertyLocationChange}
+          />
+          <Select
+            className={classNames(styles.searchInput, styles.propertyType)}
+            placeholder="Property BHK"
+            options={bhkOptions}
+            onChange={handlePropertyBHKChange}
           />
           <Button onClick={handleSearchButtonClick}>Search</Button>
         </div>

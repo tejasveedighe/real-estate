@@ -7,7 +7,11 @@ import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import { Newsletter } from "../../components/Newsletter/Newsletter";
 import PropertyCard from "../../components/PropertyCard/PropertyCard";
 import { getAllProperty } from "../../redux/slices/propertySlice";
-import { propertyStatus, propertyTypes } from "../../utils/constants";
+import {
+  bhkOptions,
+  propertyStatus,
+  propertyTypes,
+} from "../../utils/constants";
 import styles from "./AllProperty.module.css";
 
 function AllProperty() {
@@ -19,6 +23,7 @@ function AllProperty() {
   const [propertyData, setPropertyData] = useState({
     locations: [],
     maxPrice: 0,
+    bhk: [],
   });
 
   const [filters, setFilters] = useState({
@@ -26,6 +31,7 @@ function AllProperty() {
     locationFilter: null,
     statusFilter: null,
     typeFilter: null,
+    bhkFilter: null,
   });
 
   const setData = useCallback(() => {
@@ -40,6 +46,14 @@ function AllProperty() {
           (max, property) => (property.price > max ? property.price : max),
           0
         ),
+        bhk: propertiesStore.properties.reduce((bhkList, property) => {
+          const bhk = property.noBedroom + property.noBathroom;
+          const bhkOption = { value: bhk, label: bhk };
+          if (!bhkList.some((option) => option.value === bhkOption.value)) {
+            bhkList.push(bhkOption);
+          }
+          return bhkList;
+        }, []),
       }));
     }
   }, [propertiesStore.properties, propertiesStore.status]);
@@ -72,9 +86,16 @@ function AllProperty() {
             !filters.statusFilter || property.status === filters.statusFilter;
           const matchesType =
             !filters.typeFilter || property.propertyType === filters.typeFilter;
+          const matchesBHK =
+            !filters.bhkFilter ||
+            property.noBathroom + property.noBedroom === filters.bhkFilter; // Added BHK filter
 
           return (
-            matchesPrice && matchesLocation && matchesStatus && matchesType
+            matchesPrice &&
+            matchesLocation &&
+            matchesStatus &&
+            matchesType &&
+            matchesBHK
           );
         })
       );
@@ -88,6 +109,7 @@ function AllProperty() {
         locationFilter: location.state?.propertyLocation,
         statusFilter: location.state?.propertyStatus,
         typeFilter: location.state?.propertyType,
+        bhkFilter: location.state?.propertyBHK,
       }));
     }
   }, [location.state]);
@@ -184,7 +206,22 @@ function AllProperty() {
                 name="locationFilter"
                 options={propertyData.locations}
               />
-
+              <Select
+                isClearable
+                onChange={(selectedOption) =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    bhkFilter: selectedOption ? selectedOption.value : null,
+                  }))
+                }
+                value={
+                  filters.bhkFilter
+                    ? { label: filters.bhkFilter, value: filters.bhkFilter }
+                    : null
+                }
+                name="bhkFilter"
+                options={bhkOptions}
+              />
               <div className="d-flex flex-column">
                 <label>Price : {filters.priceFilter}</label>
                 <input
