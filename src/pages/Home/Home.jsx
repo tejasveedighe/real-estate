@@ -11,6 +11,7 @@ import { Newsletter } from "../../components/Newsletter/Newsletter";
 import { Properties } from "../../components/Properties/Properties";
 import { propertyStatus, propertyTypes } from "../../utils/constants";
 import styles from "./Home.module.css";
+
 function Home() {
   const navigate = useNavigate();
 
@@ -61,7 +62,6 @@ function Home() {
                 className={styles.toggleBtn}
                 id={`radio-${idx}`}
                 type="radio"
-                variant={idx % 2 ? "info" : "success"}
                 name="radio"
                 value={radio.value}
                 checked={radioValue === radio.value}
@@ -102,9 +102,7 @@ function Home() {
           <div className="text-center d-flex justify-content-center align-items-center flex-column gap-3">
             <img
               alt="log"
-              src="	https://preview.colorlib.com/theme/konato/assets/img/icon/services1.svg
-              
-"
+              src="	https://preview.colorlib.com/theme/konato/assets/img/icon/services1.svg"
             />
             <h3>Sell home or office</h3>
             <p>

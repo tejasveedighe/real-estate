@@ -11,6 +11,13 @@
       font-size: 50px;
       line-height: 50px;
     }
+    /* .toggleBtn {
+      border: 1px solid black;
+      background-color: #00a0eb;
+    }
+    .toggleBtn:nth-child(1) {
+      background-color: gray;
+    } */
   }
   .searchContainer {
     width: 100%;

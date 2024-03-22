@@ -190,7 +190,7 @@ function AllProperty() {
                 <input
                   type="range"
                   name="priceFilter"
-                  step={50000}
+                  step={10000}
                   min={0}
                   max={propertyData.maxPrice}
                   value={filters.priceFilter}
